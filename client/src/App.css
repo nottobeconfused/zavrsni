@@ -1,0 +1,602 @@
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+   scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+:root{
+  --isticanje: var(--zelena);
+  --isticanje-svijetlo: rgba(var(--isticanje), 0.425);
+
+  --pozadina: rgb(var(--pozadina-tamno));
+  --pozadina-svijetlo: 255, 255, 255;
+  --pozadina-tamno: 17, 17, 17;
+
+  --iznad: rgb(var(--tamno-iznad));
+  --iznad-prozirno: 56, 58, 56, 0.8;
+
+  --tekst: rgb(var(--tamno-tekst));
+
+  --tamno-iznad: 66, 68, 66;
+  --svijetlo-iznad: 255, 255, 255;
+
+  --tamno-tekst: 218, 214, 214;
+  --svijetlo-tekst: 15, 15, 15;
+
+  --visinaKartice: 250px;
+
+  --boxShadow: var(--sjena-tamno);
+  --sjena-tamno-navtop: 0px 0px 40px 1px rgba(0, 0, 0, 0.6);
+  --sjena-tamno: none;
+  --sjena-svijetlo: 0px 0px 40px 1px rgba(63, 63, 63, 0.219);
+  /* boje isticanja:*/
+  --ljubicasta: 150, 103, 224;
+  --crvena: 255, 104, 107;
+  --zuta: 254, 219, 114;
+  --siva: 97, 102, 107;
+  --plava: 35, 166, 213;
+  --narancasta: 251, 133, 0;
+  --zelena: 132, 169, 140;
+  --radius: 0.5rem;
+}
+*{
+  font-family: 'Roboto', sans-serif;
+  color: var(--tekst);
+}
+
+html{
+  background-color: var(--pozadina);
+}
+header{
+    z-index: 1;
+    min-width: 3.5rem;
+    height: 99%;
+    position: fixed;
+    top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--iznad);
+    font-family: 'Roboto', sans-serif;
+    box-shadow: var(--boxShadow);
+    border-radius: 0 7px 7px 0;
+  }
+  nav{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: flex-start;
+    justify-content: center;
+    top: 3px;
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  
+  nav div{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    width: 90%;
+    height: 90%;
+    border-radius: 0 10px 10px 0;
+    background: transparent;
+    transition: width 0.3s ease-in-out;
+  }
+  nav div:hover{
+    height: 90%;
+    width: 110%;
+    background: var(--isticanje-svijetlo);
+    color: var(--pozadina);
+  }
+  nav div.otvoreno{
+    width: 110%;
+    background: var(--isticanje-svijetlo);
+  }
+ .uil{
+    color: rgb(var(--isticanje));
+    font-size: 2.4em;
+  }
+  .gumb:hover{
+    cursor: pointer;
+  }
+  .nav-top{
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--iznad);
+    box-shadow: var(--sjena-tamno-navtop);
+    top: 0;
+    right: 1%;
+    width: 92.4vw;
+    padding: 0.5rem;
+    height: 3.5rem;
+    border-radius: 0 0 10px 10px;
+    z-index: 2;
+}
+.nav-top-elementi{
+  position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.nav-top-naziv{
+  position: inherit;
+  width: 50%;
+}
+.nav-top-funkcije{
+  position: relative;
+  width: 30%;
+  padding: 2%;
+  display: flex;
+  justify-content: space-around;
+  gap: 3rem;
+  align-items: center;
+}
+.gumb-novo{
+  border-radius: 5px;
+  border: none;
+  background-color: transparent;
+  text-align: center;
+  font-weight: bold;
+}
+.gumb-novo:hover{
+  background-color: var(--isticanje-svijetlo);
+  box-shadow: var(--boxShadow);
+}
+.modal-novo{
+  position: absolute;
+  width: 12rem;
+  top: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: column;
+  background-color: var(--iznad);
+  box-shadow: var(--boxShadow);
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+  margin: 1.5%;
+}
+.funkcije{
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+}
+.modal-profil{
+  position: absolute;
+  top: 3.5rem;
+  right:0rem;
+  width: 12rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: column;
+  background-color: var(--iznad);
+  box-shadow: var(--boxShadow);
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+  margin: 1.5%;
+}
+.modal-sredina{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.grupice{
+  display: flex;
+  justify-content:space-evenly;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: absolute;
+  top: 15%;
+  left: 3.6rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1%;
+  border-radius: 0.7rem;
+  z-index: 3;
+  background-color: rgb(var(--iznad-prozirno));
+}
+.gumb-grupe{
+  flex: 0 0 auto;
+  width: 10rem;
+  background-color: var(--iznad);
+  box-shadow: var(--boxShadow);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1%;
+  border-radius: 0.7rem;
+}
+.grupica{
+  font-size: 1.2rem;
+}
+.link{
+  text-decoration: none;
+}
+.login-signup{
+  width: 100vw;
+  height: 100vh;
+}
+.header-forma-login-signup{
+  width: 50%;
+  height: 100%;
+  position: relative;
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.main-login-signup{
+  width: 50%;
+  height: 100%;
+  position: relative;
+  float: right;
+  flex-direction: column;
+}
+.pokazatelj{
+  width: 90%;
+  height: 10%;
+  position: relative;
+  top: 0;
+  border-radius: 0 0 1em 1em;
+  box-shadow: var(--boxShadow);
+  background-color: rgb(var(--pozadina-svijetlo));
+}
+.pokazatelj .p{
+  color: rgb(var(--svijetlo-tekst));
+  font-weight: bold;
+}
+.glavna-forma{
+  width: 90%;
+  height: 85%;
+  position: absolute;
+  bottom: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgb(var(--svijetlo-iznad));
+  border-radius: 1em 1em 0 0;
+  box-shadow: var(--boxShadow);
+}
+.naziv-ime{
+  padding: 2%;
+}
+form{
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+.input-login-signup{
+  width: 75%;
+  margin: 2%;
+  border-radius: var(--radius);
+  padding: var(--radius);
+  box-shadow: 1px 1px 15px rgba(63, 63, 63, 0.315);
+  outline: none;
+  border: none;
+  transition: border-bottom 0.1s ease-in-out;
+}
+.input-login-signup:focus{
+border-bottom: 4px solid rgb(var(--isticanje));
+}
+#gumb-login-signup{
+  font-weight: bold;
+  text-decoration: none;
+  width: 75%;
+  margin-top: 5%;
+  color: rgb(var(--pozadina-svijetlo));
+  background-color: var(--isticanje-svijetlo);
+  border-radius: var(--radius);
+  border: none;
+  outline: none;
+  padding: var(--radius);
+}
+#gumb-login-signup:hover{
+outline: 2px solid var(--isticanje-svijetlo);
+background-color: var(--pozadina-svijetlo);
+color: rgb(var(--isticanje));
+}
+a{
+color: var(--isticanje);
+}
+.p{
+  padding: 5%;
+}
+.link-signup-login{
+  text-decoration: underline;
+  color: rgb(var(--isticanje));
+}
+
+.dropdown-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.main{
+  position: relative;
+  width: 93vw;
+  float: right;
+  display: flex;
+  top: 4.5rem;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.karticaZadatka{
+  background-color: var(--iznad);
+  box-shadow: var(--boxShadow);
+  border-radius: var(--radius);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  position: relative;
+  width: 60%;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2%;
+  transition: height 0.3s ease-in-out;
+}
+.karticaZadatka .ikona_ime_kartica{
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  width: 99%;
+}
+.ikona_ime_kartica p{
+  position: relative;
+  padding: 2%;
+  height: clamp(90%, 20%, 20%);
+}
+.ikona_ime_kartica .uil{
+  color: rgb(var(--isticanje));
+  font-size: 1em;
+  padding: 2%;
+}
+.karticaZadatka .uil{
+  font-size: 1.5rem;
+}
+.karticaZadatka .opis_kartica{
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 98%;
+  height: clamp(2rem, 3rem, 7rem);
+  margin: 1%;
+}
+.opis_kartica p{
+  padding: 0 1%;
+  overflow-y: scroll;
+}
+.karticaZadatka .gumbi_kartica{
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+  width: 99%;
+  height: 12%;
+  padding: 1%;
+}
+.gumbi_kartica .od, .do{
+  padding: 0 2% 0 2%;
+  font-size: small;
+}
+.gumb_vise{
+  margin: 0 0 0 1%;
+  transition: transform 0.1s ease-in-out;
+}
+.gumb_vise:hover{
+  transform: scale(150%);
+  color: rgb(var(--isticanje));
+}
+.gumb_otvori{
+  border-radius: 5px;
+  padding: 0 1%;
+  border: 1px solid rgb(var(--isticanje));
+  background-color: rgb(var(--isticanje));
+  text-align: center;
+  color: white;
+}
+.gumb_otvori:hover{
+  border: 1px solid rgb(var(--isticanje));
+  background-color: transparent;
+  color: rgb(var(--isticanje));
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #a1a7a7b0; 
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #222121cc; 
+  width: 8px;
+}
+  @media only screen and (max-width: 1080px) {
+    header{
+        justify-content: space-evenly;
+        width: 98%;
+        height: 3.5rem;
+        top: 94%;
+        left: 1%;
+        flex-direction: row;
+        border-radius: 10px 10px 0 0;
+      }
+      .main{
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .karticaZadatka{
+        width: 96%;
+      }
+      nav{
+        gap: 3rem;
+        flex-direction: row;
+      }
+      nav div{
+        position: relative;
+        bottom: 0;
+        height: 90%;
+        border-radius: 10px;
+        transition: height 0.3s ease-in-out ;
+        transition: bottom 0.2s ease-in-out ;
+      }
+      nav div:hover{
+        align-items: flex-start;
+        height: 150%;
+        transform: translateY(-6%);
+        bottom: 10%;
+      }
+      .nav-top{
+        right: 1%;
+        width: 98vw;
+        padding: 0.5rem;
+        height: 4rem;
+    }
+    .nav-top-funkcije{
+      width: 30%;
+      gap: 0.3rem;
+    }
+    .modal-novo, .modal-profil{
+      top: 4rem;
+      right: 0.2rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .grupice{
+      top: auto;
+      width: 98%;
+      left: 1%;
+      bottom: 4rem;
+    }
+    .gumb-grupe{
+      width: 20rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 3%;
+      border-radius: 0.7rem;
+    }
+
+  .header-forma-login-signup{
+      width: 100%;
+      height: 90vh;
+  }
+  .main-login-signup{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background-color: var(--pozadina);
+  }
+  .pokazatelj{
+      border-radius: 1em;
+  }
+  .gumb-login-signup{
+    width: 90%;
+  }
+  }
+  .error{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, 0.4);
+    z-index: 4;
+    top: 0;
+    left: 0;
+  }
