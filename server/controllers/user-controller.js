@@ -29,7 +29,7 @@ const signup = async(req, res, next) => {
         console.log(err);
     }
 
-    return res.status(201).json({message:user});
+    return res.status(201).json({message: "Uspješno ste registrirani!"});
 };
 
 const login = async (req, res, next) => {

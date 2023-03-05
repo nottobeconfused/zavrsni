@@ -406,6 +406,7 @@ color: var(--isticanje);
   justify-content: space-evenly;
   align-items: flex-start;
   flex-direction: column;
+  padding-bottom: 10%;
 }
 .karticaZadatka{
   background-color: var(--iznad);
