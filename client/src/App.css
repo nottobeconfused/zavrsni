@@ -320,10 +320,10 @@ header{
   top: 0;
   border-radius: 0 0 1em 1em;
   box-shadow: var(--boxShadow);
-  background-color: rgb(var(--pozadina-svijetlo));
+  background-color: rgb(var(--tamno-iznad));
 }
 .pokazatelj .p{
-  color: rgb(var(--svijetlo-tekst));
+  color: rgb(var(--tamno-tekst));
   font-weight: bold;
 }
 .glavna-forma{
@@ -335,7 +335,7 @@ header{
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(var(--svijetlo-iznad));
+  background-color: rgb(var(--tamno-iznad));
   border-radius: 1em 1em 0 0;
   box-shadow: var(--boxShadow);
 }
@@ -513,6 +513,7 @@ color: var(--isticanje);
         left: 1%;
         flex-direction: row;
         border-radius: 10px 10px 0 0;
+        box-shadow: var(--sjena-tamno-navtop);
       }
       .main{
         width: 100%;

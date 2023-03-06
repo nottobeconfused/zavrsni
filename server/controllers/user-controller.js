@@ -115,7 +115,6 @@ const refreshToken = (req, res, next) => {
         const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
             expiresIn: "35s"
         });
-        console.log("Regenerated token\n", token);
         res.cookie(String(user.id), token, {
             path: '/',
             expires: new Date(Date.now() + 1000 * 30),
