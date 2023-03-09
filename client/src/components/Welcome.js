@@ -9,7 +9,7 @@ const Welcome = () => {
   return (
     <div className='login-signup'>
     <div className="header-forma-login-signup">
-        <div>
+        <div className="welcome-poruka">
         <h1>PROPUH</h1>
         <p>Aplikacija za suradnju i repozitorij školskih sadržaja</p>
         <p><i>Na ovoj platformi možeš surađivati s drugima, otvoriti grupe i organizirati svoje zadatke!</i></p>

@@ -7,6 +7,10 @@ import { authActions } from '../store';
 function Login() {
     const dispatch = useDispatch();
     const history = useNavigate();
+    const [errorM, seterrorM] = useState("");
+    function handleErrorM(){
+        seterrorM("Netočni podaci!");
+    };
     const [inputs, setInputs] = useState({
         email: "",
         password: ""
@@ -16,13 +20,17 @@ function Login() {
             ...prev,
         [e.target.name]: e.target.value,
         }));
+        seterrorM("");
     };
     const sendRequest = async() => {
         const res = await axios.post("http://localhost:5000/api/login", {
             email: inputs.email,
             password: inputs.password,
         })
-        .catch (err=> console.log(err));
+        .catch (err => {
+            console.log(err);
+            handleErrorM();
+        });
         const data = await res.data;
         return data;
     }
@@ -41,7 +49,6 @@ function Login() {
         </div>
         <div className="glavna-forma">
             <form onSubmit={handleSubmit}>
-
                 <input 
                 className="input-login-signup" 
                 value={inputs.email} 
@@ -59,6 +66,7 @@ function Login() {
                 name="password" 
                 id="kor-lozinka" 
                 placeholder="lozinka"/>
+                {errorM && <section className='errorM'>{errorM}</section>}
 
                 <button id="gumb-login-signup" className='gumb' type="submit">Prijavi se</button>
             </form>

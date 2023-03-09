@@ -164,6 +164,17 @@ header{
     width: 110%;
     background: var(--isticanje-svijetlo);
   }
+  .welcome-poruka{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .errorM{
+    color: red;
+    background-color: rgba(255, 0, 0, 0.185);
+    padding: 1% 2%;
+    border-radius: var(--radius);
+  }
  .uil{
     color: rgb(var(--isticanje));
     font-size: 2.4em;
@@ -355,6 +366,7 @@ form{
   border-radius: var(--radius);
   padding: var(--radius);
   box-shadow: 1px 1px 15px rgba(63, 63, 63, 0.315);
+  color: rgb(var(--svijetlo-tekst));
   outline: none;
   border: none;
   transition: border-bottom 0.1s ease-in-out;
