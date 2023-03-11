@@ -1,4 +1,5 @@
 const User = require('../model/User.js');
+const Grupa = require('../model/Grupa');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -97,6 +98,20 @@ const getUser = async (req, res, next) => {
     return res.status(200).json({user});
 };
 
+const getGrupa = async (req, res, next) => {
+    const grupaId = req.id;
+    let grupa;
+    try {
+        grupa = await Grupa.findById(grupaId);
+    } catch (err){
+        return new Error(err);
+    }
+    if (!grupa) {
+        return res.status(404).json({message: "grupa not found"});
+    }
+    return res.status(200).json({grupa});
+};
+
 const refreshToken = (req, res, next) => {
     const cookies = req.headers.cookie;
     const prevToken = cookies.split("=")[1];
@@ -149,5 +164,6 @@ exports.signup = signup;
 exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getUser = getUser;
+exports.getGrupa = getGrupa;
 exports.refreshToken = refreshToken;
 exports.logout = logout;

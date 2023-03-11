@@ -4,7 +4,7 @@ import '../../App.css';
 import Naslovna from "../naslovna/Naslovna";
 import { OsobniProstor } from "../osobni-prostor/OsobniProstor";
 
-const Navigacija = () => {
+const Navigacija = ({data}) => {
     const [isGrupeOpen, setIsGrupeOpen] = useState(false);
 
     const toggleGrupe = () => {
@@ -21,10 +21,7 @@ const Navigacija = () => {
   };
 
 
-      const listItems = [
-        { id: 1, label: 'Item 1' },
-        { id: 2, label: 'Item 2' },
-      ];
+      const listItems = data;
 
     return (
         <>

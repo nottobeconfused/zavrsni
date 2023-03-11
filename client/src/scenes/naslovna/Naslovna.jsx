@@ -3,59 +3,38 @@ import NavTop from '../nav-top'
 import Navigacija from '../navigacija'
 import '../../App.css';
 import Objava from '../../components/Objava/Objava';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
+
+axios.defaults.withCredentials = true;
 const Naslovna = () => {
+    const [grupe, setGrupe] = useState();
+    const sendRequest = async () => {
+        const res = await axios.get('http://localhost:5000/api/grupe', {
+            withCredentials: true
+        }).catch((err) => console.log(err));
+        const data = await res.data;
+        return data;
+    }
+    useEffect(() => {
+            sendRequest().then((data) => setGrupe(data.user));
+    }, [])
 
-  const Grupe = [
+  const Objave = [
     { 
-        imeGrupe: 'Grupa1', 
-        nazivZadatka: "Novi zadatak",
-        tekst: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?",
-        od: "11.2.2023",
-        do: "3.3.2023.",
-    },
-    { 
-        imeGrupe: 'Grupa2', 
-        nazivZadatka: "Novi zadatak2",
-        tekst: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?",
-        od: "23.2.2023",
-        do: "3.4.2023.",
-    },
-    { 
-        imeGrupe: 'Grupa2', 
-        nazivZadatka: "Novi zadatak3",
-        tekst: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?",
-        od: "24.2.2023",
-        do: "13.4.2023.",
-    },
-    { 
-        imeGrupe: 'Grupa2', 
-        nazivZadatka: "Novi zadatak2",
-        tekst: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?",
-        od: "23.2.2023",
-        do: "3.4.2023.",
-    },
-    { 
-        imeGrupe: 'Grupa2', 
-        nazivZadatka: "Novi zadatak2",
-        tekst: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?",
-        od: "23.2.2023",
-        do: "3.4.2023.",
-    },
-    { 
-        imeGrupe: 'Grupa2', 
-        nazivZadatka: "Novi zadatak2",
-        tekst: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi aliquam deserunt itaque architecto enim assumenda, odio corporis! Nam architecto voluptas ea ex repellat nulla, expedita veniam soluta, ad maiores dicta?",
-        od: "23.2.2023",
-        do: "3.4.2023.",
+        imeGrupe, 
+        nazivZadatka,
+        tekst,
+        od,
     },
   ];
     return (
         <>
-        <Navigacija />
+        <Navigacija data={grupe.data} />
         <NavTop />
         <div className="main">
-        {Grupe.map(item => (
+        {Objave.map(item => (
             <Objava item={item}/>
           ))}
         </div>

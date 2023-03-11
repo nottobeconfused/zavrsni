@@ -1,15 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import '../../App.css';
 import ModalNovo from "./ModalNovo";
 import ModalProfil from "./MofdalProfil";
-import { useEffect } from "react";
 import axios from "axios";
 
 
 axios.defaults.withCredentials = true;
 let firstRender = true;
 const NavTop = () => {
-    
     const [user, setUser] = useState();
 
     const refreshToken = async () => {
@@ -39,7 +37,6 @@ const NavTop = () => {
         return () => clearInterval(interval);
 
     }, [])
-
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenP, setIsOpenP] = useState(false);
 
