@@ -23,15 +23,16 @@ const Naslovna = () => {
 
   const Objave = [
     { 
-        imeGrupe, 
-        nazivZadatka,
-        tekst,
-        od,
+        imeGrupe: "naziv grupe", 
+        nazivZadatka: "zadatak",
+        tekst: "Lorem ipsum",
+        od: "11.3.2023.",
+        do: "23.3.2023.",
     },
   ];
     return (
         <>
-        <Navigacija data={grupe.data} />
+        <Navigacija />
         <NavTop />
         <div className="main">
         {Objave.map(item => (
