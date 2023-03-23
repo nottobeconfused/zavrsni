@@ -24,7 +24,7 @@ const Navigacija = () => {
 
   useEffect(() => {
     // Get user's groups from the backend API
-    axios.get('/api/groups')
+    axios.get('http://localhost:5000/api/grupe')
       .then(res => {
         setGroups(res.data.groups);
       })
@@ -49,7 +49,7 @@ const Navigacija = () => {
 
   const handleCreateGroup = e => {
     e.preventDefault();
-    axios.post('/api/groups', { name: groupName, users: users })
+    axios.post('http://localhost:5000/api/grupe', { name: groupName, users: users })
       .then(res => {
         console.log(res.data);
         setShowModal(false);
@@ -88,7 +88,7 @@ const Navigacija = () => {
     </header>
     {isGrupeOpen && (
     <div className="grupice">
-        {groups.length > 0 ? (
+        {groups?.length > 0 ? (
             groups.map(group => (
                 <Link className="link" to="/grupe1/:id">
                     <div key={group._id} className="gumb-nav gumb-grupe" onClick={handleClick}>
@@ -98,15 +98,18 @@ const Navigacija = () => {
                 </Link>
               ))
         ):(
-            <button onClick={() => setShowModal(true)}>Create New Group</button>
+            <button onClick={() => setShowModal(true)} className="gumb_otvori gumb">Create New Group</button>
         )}
         {showModal && (
         <div>
           <form onSubmit={handleCreateGroup}>
+            <div>
             <label>
               Group Name:
               <input type="text" value={groupName} onChange={handleInputChange} />
             </label>
+            </div>
+            <div>
             <label>
               Add Users:
               <ul>
@@ -115,11 +118,12 @@ const Navigacija = () => {
                 ))}
               </ul>
               <input type="text" name="user" />
-              <button onClick={handleAddUser}>Add User</button>
+              <button onClick={handleAddUser} className="gumb_otvori gumb">Add User</button>
             </label>
-            <button type="submit">Create Group</button>
+            </div>
+            <button type="submit" className="gumb_otvori gumb">Create Group</button>
           </form>
-          <button onClick={() => setShowModal(false)}>Cancel</button>
+          <button onClick={() => setShowModal(false)} className="gumb_otvori gumb">Cancel</button>
         </div>
       )}
     </div>

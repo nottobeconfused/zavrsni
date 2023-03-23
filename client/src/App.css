@@ -116,6 +116,9 @@ select {
 html{
   background-color: var(--pozadina);
 }
+input[type="text"]{
+  color: black;
+}
 header{
     z-index: 1;
     min-width: 3.5rem;

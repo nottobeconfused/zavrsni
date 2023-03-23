@@ -99,6 +99,32 @@ const getUser = async (req, res, next) => {
     return res.status(200).json({user});
 };
 
+const novaGrupa = async(req, res, next) => {
+    const { imeGrupe, users} = req.body;
+    let existingGrupa;
+
+    try {
+        existingGrupa = await Grupa.findOne({ imeGrupe: imeGrupe });
+    } catch (err) {
+        console.log(err);
+    }
+    if (existingGrupa) {
+        return res.status(400).json({message: "Grupa već postoji!"});
+    }
+
+    const grupa = new Grupa({
+        imeGrupe,
+        users,
+    });
+
+    try {
+        await grupa.save();
+    }catch (err) {
+        console.log(err);
+    }
+
+    return res.status(201).json({message: "Uspješno ste izradili grupu!"});
+};
 const getGrupa = async (req, res, next) => {
     const grupaId = req.id;
     let grupa;
@@ -178,6 +204,7 @@ exports.signup = signup;
 exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getUser = getUser;
+exports.novaGrupa = novaGrupa;
 exports.getGrupa = getGrupa;
 exports.getObjava = getObjava;
 exports.refreshToken = refreshToken;
