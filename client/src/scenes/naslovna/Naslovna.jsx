@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true;
 const Naslovna = () => {
     const [grupe, setGrupe] = useState();
     const sendRequest = async () => {
-        const res = await axios.get('http://localhost:5000/api/grupe', {
+        const res = await axios.get('http://localhost:5000/api/grupe/objava', {
             withCredentials: true
         }).catch((err) => console.log(err));
         const data = await res.data;
@@ -21,23 +21,25 @@ const Naslovna = () => {
             sendRequest().then((data) => setGrupe(data.user));
     }, [])
 
-  const Objave = [
-    { 
-        imeGrupe: "naziv grupe", 
-        nazivZadatka: "zadatak",
-        tekst: "Lorem ipsum",
-        od: "11.3.2023.",
-        do: "23.3.2023.",
-    },
-  ];
+  const Objave = [{...grupe}];
     return (
         <>
         <Navigacija />
         <NavTop />
         <div className="main">
-        {Objave.map(item => (
+        {Objave?.lenght > 0 ? (
+          Objave.map(item => (
             <Objava item={item}/>
-          ))}
+          ))) : (
+            <div className="karticaZadatka">
+            <div className="ikona_ime_kartica">
+                  <i className="uil uil-polygon" id="uil">
+                    Još nemate objava!
+                  </i>
+            <p></p>
+            </div>
+        </div>
+          )}
         </div>
         </>
     )
