@@ -4,9 +4,11 @@ import '../../App.css';
 import Naslovna from "../naslovna/Naslovna";
 import { OsobniProstor } from "../osobni-prostor/OsobniProstor";
 import axios from 'axios';
+import NewGroup from "../../components/novaGrupa/novaGrupa";
 
 const Navigacija = () => {
     const [isGrupeOpen, setIsGrupeOpen] = useState(false);
+    const [user, setUser] = useState();
 
     const toggleGrupe = () => {
         setIsGrupeOpen(!isGrupeOpen);
@@ -21,9 +23,17 @@ const Navigacija = () => {
     setActiveItem(item);
   };
   const [groups, setGroups] = useState([]);
+  const sendRequest = async () => {
+    const res = await axios.get('http://localhost:5000/api/user', {
+        withCredentials: true
+    }).catch((err) => console.log(err));
+    const data = await res.data;
+    return data;
+}
 
   useEffect(() => {
     // Get user's groups from the backend API
+    sendRequest().then((data) => setUser(data.user));
     axios.get('http://localhost:5000/api/grupe')
       .then(res => {
         setGroups(res.data.groups);
@@ -32,34 +42,7 @@ const Navigacija = () => {
         console.log(err);
       });
   }, []);
-  const [groupName, setGroupName] = useState('');
-  const [users, setUsers] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-
-  const handleInputChange = e => {
-    setGroupName(e.target.value);
-  };
-
-  const handleAddUser = e => {
-    e.preventDefault();
-    const newUser = e.target.user.value;
-    setUsers([...users, newUser]);
-    e.target.user.value = '';
-  };
-
-  const handleCreateGroup = e => {
-    e.preventDefault();
-    axios.post('http://localhost:5000/api/grupe', { name: groupName, users: users })
-      .then(res => {
-        console.log(res.data);
-        setShowModal(false);
-        setGroupName('');
-        setUsers([]);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>
@@ -98,33 +81,10 @@ const Navigacija = () => {
                 </Link>
               ))
         ):(
-            <button onClick={() => setShowModal(true)} className="gumb_otvori gumb">Create New Group</button>
+            <button onClick={() => setIsOpen(true)} className="gumb_otvori gumb">Create New Group</button>
         )}
-        {showModal && (
-        <div>
-          <form onSubmit={handleCreateGroup}>
-            <div>
-            <label>
-              Group Name:
-              <input type="text" value={groupName} onChange={handleInputChange} />
-            </label>
-            </div>
-            <div>
-            <label>
-              Add Users:
-              <ul>
-                {users.map(user => (
-                  <li key={user}>{user}</li>
-                ))}
-              </ul>
-              <input type="text" name="user" />
-              <button onClick={handleAddUser} className="gumb_otvori gumb">Add User</button>
-            </label>
-            </div>
-            <button type="submit" className="gumb_otvori gumb">Create Group</button>
-          </form>
-          <button onClick={() => setShowModal(false)} className="gumb_otvori gumb">Cancel</button>
-        </div>
+        {isOpen && (
+        <NewGroup user={user} onClose={() => setIsOpen(false)}></NewGroup>
       )}
     </div>
     )};

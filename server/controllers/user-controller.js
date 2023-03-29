@@ -100,7 +100,7 @@ const getUser = async (req, res, next) => {
 };
 
 const novaGrupa = async(req, res, next) => {
-    const { imeGrupe, users} = req.body;
+    const { imeGrupe} = req.body;
     let existingGrupa;
 
     try {
@@ -113,12 +113,13 @@ const novaGrupa = async(req, res, next) => {
     }
 
     const grupa = new Grupa({
-        imeGrupe,
-        users,
+        imeGrupe: req.body.imeGrupe,
+        admin: req.user._id
     });
 
     try {
         await grupa.save();
+        res.status(201).json({grupa});
     }catch (err) {
         console.log(err);
     }
