@@ -10,7 +10,6 @@ import OsobniProstor from "./scenes/osobni-prostor/OsobniProstor";
 function App() {
     const isLoggedIn = useSelector((state) => state.isLoggedIn);
     console.log(isLoggedIn)
-    
     return (
         <>
             <Routes>
@@ -23,5 +22,5 @@ function App() {
         </>
     );
   }
-
-export default App;
+  
+  export default App;

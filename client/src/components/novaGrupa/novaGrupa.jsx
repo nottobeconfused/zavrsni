@@ -10,7 +10,7 @@ const NewGroup = ({ user, setUserGroup, onClose }) => {
 
       alert(`Grupa "${res.data.name}" kreirana!`);
 
-      setUserGroup(res.data);
+      setGroupName(res.data);
     } catch (error) {
       console.error(error);
       alert('Nismo uspjeli kreirati grupu.');

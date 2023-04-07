@@ -101,44 +101,45 @@ const getUser = async (req, res, next) => {
 
 const novaGrupa = async(req, res, next) => {
     const { imeGrupe } = req.body;
-    let existingGrupa;
-
+    const userId = req.id;
+  
     try {
-        existingGrupa = await Grupa.findOne({ imeGrupe: imeGrupe });
-    } catch (err) {
-        console.log(err);
-    }
-    if (existingGrupa) {
-        return res.status(400).json({message: "Grupa već postoji!"});
-    }
-    const cookies = req.headers.cookie;
-    const prevToken = cookies.split("=")[1];
-    let userId = "";
-    jwt.verify(String(prevToken), process.env.JWT_SECRET, (err, user) => {
-        if(err) {
-            console.log(err);
-            return res.status(403).json({message: "Autentication faild"})
-        };
-        userId = req.cookies[`${user.id}`];
-    })
-    const grupa = new Grupa({
-        imeGrupe: req.body.imeGrupe,
+      // Provjeri postoji li grupa s istim imenom
+      const existingGrupa = await Grupa.findOne({ imeGrupe: imeGrupe });
+      if (existingGrupa) {
+        return res.status(400).json({ message: 'Grupa već postoji!' });
+      }
+  
+      // Kreiraj novu grupu
+      const novaGrupa = new Grupa({
+        imeGrupe: imeGrupe,
         admin: userId,
-    });
-
-    try {
-        await grupa.save();
-        res.status(201).json({grupa});
-    }catch (err) {
-        console.log(err);
+      });
+      // Dodaj novu grupu u bazu podataka kod korisnika-admina
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(400).json({ message: 'Korisnik nije pronađen!' });
+      }
+      // Spremi novu grupu u bazu podataka
+      await novaGrupa.save();
+  
+      user.grupe.push(novaGrupa.imeGrupe);
+      await user.save();
+  
+      // Vrati novu grupu
+      res.status(201).json({ novaGrupa });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
     }
-};
+  };
+
 const getGrupa = async (req, res, next) => {
     const grupaId = req.id;
     
     let grupa;
     try {
-        grupa = await Grupa.findById(grupaId);
+        grupa = await Grupa.findById({id: grupaId});
     } catch (err){
         return new Error(err);
     }
@@ -192,7 +193,7 @@ const refreshToken = (req, res, next) => {
 };
 
 const logout = (req, res, next) => {
-    const cookies = req.headers.cookie;
+    const cookies = req.cookies;
     const prevToken = cookies.split("=")[1];
     if(!prevToken) {
         return res.status(400).json({message: "Couldn't find token"});

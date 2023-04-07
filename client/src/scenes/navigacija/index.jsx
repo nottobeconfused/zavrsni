@@ -8,7 +8,6 @@ import NewGroup from "../../components/novaGrupa/novaGrupa";
 axios.defaults.withCredentials = true;
 const Navigacija = () => {
     const [isGrupeOpen, setIsGrupeOpen] = useState(false);
-    const [user, setUser] = useState();
 
     const toggleGrupe = () => {
         setIsGrupeOpen(!isGrupeOpen);
@@ -22,27 +21,24 @@ const Navigacija = () => {
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
-  const [groups, setGroups] = useState([]);
-  const sendRequest = async () => {
-    const res = await axios.get('http://localhost:5000/api/user', {
-        withCredentials: true
-    }).catch((err) => console.log(err));
-    const data = await res.data;
-    return data;
-}
-const getGrupe = async () => {
-  const res = await axios.get('http://localhost:5000/api/grupe', {
-      withCredentials: true
+
+const [user, setUser] = useState();
+const [groups, setGroups] = useState([]);
+
+const sendRequest = async () => {
+  const res = await axios.get('http://localhost:5000/api/user', {
+    withCredentials: true
   }).catch((err) => console.log(err));
   const data = await res.data;
   return data;
 }
 
-  useEffect(() => {
-    // Get user's groups from the backend API
-    sendRequest().then((data) => setUser(data.user));
-    getGrupe().then((data) => setGroups(data.groups));
-  }, []);
+useEffect(() => {
+  sendRequest().then((data) => {
+    setUser(data.user);
+    setGroups(data.user.grupe);
+  });
+}, []);
   const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -72,7 +68,7 @@ const getGrupe = async () => {
     </header>
     {isGrupeOpen && (
     <div className="grupice">
-        {groups.length > 0 ? (
+        {groups?.length > 0 ? (
             groups.map(group => (
                 <Link className="link" to="/grupe1/:id">
                     <div key={group._id} className="gumb-nav gumb-grupe" onClick={handleClick}>

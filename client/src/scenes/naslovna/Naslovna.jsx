@@ -9,18 +9,7 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 const Naslovna = () => {
-    const [objave, setObjave] = useState();
-    const sendRequest = async () => {
-        const res = await axios.get('http://localhost:5000/api/objava', {
-            withCredentials: true
-        }).catch((err) => console.log(err));
-        const data = await res.data;
-        return data;
-    }
-    useEffect(() => {
-            sendRequest().then((data) => setObjave(data.objave));
-    }, [])
-
+    const [objave, setObjave] = useState(null);
   const Objave = [{...objave}];
     return (
         <>
