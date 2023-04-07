@@ -9,19 +9,19 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 const Naslovna = () => {
-    const [grupe, setGrupe] = useState();
+    const [objave, setObjave] = useState();
     const sendRequest = async () => {
-        const res = await axios.get('http://localhost:5000/api/grupe/objava', {
+        const res = await axios.get('http://localhost:5000/api/objava', {
             withCredentials: true
         }).catch((err) => console.log(err));
         const data = await res.data;
         return data;
     }
     useEffect(() => {
-            sendRequest().then((data) => setGrupe(data.user));
+            sendRequest().then((data) => setObjave(data.objave));
     }, [])
 
-  const Objave = [{...grupe}];
+  const Objave = [{...objave}];
     return (
         <>
         <Navigacija />

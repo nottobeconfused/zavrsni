@@ -100,7 +100,7 @@ const getUser = async (req, res, next) => {
 };
 
 const novaGrupa = async(req, res, next) => {
-    const { imeGrupe} = req.body;
+    const { imeGrupe } = req.body;
     let existingGrupa;
 
     try {
@@ -111,10 +111,19 @@ const novaGrupa = async(req, res, next) => {
     if (existingGrupa) {
         return res.status(400).json({message: "Grupa već postoji!"});
     }
-
+    const cookies = req.headers.cookie;
+    const prevToken = cookies.split("=")[1];
+    let userId = "";
+    jwt.verify(String(prevToken), process.env.JWT_SECRET, (err, user) => {
+        if(err) {
+            console.log(err);
+            return res.status(403).json({message: "Autentication faild"})
+        };
+        userId = req.cookies[`${user.id}`];
+    })
     const grupa = new Grupa({
         imeGrupe: req.body.imeGrupe,
-        admin: req.user._id
+        admin: userId,
     });
 
     try {
@@ -123,11 +132,10 @@ const novaGrupa = async(req, res, next) => {
     }catch (err) {
         console.log(err);
     }
-
-    return res.status(201).json({message: "Uspješno ste izradili grupu!"});
 };
 const getGrupa = async (req, res, next) => {
     const grupaId = req.id;
+    
     let grupa;
     try {
         grupa = await Grupa.findById(grupaId);
@@ -169,7 +177,7 @@ const refreshToken = (req, res, next) => {
         req.cookies[`${user.id}`] = "";
 
         const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
-            expiresIn: "35s"
+            expiresIn: "60s"
         });
         res.cookie(String(user.id), token, {
             path: '/',

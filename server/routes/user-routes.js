@@ -7,8 +7,9 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.get("/user", verifyToken, getUser, getObjava);
 router.get("/grupe", getGrupa);
-router.post("/grupe", novaGrupa);
-router.get("/grupe/objava", getGrupa, getObjava);
+router.post("/nova-grupa", novaGrupa);
+router.get("/grupe", getGrupa);
+router.get("/objava", getObjava);
 router.get("/refresh", refreshToken, verifyToken, getUser);
 router.post("/logout", verifyToken, logout);
 

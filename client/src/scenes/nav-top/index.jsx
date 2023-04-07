@@ -32,7 +32,7 @@ const NavTop = () => {
         }
         let interval = setInterval(() => {
             refreshToken().then((data)=>setUser(data.user))
-        }, 1000 * 29)
+        }, 1000 * 59)
         
         return () => clearInterval(interval);
 

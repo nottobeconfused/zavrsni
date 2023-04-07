@@ -21,6 +21,10 @@ const grupaSchema = new Schema({
         type: Array,
         default: []
     },
+    admin : {
+        type: String,
+        default: ""
+    }
 },
 {timestamps: true }
 );
