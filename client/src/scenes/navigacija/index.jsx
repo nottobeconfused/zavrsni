@@ -68,21 +68,18 @@ useEffect(() => {
     </header>
     {isGrupeOpen && (
     <div className="grupice">
-        {groups?.length > 0 ? (
-            groups.map(group => (
-                <Link className="link" to="/grupe1/:id">
-                    <div key={group._id} className="gumb-nav gumb-grupe" onClick={handleClick}>
+      {groups.map(group => (
+                <Link className="link" to="/grupe/:id" key={group.id}>
+                    <div  className="gumb-nav gumb-grupe" onClick={handleClick}>
                     <i className="uil uil-polygon grupica"></i>
                     <p>{group.imeGrupe}</p>
                     </div>
                 </Link>
-              ))
-        ):(
-            <button onClick={() => setIsOpen(true)} className="gumb_otvori gumb">Create New Group</button>
-        )}
+              ))}
         {isOpen && (
         <NewGroup user={user} onClose={() => setIsOpen(false)}></NewGroup>
       )}
+      <button onClick={() => setIsOpen(true)} className="gumb_otvori gumb">Create New Group</button>
     </div>
     )};
     <Routes>

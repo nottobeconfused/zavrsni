@@ -71,19 +71,18 @@ const login = async (req, res, next) => {
 const verifyToken = (req, res, next) => {
     const cookies = req.headers.cookie;
     const token = cookies.split("=")[1];
-    
-    if(!token) {
-        res.status(404).json({message: "No token found"});
+    if (!token) {
+      res.status(404).json({ message: "No token found" });
     }
     jwt.verify(String(token), process.env.JWT_SECRET, (err, user) => {
-        if(err) {
-            return res.status(400).json({message: "Invalid token"});
-        }
-        console.log(user.id);
-        req.id = user.id;
+      if (err) {
+        return res.status(400).json({ message: "Invalid Token" });
+      }
+      console.log(user.id);
+      req.id = user.id;
     });
     next();
-};
+  };
 
 const getUser = async (req, res, next) => {
     const userId = req.id;
@@ -112,7 +111,7 @@ const novaGrupa = async(req, res, next) => {
   
       // Kreiraj novu grupu
       const novaGrupa = new Grupa({
-        imeGrupe: imeGrupe,
+        imeGrupe,
         admin: userId,
       });
       // Dodaj novu grupu u bazu podataka kod korisnika-admina
@@ -123,7 +122,7 @@ const novaGrupa = async(req, res, next) => {
       // Spremi novu grupu u bazu podataka
       await novaGrupa.save();
   
-      user.grupe.push(novaGrupa.imeGrupe);
+      user.grupe.push(novaGrupa);
       await user.save();
   
       // Vrati novu grupu
@@ -131,37 +130,9 @@ const novaGrupa = async(req, res, next) => {
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
-    }
-  };
-
-const getGrupa = async (req, res, next) => {
-    const grupaId = req.id;
-    
-    let grupa;
-    try {
-        grupa = await Grupa.findById({id: grupaId});
-    } catch (err){
-        return new Error(err);
-    }
-    if (!grupa) {
-        return res.status(404).json({message: "grupa not found"});
-    }
-    return res.status(200).json({grupa});
-};
-const getObjava = async (req, res, next) => {
-    const objavaId = req.id;
-    let objava;
-    try {
-        objava = await Objava.findById(objavaId);
-    } catch (err){
-        return new Error(err);
-    }
-    if (!objava) {
-        return res.status(404).json({message: "objava not found"});
-    }
-    return res.status(200).json({objava});
-};
-
+    }               
+  };                                
+                                                                                                                                                           
 const refreshToken = (req, res, next) => {
     const cookies = req.headers.cookie;
     const prevToken = cookies.split("=")[1];
@@ -178,7 +149,7 @@ const refreshToken = (req, res, next) => {
         req.cookies[`${user.id}`] = "";
 
         const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
-            expiresIn: "60s"
+            expiresIn: "35s"
         });
         res.cookie(String(user.id), token, {
             path: '/',
@@ -193,7 +164,7 @@ const refreshToken = (req, res, next) => {
 };
 
 const logout = (req, res, next) => {
-    const cookies = req.cookies;
+    const cookies = req.headers.cookie;
     const prevToken = cookies.split("=")[1];
     if(!prevToken) {
         return res.status(400).json({message: "Couldn't find token"});
@@ -215,7 +186,5 @@ exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getUser = getUser;
 exports.novaGrupa = novaGrupa;
-exports.getGrupa = getGrupa;
-exports.getObjava = getObjava;
 exports.refreshToken = refreshToken;
 exports.logout = logout;

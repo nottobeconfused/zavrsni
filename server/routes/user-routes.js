@@ -6,7 +6,7 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/user", verifyToken, getUser);
-router.post("/nova-grupa", novaGrupa);
+router.post("/nova-grupa", verifyToken, novaGrupa);
 router.get("/refresh", refreshToken, verifyToken, getUser);
 router.post("/logout", verifyToken, logout);
 
