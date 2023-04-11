@@ -6,8 +6,11 @@ import { OsobniProstor } from "../osobni-prostor/OsobniProstor";
 import axios from 'axios';
 import NewGroup from "../../components/novaGrupa/novaGrupa";
 axios.defaults.withCredentials = true;
-const Navigacija = () => {
+
+const Navigacija = ({grupe, user}) => {
+
     const [isGrupeOpen, setIsGrupeOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const toggleGrupe = () => {
         setIsGrupeOpen(!isGrupeOpen);
@@ -21,25 +24,7 @@ const Navigacija = () => {
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
-
-const [user, setUser] = useState();
-const [groups, setGroups] = useState([]);
-
-const sendRequest = async () => {
-  const res = await axios.get('http://localhost:5000/api/user', {
-    withCredentials: true
-  }).catch((err) => console.log(err));
-  const data = await res.data;
-  return data;
-}
-
-useEffect(() => {
-  sendRequest().then((data) => {
-    setUser(data.user);
-    setGroups(data.user.grupe);
-  });
-}, []);
-  const [isOpen, setIsOpen] = useState(false);
+  
 
     return (
         <>
@@ -68,14 +53,16 @@ useEffect(() => {
     </header>
     {isGrupeOpen && (
     <div className="grupice">
-      {groups.map(group => (
-                <Link className="link" to="/grupe/:id" key={group.id}>
+      {grupe.map(grupa => {
+        return (
+                <Link className="link" to={`/grupe/${grupa.id}`} key={grupa.id}>
                     <div  className="gumb-nav gumb-grupe" onClick={handleClick}>
                     <i className="uil uil-polygon grupica"></i>
-                    <p>{group.imeGrupe}</p>
+                    <p>{grupa.imeGrupe}</p>
                     </div>
                 </Link>
-              ))}
+        )
+})}
         {isOpen && (
         <NewGroup user={user} onClose={() => setIsOpen(false)}></NewGroup>
       )}

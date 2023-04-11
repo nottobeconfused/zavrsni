@@ -7,14 +7,60 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 
+let firstRender = true;
 axios.defaults.withCredentials = true;
 const Naslovna = () => {
-    const [objave, setObjave] = useState(null);
+
+  const [objave, setObjave] = useState(null);
+  const [user, setUser] = useState();
+  const [groups, setGroups] = useState([]);
+
+  const sendRequest = async () => {
+      const res = await axios.get('http://localhost:5000/api/user', {
+          withCredentials: true
+      }).catch((err) => console.log(err));
+      const data = await res.data;
+      return data;
+  }
+
+  const refreshToken = async () => {
+      const res = await axios
+        .get("http://localhost:5000/api/refresh", {
+          withCredentials: true,
+        })
+        .catch((err) => console.log(err));
+  
+      const data = await res.data;
+      return data;
+    };
+
+
+    useEffect(() => {
+
+      if (firstRender) {
+        firstRender = false;
+        sendRequest().then((data) => {
+          setUser(data.user)
+          setGroups(data.user.grupe);
+        });
+      }
+
+      let interval = setInterval(() => {
+        refreshToken().then((data) => setUser(data.user));
+      }, 1000 * 29);
+
+      return () => clearInterval(interval);
+
+    }, []);
+
+
+
+    
   const Objave = [{...objave}];
     return (
         <>
-        <Navigacija />
-        <NavTop />
+        <Navigacija grupe={groups} user={user}/>
+        <NavTop user={user}/>
         <div className="main">
         {Objave?.lenght > 0 ? (
           Objave.map(item => (
