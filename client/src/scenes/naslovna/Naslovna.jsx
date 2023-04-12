@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 
-let firstRender = true;
 axios.defaults.withCredentials = true;
 const Naslovna = () => {
 
@@ -37,16 +36,17 @@ const Naslovna = () => {
 
     useEffect(() => {
 
-      if (firstRender) {
-        firstRender = false;
+      
         sendRequest().then((data) => {
           setUser(data.user)
           setGroups(data.user.grupe);
         });
-      }
 
       let interval = setInterval(() => {
-        refreshToken().then((data) => setUser(data.user));
+        refreshToken().then((data) => {
+          setUser(data.user)
+          setGroups(data.user.grupe)
+        });
       }, 1000 * 29);
 
       return () => clearInterval(interval);

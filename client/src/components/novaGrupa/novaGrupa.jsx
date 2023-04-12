@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const NewGroup = ({ user, setUserGroup, onClose }) => {
+const NewGroup = ({ onClose }) => {
   const [groupName, setGroupName] = useState('');
 
   const createGroup = async () => {
     try {
       const res = await axios.post('http://localhost:5000/api/nova-grupa', { imeGrupe: groupName }, { withCredentials: true });
 
-      alert(`Grupa "${res.data.name}" kreirana!`);
+      alert(`Grupa "${groupName}" kreirana!`);
 
       setGroupName(res.data);
+      setGroupName('');
     } catch (error) {
       console.error(error);
       alert('Nismo uspjeli kreirati grupu.');

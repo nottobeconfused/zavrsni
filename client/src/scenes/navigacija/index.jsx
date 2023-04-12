@@ -55,7 +55,7 @@ const Navigacija = ({grupe, user}) => {
     <div className="grupice">
       {grupe.map(grupa => {
         return (
-                <Link className="link" to={`/grupe/${grupa.id}`} key={grupa.id}>
+                <Link className="link" to={`/grupe/${grupa._id}`} key={grupa._id}>
                     <div  className="gumb-nav gumb-grupe" onClick={handleClick}>
                     <i className="uil uil-polygon grupica"></i>
                     <p>{grupa.imeGrupe}</p>
@@ -71,7 +71,8 @@ const Navigacija = ({grupe, user}) => {
     )}
     <Routes>
         <Route path="/user" element={<Naslovna />} />
-        <Route path="/osobni-prostor/:id" element={<OsobniProstor />} />
+        <Route path="/osobni-prostor" element={<OsobniProstor />} />
+        <Route path={`/grupe/${grupe._id}`} />
     </Routes>
         </>
     )

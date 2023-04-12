@@ -11,6 +11,8 @@ app.use(cors({credentials: true, origin: "http://localhost:3000"}));
 app.use(cookieParser());
 app.use(express.json());
 app.use('/api', router);
+
+
 mongoose.set('strictQuery', false);
 mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.utstgc3.mongodb.net/?retryWrites=true&w=majority`).then(()=>{
     app.listen(5000);
