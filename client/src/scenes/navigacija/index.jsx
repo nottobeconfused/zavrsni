@@ -68,13 +68,13 @@ const Navigacija = ({grupe, user}) => {
       )}
       <button onClick={() => setIsOpen(true)} className="gumb_otvori gumb">Create New Group</button>
     </div>
-    )};
+    )}
     <Routes>
         <Route path="/user" element={<Naslovna />} />
         <Route path="/osobni-prostor/:id" element={<OsobniProstor />} />
     </Routes>
         </>
-    );
+    )
 }
 
 export default Navigacija;

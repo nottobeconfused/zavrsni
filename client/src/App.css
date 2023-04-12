@@ -108,8 +108,12 @@ select {
   --zelena: 132, 169, 140;
   --radius: 0.5rem;
 }
+@font-face {
+  font-family: 'My font';
+  src: url(../titillium-web-font/TitilliumWeb-1eq2.ttf);
+}
 *{
-  font-family: 'Roboto', sans-serif;
+  font-family: 'My font', sans-serif;
   color: var(--tekst);
 }
 
@@ -616,4 +620,7 @@ color: var(--isticanje);
     z-index: 4;
     top: 0;
     left: 0;
+  }
+  .icon-house {
+    stroke: #FF0000; /* Change the color to red */
   }

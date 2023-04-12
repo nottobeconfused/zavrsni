@@ -20,7 +20,7 @@ function App() {
     return (
         <>
             <Routes>
-                {isLoggedIn && <Route path="/user" element={<Naslovna />} />}
+                {isLoggedIn && <Route path="/user/*" element={<Naslovna />} />}
                 {isLoggedIn && <Route path="/osobni-prostor/:id" element={<OsobniProstor />} />}
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
