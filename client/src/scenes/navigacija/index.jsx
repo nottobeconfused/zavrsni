@@ -66,7 +66,7 @@ const Navigacija = ({grupe, user}) => {
         {isOpen && (
         <NewGroup user={user} onClose={() => setIsOpen(false)}></NewGroup>
       )}
-      <button onClick={() => setIsOpen(true)} className="gumb_otvori gumb">Create New Group</button>
+      <button onClick={() => setIsOpen(true)} className="gumb_otvori gumb">Izradi novu Grupu!</button>
     </div>
     )}
     <Routes>
