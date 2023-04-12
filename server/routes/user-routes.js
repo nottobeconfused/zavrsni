@@ -7,6 +7,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.get("/user", verifyToken, getUser);
 router.post("/nova-grupa", verifyToken, novaGrupa);
+router.get("/grupe/:id", verifyToken, refreshToken, getGrupa);
 router.get("/refresh", refreshToken, verifyToken, getUser);
 router.post("/logout", verifyToken, logout);
 

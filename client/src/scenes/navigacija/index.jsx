@@ -5,6 +5,8 @@ import Naslovna from "../naslovna/Naslovna";
 import { OsobniProstor } from "../osobni-prostor/OsobniProstor";
 import axios from 'axios';
 import NewGroup from "../../components/novaGrupa/novaGrupa";
+import Grupa from "../Grupe/Grupa";
+import NotFound from "../NotFound/NotFound";
 axios.defaults.withCredentials = true;
 
 const Navigacija = ({grupe, user}) => {
@@ -72,7 +74,7 @@ const Navigacija = ({grupe, user}) => {
     <Routes>
         <Route path="/user" element={<Naslovna />} />
         <Route path="/osobni-prostor" element={<OsobniProstor />} />
-        <Route path={`/grupe/${grupe._id}`} />
+        <Route path={"/grupe/:id"} element={<Grupa/>}/>
     </Routes>
         </>
     )

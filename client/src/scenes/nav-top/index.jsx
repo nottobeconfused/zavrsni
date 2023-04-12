@@ -3,7 +3,7 @@ import '../../App.css';
 import ModalNovo from "./ModalNovo";
 import ModalProfil from "./MofdalProfil";
 
-const NavTop = ({user}) => {
+const NavTop = ({user, grupa}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenP, setIsOpenP] = useState(false);
 
@@ -14,7 +14,7 @@ const NavTop = ({user}) => {
             <div className="nav-top-elementi">
             <div className="nav-top-naziv">
                 <div className="naziv-ime">
-                    {user && <h3>Naslovna</h3>}
+                    {!grupa ? (<h3>Naslovna</h3>) : (<h3>{grupa.imeGrupe}</h3>)}
                 </div>
             </div>
             <div className="nav-top-funkcije">

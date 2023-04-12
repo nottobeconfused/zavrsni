@@ -97,6 +97,17 @@ const getUser = async (req, res, next) => {
     }
     return res.status(200).json({user});
 };
+const getGrupa = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        console.log("grupa id:", id)
+        const grupa = await Grupa.findById(id);
+        console.log(grupa.imeGrupe)
+        res.status(200).json(grupa);
+      } catch (err) {
+        res.status(404).json({ message: err.message });
+      }
+}
 
 const novaGrupa = async(req, res, next) => {
     const { imeGrupe } = req.body;
@@ -185,6 +196,7 @@ exports.signup = signup;
 exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getUser = getUser;
+exports.getGrupa = getGrupa;
 exports.novaGrupa = novaGrupa;
 exports.refreshToken = refreshToken;
 exports.logout = logout;
