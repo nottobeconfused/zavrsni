@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import axios from "axios";
-import { Routes, Route, Link } from "react-router-dom";
-import Login from "./Login";
+import { Link } from "react-router-dom";
 axios.defaults.withCredentials = true;
 const Welcome = () => {
 
@@ -21,10 +19,10 @@ const Welcome = () => {
         </div>
         <div className="glavna-forma">
             <p className='p'>
-                <Link id='gumb-login-signup' to="/signup">Registriraj se!</Link>
+                <Link className='gumb-login-signup' to="/signup">Registriraj se!</Link>
             </p>
             <p className='p'>
-                <Link id='gumb-login-signup' to="/login">Prijavi se!</Link>
+                <Link className='gumb-login-signup' to="/login">Prijavi se!</Link>
             </p>
         </div>
     </div>

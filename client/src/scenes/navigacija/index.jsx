@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Routes, Route, Link } from 'react-router-dom';
 import '../../App.css';
 import Naslovna from "../naslovna/Naslovna";
@@ -6,7 +6,6 @@ import { OsobniProstor } from "../osobni-prostor/OsobniProstor";
 import axios from 'axios';
 import NewGroup from "../../components/novaGrupa/novaGrupa";
 import Grupa from "../Grupe/Grupa";
-import NotFound from "../NotFound/NotFound";
 axios.defaults.withCredentials = true;
 
 const Navigacija = ({grupe, user}) => {
@@ -57,7 +56,7 @@ const Navigacija = ({grupe, user}) => {
     <div className="grupice">
       {grupe.map(grupa => {
         return (
-                <Link className="link" to={`/grupe/${grupa._id}`} key={grupa._id}>
+                <Link className={activeItem === "link" ? "otvoreno" : ""} onClick={() => handleItemClick("link")} to={`/grupe/${grupa.id}`} key={grupa.id}>
                     <div  className="gumb-nav gumb-grupe" onClick={handleClick}>
                     <i className="uil uil-polygon grupica"></i>
                     <p>{grupa.imeGrupe}</p>
@@ -74,7 +73,7 @@ const Navigacija = ({grupe, user}) => {
     <Routes>
         <Route path="/user" element={<Naslovna />} />
         <Route path="/osobni-prostor" element={<OsobniProstor />} />
-        <Route path={"/grupe/:id"} element={<Grupa/>}/>
+        <Route path={"/grupe/:id/*"} element={<Grupa grupe={grupe}/>}/>
     </Routes>
         </>
     )

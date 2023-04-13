@@ -40,6 +40,7 @@ const Naslovna = () => {
         sendRequest().then((data) => {
           setUser(data.user)
           setGroups(data.user.grupe);
+          setObjave(data.user.objave)
         });
 
       let interval = setInterval(() => {

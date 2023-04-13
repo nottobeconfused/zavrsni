@@ -131,11 +131,12 @@ const novaGrupa = async(req, res, next) => {
         return res.status(400).json({ message: 'Korisnik nije pronađen!' });
       }
       // Spremi novu grupu u bazu podataka
+      novaGrupa.users.push(userId);
       await novaGrupa.save();
   
-      user.grupe.push(novaGrupa);
+      user.grupe.push({imeGrupe: novaGrupa.imeGrupe, id: novaGrupa._id});
       await user.save();
-  
+
       // Vrati novu grupu
       res.status(201).json({ novaGrupa });
     } catch (err) {

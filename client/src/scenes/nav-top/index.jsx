@@ -14,7 +14,7 @@ const NavTop = ({user, grupa}) => {
             <div className="nav-top-elementi">
             <div className="nav-top-naziv">
                 <div className="naziv-ime">
-                    {!grupa ? (<h3>Naslovna</h3>) : (<h3>{grupa.imeGrupe}</h3>)}
+                    {grupa ? (<h3>{grupa.imeGrupe}</h3>) : (<h3>Naslovna</h3>)}
                 </div>
             </div>
             <div className="nav-top-funkcije">

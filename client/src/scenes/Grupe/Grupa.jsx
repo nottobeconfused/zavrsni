@@ -12,57 +12,60 @@ const Grupa = () => {
     const { id } = useParams();
 
     const [objave, setObjave] = useState(null);
-    const [user, setUser] = useState();
     const [grupa, setGrupa] = useState();
+    const [user, setUser] = useState();
     const [groups, setGroups] = useState([]);
-  
+
     const sendRequest = async () => {
-        const res = await axios.get('http://localhost:5000/api/user', {
-            withCredentials: true
-        }).catch((err) => console.log(err));
-        const data = await res.data;
-        return data;
-    }
+      const res = await axios.get('http://localhost:5000/api/user', {
+          withCredentials: true
+      }).catch((err) => console.log(err));
+      const data = await res.data;
+      return data;
+  }
     const sendRequestGrupa = async () => {
         const res = await axios.get(`http://localhost:5000/api/grupe/${id}`, {
             withCredentials: true
         }).catch((err) => console.log(err));
         const data = await res.data;
+        console.log(data)
         return data;
     }
-  
+
     const refreshToken = async () => {
-        const res = await axios
-          .get("http://localhost:5000/api/refresh", {
-            withCredentials: true,
-          })
-          .catch((err) => console.log(err));
-    
-        const data = await res.data;
-        return data;
-      };
+      const res = await axios
+        .get("http://localhost:5000/api/refresh", {
+          withCredentials: true,
+        })
+        .catch((err) => console.log(err));
+  
+      const data = await res.data;
+      return data;
+    };
   
   
       useEffect(() => {
   
-        
-          sendRequest().then((data) => {
-            setUser(data.user)
-            setGroups(data.user.grupe);
-          });
           sendRequestGrupa().then((data) => {
             setGrupa(data.grupa)
           })
-  
-        let interval = setInterval(() => {
-          refreshToken().then((data) => {
+          sendRequest().then((data) => {
             setUser(data.user)
-            setGroups(data.user.grupe)
+            setGroups(data.user.grupe);
+            setObjave(data.user.objave)
           });
-        }, 1000 * 29);
-  
-        return () => clearInterval(interval);
-  
+
+          let interval = setInterval(() => {
+            refreshToken().then((data) => {
+              setUser(data.user)
+            });
+            sendRequestGrupa().then((data) => {
+              setGrupa(data.grupa)
+              setObjave(data.grupa.objave)
+            })
+          }, 1000 * 29);
+    
+          return () => clearInterval(interval);
       }, []);
   
   
@@ -73,6 +76,7 @@ const Grupa = () => {
           <>
           <Navigacija grupe={groups} user={user}/>
           <NavTop user={user} grupa={grupa}/>
+          {console.log(grupa)}
           <div className="main">
           {Objave?.lenght > 0 ? (
             Objave.map(item => (

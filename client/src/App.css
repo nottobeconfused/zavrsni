@@ -397,6 +397,23 @@ outline: 2px solid var(--isticanje-svijetlo);
 background-color: var(--pozadina-svijetlo);
 color: rgb(var(--isticanje));
 }
+.gumb-login-signup{
+  font-weight: bold;
+  text-decoration: none;
+  width: 100%;
+  margin-top: 5%;
+  color: rgb(var(--pozadina-svijetlo));
+  background-color: var(--isticanje-svijetlo);
+  border-radius: var(--radius);
+  border: none;
+  outline: none;
+  padding: 1rem 2rem;
+}
+.gumb-login-signup:hover{
+outline: 2px solid var(--isticanje-svijetlo);
+background-color: var(--pozadina-svijetlo);
+color: rgb(var(--isticanje));
+}
 a{
 color: var(--isticanje);
 }
