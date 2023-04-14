@@ -28,7 +28,6 @@ const Grupa = () => {
             withCredentials: true
         }).catch((err) => console.log(err));
         const data = await res.data;
-        console.log(data)
         return data;
     }
 
@@ -47,8 +46,8 @@ const Grupa = () => {
       useEffect(() => {
   
           sendRequestGrupa().then((data) => {
-            setGrupa(data.grupa)
-          })
+            setGrupa(data)
+          });
           sendRequest().then((data) => {
             setUser(data.user)
             setGroups(data.user.grupe);
@@ -57,10 +56,12 @@ const Grupa = () => {
 
           let interval = setInterval(() => {
             refreshToken().then((data) => {
+              setGroups(data.user.grupe);
+              setObjave(data.user.objave)
               setUser(data.user)
             });
             sendRequestGrupa().then((data) => {
-              setGrupa(data.grupa)
+              setGrupa(data)
               setObjave(data.grupa.objave)
             })
           }, 1000 * 29);
@@ -69,14 +70,12 @@ const Grupa = () => {
       }, []);
   
   
-  
       
     const Objave = [{...objave}];
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
           <NavTop user={user} grupa={grupa}/>
-          {console.log(grupa)}
           <div className="main">
           {Objave?.lenght > 0 ? (
             Objave.map(item => (
