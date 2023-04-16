@@ -81,6 +81,7 @@ select {
   --pozadina-tamno: 17, 17, 17;
 
   --iznad: rgb(var(--tamno-iznad));
+  --iznad-objava: rgb(var(--isticanje));
   --iznad-prozirno: 56, 58, 56, 0.8;
 
   --tekst: rgb(var(--tamno-tekst));
@@ -527,6 +528,129 @@ color: var(--isticanje);
   color: rgb(var(--isticanje));
 }
 
+textarea{
+  resize: none;
+  overflow-y: scroll;
+}
+.novaObjavaBackground{
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ob-modal{
+  width: 50%;
+  height: 80%;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.novaObjava-modal{
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: auto;
+  row-gap: 0.4rem;
+}
+.objava-polje{
+  padding: 1rem;
+  border-radius: var(--radius);
+  color: var(--tekst);
+  background-color: var(--iznad-objava);
+  display: flex;
+  flex-direction: column;
+}
+.ob-label{
+  padding-bottom: 1%;
+}
+.ob-input{
+  background-color: rgb(164, 189, 169);
+  border: none;
+  border-radius: calc(var(--radius) - 0.2rem);
+  padding: 1%;
+}
+.ob-funkcije{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.objava-gumbi{
+  margin: 1%;
+  column-gap: 0.5rem;
+}
+.gumb-ob{
+  color: var(--tekst);
+  border-radius: var(--radius);
+  border: none;
+  padding: 0.5% 1%;
+  cursor: pointer;
+}
+
+.odabir{
+  width: 15rem;
+  padding: 1% 5%;
+  background-color: var(--iznad-objava);
+  border-radius: 0.5rem;
+  color: var(--tekst);
+  display: flex;
+  align-items: center;
+}
+.radio{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.radio_input{
+  display: none;
+}
+.radio_label{
+  text-align: center;
+  border-radius: 0.2rem;
+  width: 8rem;
+  padding: 0 0.7rem;
+  cursor: pointer;
+  transition: background-color 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.radio_input:checked + .radio_label{
+  background-color: var(--tekst);
+  color: var(--iznad-objava);
+}
+.ob-izlaz{
+  padding: 0 1rem;
+}
+#delete{
+  background-color: rgb(129, 58, 58);
+}
+#delete:hover{
+  background-color: rgba(129, 58, 58, 0.6);
+  outline: 2px solid rgb(129, 58, 58);
+  color: rgb(194, 89, 89);
+}
+#cancel{
+  background-color: rgb(167, 167, 78);
+}
+#cancel:hover{
+  background-color: rgba(167, 167, 78, 0.6);
+  outline: 2px solid rgb(167, 167, 78);
+  color: rgb(211, 211, 99);
+}
+#save{
+  background-color: rgb(72, 146, 72);
+}
+#save:hover{
+  background-color: rgba(72, 146, 72, 0.6);
+  outline: 2px solid rgb(72, 146, 72);
+  color: rgb(90, 182, 90);
+}
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -607,6 +731,9 @@ color: var(--isticanje);
       padding: 3%;
       border-radius: 0.7rem;
     }
+    .profil-slika p{
+      display: none;
+    }
 
   .header-forma-login-signup{
       width: 100%;
@@ -624,6 +751,16 @@ color: var(--isticanje);
   .gumb-login-signup{
     width: 90%;
   }
+  .ob-modal{
+    width: 95%;
+    height: 95%;
+}
+textarea{
+    width: 100%;
+}
+input{
+    width: 100%;
+}
   }
   .error{
     display: flex;

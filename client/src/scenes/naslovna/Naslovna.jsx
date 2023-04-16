@@ -5,10 +5,13 @@ import '../../App.css';
 import Objava from '../../components/Objava/Objava';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import NewObjava from '../../components/novaObjava/novaObjava';
 
 
 axios.defaults.withCredentials = true;
 const Naslovna = () => {
+
+  const [ObjavaModal, setObjavaModalOpen] = useState(false);
 
   const [objave, setObjave] = useState(null);
   const [user, setUser] = useState();
@@ -61,7 +64,8 @@ const Naslovna = () => {
     return (
         <>
         <Navigacija grupe={groups} user={user}/>
-        <NavTop user={user}/>
+        <NavTop user={user} setObjavaModalOpen={() => setObjavaModalOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
+        {ObjavaModal && (<NewObjava onClose={() => setObjavaModalOpen(false)}/>)}
         <div className="main">
         {Objave?.lenght > 0 ? (
           Objave.map(item => (

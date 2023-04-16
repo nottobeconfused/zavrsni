@@ -3,7 +3,7 @@ import '../../App.css';
 import ModalNovo from "./ModalNovo";
 import ModalProfil from "./MofdalProfil";
 
-const NavTop = ({user, grupa}) => {
+const NavTop = ({user, grupa, setObjavaModalOpen}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenP, setIsOpenP] = useState(false);
 
@@ -22,7 +22,7 @@ const NavTop = ({user, grupa}) => {
                     <div >
                     <button onClick={() => setIsOpen(true)}
                     className="gumb-novo gumb-nav gumb"><i className="uil uil-plus-circle"></i></button>
-                    <ModalNovo open={isOpen}  onClose={() => setIsOpen(false)}/>
+                    <ModalNovo open={isOpen}  onClose={() => setIsOpen(false)} setObjavaModalOpen={setObjavaModalOpen}/>
                     </div>
                     <div className="gumb-nav">
                 <div className="profil-slika dropdown-container gumb" onClick={() => setIsOpenP(true)}>

@@ -56,7 +56,7 @@ const Navigacija = ({grupe, user}) => {
     <div className="grupice">
       {grupe.map(grupa => {
         return (
-                <Link className={activeItem === "link" ? "otvoreno" : ""} onClick={() => handleItemClick("link")} to={`/grupe/${grupa.id}`} key={grupa.id}>
+                <Link className="link" to={`/grupe/${grupa.id}`} key={grupa.id}>
                     <div  className="gumb-nav gumb-grupe" onClick={handleClick}>
                     <i className="uil uil-polygon grupica"></i>
                     <p>{grupa.imeGrupe}</p>
