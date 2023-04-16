@@ -17,7 +17,7 @@ function Signup() {
         }));
     };
     const sendRequest = async() => {
-        const res = await axios.post('https://propuh-m6q1.onrender.com/api/signup', {
+        const res = await axios.post('https://localhost:5000/api/signup', {
             korisnickoIme: inputs.korisnickoIme,
             email: inputs.email,
             password: inputs.password

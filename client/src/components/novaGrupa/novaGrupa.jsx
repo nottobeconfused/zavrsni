@@ -6,7 +6,7 @@ const NewGroup = ({ onClose }) => {
 
   const createGroup = async () => {
     try {
-      const res = await axios.post('https://propuh-m6q1.onrender.com/api/nova-grupa', { imeGrupe: groupName }, { withCredentials: true });
+      const res = await axios.post('https://localhost:5000/api/nova-grupa', { imeGrupe: groupName }, { withCredentials: true });
 
       alert(`Grupa "${groupName}" kreirana!`);
 
