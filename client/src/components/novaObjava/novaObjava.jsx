@@ -28,7 +28,7 @@ const NewObjava = ({ onClose }) => {
                 <input className="radio_input" onClick={() => {
                     setObChecked(true)
                     setZadChecked(false)
-                }} type="radio" name="ob-zad" id="ob" />
+                }} defaultChecked type="radio" name="ob-zad" id="ob" />
                 <label className="radio_label" htmlFor="ob">objava</label>
                 <input className="radio_input" onClick={() => {
                     setObChecked(false)
@@ -36,7 +36,6 @@ const NewObjava = ({ onClose }) => {
                 }} type="radio" name="ob-zad" id="zad"/>
                 <label className="radio_label" htmlFor="zad">zadatak</label>
             </div>
-            <div className='ob-izlaz gumb' onClick={onClose}><i className='uil uil-x'></i></div>
         </div>
         <div className='novaObjava-modal'>
 
@@ -55,6 +54,29 @@ const NewObjava = ({ onClose }) => {
                 <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple/>
             </div>
 
+                {zadChecked && (
+                    <>
+                <div className='objava-oddo'>
+                    <div className="objava-polje">
+                        <label htmlFor="od">OD datuma:</label>
+                        <input className="ob-input" type="date" name="od" id="od" />
+                    </div>
+                    <div className="objava-polje">
+                        <label htmlFor="do">DO datuma:</label>
+                        <input className="ob-input" type="date" name="do" id="do" />
+                    </div>
+                </div>
+
+                <div className='objava-polje ob-ocjena'>
+                    <label htmlFor="ocjena">Ocjena:</label>
+                    <section>
+                        <p>___ / <input className="ob-input" type="number" name="ocjena" id="ocjena" min={0} max={100} defaultValue={100}/></p>
+                    </section>
+                </div>
+                </>
+                )}
+
+
             <div className="objava-polje objava-komentari">
                 <label className="ob-label" htmlFor="ob-komentar">Komentari</label>
                 <textarea className="ob-input" name="ob-komentar" id="ob-komentar" cols="auto" rows="3" placeholder="Komentar..."></textarea>
@@ -64,7 +86,7 @@ const NewObjava = ({ onClose }) => {
 
         <div className="ob-funkcije objava-gumbi">
             <button className="gumb-ob" id="delete">Obriši</button>
-            <button className="gumb-ob" id="cancel">Cancel</button>
+            <button className="gumb-ob" id="cancel" onClick={onClose}>Cancel</button>
             <button className="gumb-ob" id="save">Spremi</button>
         </div>
 

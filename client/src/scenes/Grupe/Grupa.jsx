@@ -6,8 +6,11 @@ import Objava from '../../components/Objava/Objava';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from 'react-router-dom';
+import NewObjava from '../../components/novaObjava/novaObjava';
 
 const Grupa = () => {
+
+  const [ObjavaModal, setObjavaModalOpen] = useState(false);
 
     const { id } = useParams();
 
@@ -75,7 +78,8 @@ const Grupa = () => {
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
-          <NavTop user={user} grupa={grupa}/>
+          <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
+          {ObjavaModal && (<NewObjava onClose={() => setObjavaModalOpen(false)}/>)}
           <div className="main">
           {Objave?.lenght > 0 ? (
             Objave.map(item => (
