@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store";
@@ -11,7 +11,7 @@ function ModalProfil({open, onClose}) {
   const res = await axios.post("http://localhost:5000/api/logout", null, {
     withCredentials: true
   })
-  if(res.status == 200) {
+  if(res.status === 200) {
     return res;
   }
   return new Error("Unable to logout. Try again");

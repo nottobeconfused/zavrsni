@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const NewObjava = ({ onClose }) => {
-    const [obChecked, setObChecked] = useState(true)
     const [zadChecked, setZadChecked] = useState(false)
 //   const [objavaIme, setObjavaIme] = useState('');
 //   const [objavaTekst, setObjavaTekst] = useState('');
@@ -26,12 +24,10 @@ const NewObjava = ({ onClose }) => {
             <div className="ob-funkcije ob-zad">
             <div className="odabir radio">
                 <input className="radio_input" onClick={() => {
-                    setObChecked(true)
                     setZadChecked(false)
                 }} defaultChecked type="radio" name="ob-zad" id="ob" />
                 <label className="radio_label" htmlFor="ob">objava</label>
                 <input className="radio_input" onClick={() => {
-                    setObChecked(false)
                     setZadChecked(true)
                 }} type="radio" name="ob-zad" id="zad"/>
                 <label className="radio_label" htmlFor="zad">zadatak</label>

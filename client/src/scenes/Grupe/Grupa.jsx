@@ -65,11 +65,10 @@ const Grupa = () => {
             });
             sendRequestGrupa().then((data) => {
               setGrupa(data)
-              setObjave(data.grupa.objave)
             })
           }, 1000 * 29);
     
-          return () => clearInterval(interval);
+          return () => clearInterval(interval);// eslint-disable-next-line
       }, []);
   
   

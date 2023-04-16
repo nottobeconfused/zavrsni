@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 function ModalNovo({open, onClose, setObjavaModalOpen}) {
   if (!open) return null
   return (
