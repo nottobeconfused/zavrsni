@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors({credentials: true, origin: "http://localhost:3000"}));
+app.use(cors({credentials: true, origin: "https://main--regal-marshmallow-8e30fc.netlify.app/"}));
 app.use(cookieParser());
 app.use(express.json());
 app.use('/api', router);
