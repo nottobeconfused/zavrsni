@@ -17,7 +17,7 @@ const Naslovna = () => {
   const [groups, setGroups] = useState([]);
 
   const sendRequest = async () => {
-      const res = await axios.get('http://localhost:5000/api/user', {
+      const res = await axios.get('https://propuh-m6q1.onrender.com/api/user', {
           withCredentials: true
       }).catch((err) => console.log(err));
       const data = await res.data;
@@ -26,7 +26,7 @@ const Naslovna = () => {
 
   const refreshToken = async () => {
       const res = await axios
-        .get("http://localhost:5000/api/refresh", {
+        .get("https://propuh-m6q1.onrender.com/api/refresh", {
           withCredentials: true,
         })
         .catch((err) => console.log(err));
