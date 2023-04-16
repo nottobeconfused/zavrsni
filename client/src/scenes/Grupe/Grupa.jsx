@@ -20,14 +20,14 @@ const Grupa = () => {
     const [groups, setGroups] = useState([]);
 
     const sendRequest = async () => {
-      const res = await axios.get('https://localhost:5000/api/user', {
+      const res = await axios.get('http://localhost:5000/api/user', {
           withCredentials: true
       }).catch((err) => console.log(err));
       const data = await res.data;
       return data;
   }
     const sendRequestGrupa = async () => {
-        const res = await axios.get(`https://localhost:5000/api/grupe/${id}`, {
+        const res = await axios.get(`http://localhost:5000/api/grupe/${id}`, {
             withCredentials: true
         }).catch((err) => console.log(err));
         const data = await res.data;
@@ -36,7 +36,7 @@ const Grupa = () => {
 
     const refreshToken = async () => {
       const res = await axios
-        .get("https://localhost:5000/api/refresh", {
+        .get("http://localhost:5000/api/refresh", {
           withCredentials: true,
         })
         .catch((err) => console.log(err));

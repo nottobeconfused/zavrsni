@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const NewObjava = ({ onClose }) => {
+    const [obChecked, setObChecked] = useState(true)
     const [zadChecked, setZadChecked] = useState(false)
 //   const [objavaIme, setObjavaIme] = useState('');
 //   const [objavaTekst, setObjavaTekst] = useState('');
