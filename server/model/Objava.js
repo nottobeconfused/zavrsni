@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const objavaSchema = new Schema({
+    grupa: {
+        type: String,
+        default: "",
+    },
     nazivObjave: {
         type: String,
         required: true,
@@ -17,11 +21,7 @@ const objavaSchema = new Schema({
         type: String,
         default: "",
     },
-    od: {
-        type: String,
-        default: "",
-    },
-    do: {
+    admin: {
         type: String,
         default: "",
     },

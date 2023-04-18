@@ -14,7 +14,7 @@ const Grupa = () => {
 
     const { id } = useParams();
 
-    const [objave, setObjave] = useState(null);
+    const [objave, setObjave] = useState();
     const [grupa, setGrupa] = useState();
     const [user, setUser] = useState();
     const [groups, setGroups] = useState([]);
@@ -25,6 +25,7 @@ const Grupa = () => {
       }).catch((err) => console.log(err));
       const data = await res.data;
       return data;
+      
   }
     const sendRequestGrupa = async () => {
         const res = await axios.get(`http://localhost:5000/api/grupe/${id}`, {
@@ -50,38 +51,36 @@ const Grupa = () => {
   
           sendRequestGrupa().then((data) => {
             setGrupa(data)
+            setObjave(data.objave)
           });
           sendRequest().then((data) => {
             setUser(data.user)
             setGroups(data.user.grupe);
-            setObjave(data.user.objave)
+            
           });
 
           let interval = setInterval(() => {
             refreshToken().then((data) => {
               setGroups(data.user.grupe);
-              setObjave(data.user.objave)
               setUser(data.user)
             });
             sendRequestGrupa().then((data) => {
               setGrupa(data)
+              setObjave(data.objave)
             })
           }, 1000 * 29);
     
           return () => clearInterval(interval);// eslint-disable-next-line
       }, []);
-  
-  
-      
-    const Objave = [{...objave}];
+
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
           <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
           {ObjavaModal && (<NewObjava onClose={() => setObjavaModalOpen(false)}/>)}
           <div className="main">
-          {Objave?.lenght > 0 ? (
-            Objave.map(item => (
+          {objave?.lenght > 0 ? (
+            objave.map(item => (
               <Objava item={item}/>
             ))) : (
               <div className="karticaZadatka">

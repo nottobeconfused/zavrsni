@@ -2,23 +2,52 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const NewObjava = ({ onClose }) => {
-    const [obChecked, setObChecked] = useState(true)
     const [zadChecked, setZadChecked] = useState(false)
-//   const [objavaIme, setObjavaIme] = useState('');
-//   const [objavaTekst, setObjavaTekst] = useState('');
-//   const [objavaDatumOd, setObjavaDatumOd] = useState('');
-//   const [objavaDatumDo, setObjavaDatumDo] = useState('');
+    const [objavaIme, setObjavaIme] = useState('');
+    const [objavaTekst, setObjavaTekst] = useState('');
+    const [objavaDatumOd, setObjavaDatumOd] = useState('');
+    const [objavaDatumDo, setObjavaDatumDo] = useState('');
+    const [objavaOcjena, setObjavaOcjena] = useState('');
 
-//   const izradiObjavu = async () => {
-//     try {
-//       const res = await axios.post('http://localhost:5000/api/nova-objava', { nazivObjave: objavaIme }, { withCredentials: true });
+    const handleNaziv = (e) => {
+        setObjavaIme(e);
+    }
+    
+    const handleTekst = (e) => {
+        setObjavaTekst(e);
+    }
+    const handleDatumOd = (e) => {
+        setObjavaDatumOd(e);
+    }
+    const handleDatumDo = (e) => {
+        setObjavaDatumDo(e);
+    }
+    const handleObjavaOcjena = (e) => {
+        setObjavaOcjena(e);
+    }
 
-//       setObjavaIme(res.data);
-//     } catch (error) {
-//       console.error(error);
-//       alert('Nismo uspjeli kreirati objavu.');
-//     }
-//   };
+    const izradi = async () => {
+        if (!zadChecked){
+        try {
+        const res = await axios.post('http://localhost:5000/api/nova-objava', { nazivObjave: objavaIme, tekst: objavaTekst }, { withCredentials: true });
+        const data = await res.data;
+        return data;
+        } catch (error) {
+        console.error(error);
+        alert('Nismo uspjeli kreirati objavu.');
+        }
+    }else{
+        try {
+            const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
+    
+            const data = await res.data;
+            return data;
+            } catch (error) {
+            console.error(error);
+            alert('Nismo uspjeli kreirati zadatak.');
+         }
+        }
+    };
 
   return (
     <div className="novaObjavaBackground">
@@ -39,12 +68,27 @@ const NewObjava = ({ onClose }) => {
 
             <div className="objava-polje objava-naziv">
                 <label className="ob-label" htmlFor="ob-ime">Naziv objave</label>
-                <input className="ob-input" type="text" name="ob-ime" id="ob-ime" placeholder="Naziv objave" />
+                <input 
+                className="ob-input"
+                 type="text"
+                name="ob-ime" 
+                id="ob-ime" 
+                placeholder="Naziv objave"
+                onChange={(e) => handleNaziv(e.target.value)} 
+                />
             </div>
 
             <div className="objava-polje objava-tekst">
                 <label className="ob-label" htmlFor="ob-txt">Tekst objave</label>
-                <textarea className="ob-input" name="ob-txt" id="ob-txt" cols="auto" rows="7" placeholder="Tekst objave..."></textarea>
+                <textarea 
+                className="ob-input" 
+                name="ob-txt" 
+                id="ob-txt" 
+                cols="auto" 
+                rows="7" 
+                placeholder="Tekst objave..."
+                onChange={(e) => handleTekst(e.target.value)} 
+                />
             </div>
 
             <div className="objava-polje objava-datoteke">
@@ -57,18 +101,39 @@ const NewObjava = ({ onClose }) => {
                 <div className='objava-oddo'>
                     <div className="objava-polje">
                         <label htmlFor="od">OD datuma:</label>
-                        <input className="ob-input" type="date" name="od" id="od" />
+                        <input 
+                        className="ob-input" 
+                        type="date" 
+                        name="od" 
+                        id="od" 
+                        onChange={(e) => handleDatumOd(e.target.value)} 
+                        />
                     </div>
                     <div className="objava-polje">
                         <label htmlFor="do">DO datuma:</label>
-                        <input className="ob-input" type="date" name="do" id="do" />
+                        <input 
+                        className="ob-input" 
+                        type="date" 
+                        name="do" 
+                        id="do" 
+                        onChange={(e) => handleDatumDo(e.target.value)} 
+                        />
                     </div>
                 </div>
 
                 <div className='objava-polje ob-ocjena'>
                     <label htmlFor="ocjena">Ocjena:</label>
                     <section>
-                        <p>___ / <input className="ob-input" type="number" name="ocjena" id="ocjena" min={0} max={100} defaultValue={100}/></p>
+                        <p>___ / <input 
+                        className="ob-input" 
+                        type="number" 
+                        name="ocjena" 
+                        id="ocjena" 
+                        min={0} 
+                        max={100} 
+                        defaultValue={100}
+                        onChange={(e) => handleObjavaOcjena(e.target.value)} 
+                        /></p>
                     </section>
                 </div>
                 </>
@@ -85,7 +150,7 @@ const NewObjava = ({ onClose }) => {
         <div className="ob-funkcije objava-gumbi">
             <button className="gumb-ob" id="delete">Obriši</button>
             <button className="gumb-ob" id="cancel" onClick={onClose}>Cancel</button>
-            <button className="gumb-ob" id="save">Spremi</button>
+            <button className="gumb-ob" id="save" onClick={izradi}>Spremi</button>
         </div>
 
         </div>

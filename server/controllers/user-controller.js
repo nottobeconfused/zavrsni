@@ -100,9 +100,7 @@ const getUser = async (req, res, next) => {
 const getGrupa = async (req, res, next) => {
     try {
         const { id } = req.params;
-        console.log("grupa id:", id)
         const grupa = await Grupa.findById(id);
-        console.log(grupa.imeGrupe)
         res.status(200).json(grupa);
       } catch (err) {
         res.status(404).json({ message: err.message });
@@ -110,7 +108,7 @@ const getGrupa = async (req, res, next) => {
 }
 
 const novaGrupa = async(req, res, next) => {
-    const { imeGrupe } = req.body;
+    const { imeGrupe } = req.params;
     const userId = req.id;
   
     try {
@@ -143,7 +141,10 @@ const novaGrupa = async(req, res, next) => {
       console.error(err.message);
       res.status(500).send('Server Error');
     }               
-  };                                
+  };    
+  const novaObjava = async(req, res, next) => {
+    const {grupaId} = req.id     
+  };                             
                                                                                                                                                            
 const refreshToken = (req, res, next) => {
     const cookies = req.headers.cookie;
@@ -199,5 +200,6 @@ exports.verifyToken = verifyToken;
 exports.getUser = getUser;
 exports.getGrupa = getGrupa;
 exports.novaGrupa = novaGrupa;
+exports.novaObjava = novaObjava;
 exports.refreshToken = refreshToken;
 exports.logout = logout;
