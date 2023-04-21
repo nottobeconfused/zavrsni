@@ -8,7 +8,7 @@ import NewGroup from "../../components/novaGrupa/novaGrupa";
 import Grupa from "../Grupe/Grupa";
 axios.defaults.withCredentials = true;
 
-const Navigacija = ({grupe, user}) => {
+const Navigacija = ({grupe, user, otvoreno}) => {
 
     const [isGrupeOpen, setIsGrupeOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +20,7 @@ const Navigacija = ({grupe, user}) => {
         setIsGrupeOpen(false);
       }
 
-      const [activeItem, setActiveItem] = useState("naslovna");
+      const [activeItem, setActiveItem] = useState(otvoreno);
 
   const handleItemClick = (item) => {
     setActiveItem(item);
@@ -46,7 +46,10 @@ const Navigacija = ({grupe, user}) => {
                 </div>
             
             
-                <div className="gumb-nav gumb" onClick={toggleGrupe}>
+                <div className={activeItem === "nav-gumb" ? "otvoreno" : ""} onClick={() => {
+                  handleItemClick("nav-gumb");
+                  toggleGrupe()
+              }}>
                         <i className="uil uil-cell"></i>
                 </div>
 

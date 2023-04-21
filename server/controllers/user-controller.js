@@ -50,7 +50,7 @@ const login = async (req, res, next) => {
     if (!isPasswordCorrect) {
         return res.status(400).json({message: "Invalid email/password!"})
     }
-    const token = jwt.sign({id: existingUser._id}, process.env.JWT_SECRET, {expiresIn: "35s",});
+    const token = jwt.sign({id: existingUser._id}, process.env.JWT_SECRET, {expiresIn: "1h",});
 
     console.log("generated token\n", token);
 
@@ -60,7 +60,7 @@ const login = async (req, res, next) => {
 
     res.cookie(String(existingUser._id), token, {
         path: '/',
-        expires: new Date(Date.now() + 1000 * 30),
+        expires: new Date(Date.now() + 1000 * 60 * 59),
         httpOnly: true,
         sameSite: 'lax',
     });
@@ -84,19 +84,19 @@ const verifyToken = (req, res, next) => {
     next();
   };
 
-const getUser = async (req, res, next) => {
+async function getUser(req, res, next) {
     const userId = req.id;
     let user;
     try {
         user = await User.findById(userId, "-password");
-    } catch (err){
+    } catch (err) {
         return new Error(err);
     }
     if (!user) {
-        return res.status(404).json({message: "user not found"});
+        return res.status(404).json({ message: "user not found" });
     }
-    return res.status(200).json({user});
-};
+    return res.status(200).json({ user });
+}
 const getGrupa = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -142,13 +142,42 @@ const novaGrupa = async(req, res, next) => {
       res.status(500).send('Server Error');
     }               
   };    
-  const novaObjava = async(req, res, next) => {
-    const {grupaId} = req.id     
-  };                             
+  const novaObjava = async (req, res, next) => {
+    const { naslov, sadrzaj } = req.body;
+    const userId = req.id;
+  
+    try {
+      // Create a new Objava object
+      const novaObjava = new Objava({
+        nazivObjave: naslov,
+        tekst: sadrzaj,
+        admin: userId,
+      });
+  
+      // Save the new Objava object to the database
+      await novaObjava.save();
+  
+      // Add the new Objava object to the relevant Grupa object's objave array
+      const { id } = req.params;
+      const grupa = await Grupa.findById(id);
+      if (!grupa) {
+        return res.status(400).json({ message: 'Grupa nije pronađena!' });
+      }
+      grupa.objave.push(novaObjava);
+      await grupa.save();
+  
+      // Send a response back to the client with the newly created Objava object
+      res.status(201).json({ novaObjava });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  };                           
                                                                                                                                                            
 const refreshToken = (req, res, next) => {
     const cookies = req.headers.cookie;
     const prevToken = cookies.split("=")[1];
+    console.log(prevToken)
     if(!prevToken) {
         return res.status(400).json({message: "Couldn't find token"});
     }
@@ -162,11 +191,11 @@ const refreshToken = (req, res, next) => {
         req.cookies[`${user.id}`] = "";
 
         const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
-            expiresIn: "35s"
+            expiresIn: "1h"
         });
         res.cookie(String(user.id), token, {
             path: '/',
-            expires: new Date(Date.now() + 1000 * 30),
+            expires: new Date(Date.now() + 1000 * 60 * 59),
             httpOnly: true,
             sameSite: 'lax',
         });
@@ -197,8 +226,8 @@ const logout = (req, res, next) => {
 exports.signup = signup;
 exports.login = login;
 exports.verifyToken = verifyToken;
-exports.getUser = getUser;
 exports.getGrupa = getGrupa;
+exports.getUser = getUser;
 exports.novaGrupa = novaGrupa;
 exports.novaObjava = novaObjava;
 exports.refreshToken = refreshToken;

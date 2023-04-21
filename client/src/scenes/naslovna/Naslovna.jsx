@@ -9,12 +9,10 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 const Naslovna = () => {
-
-  
-
   const [objave, setObjave] = useState(null);
   const [user, setUser] = useState();
   const [groups, setGroups] = useState([]);
+  const otvoreno = "naslovna";
 
   const sendRequest = async () => {
       const res = await axios.get('http://localhost:5000/api/user', {
@@ -42,7 +40,6 @@ const Naslovna = () => {
         sendRequest().then((data) => {
           setUser(data.user)
           setGroups(data.user.grupe);
-          setObjave(data.user.objave)
         });
 
       let interval = setInterval(() => {
@@ -50,7 +47,7 @@ const Naslovna = () => {
           setUser(data.user)
           setGroups(data.user.grupe)
         });
-      }, 1000 * 29);
+      }, 1000 * 28 * 60 * 60);
 
       return () => clearInterval(interval);
 
@@ -62,7 +59,7 @@ const Naslovna = () => {
   const Objave = [{...objave}];
     return (
         <>
-        <Navigacija grupe={groups} user={user}/>
+        <Navigacija grupe={groups} user={user} otvoreno={otvoreno}/>
         <NavTop user={user} />
         <div className="main">
         {Objave?.lenght > 0 ? (

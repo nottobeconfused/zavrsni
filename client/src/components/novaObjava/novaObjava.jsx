@@ -26,27 +26,31 @@ const NewObjava = ({ onClose }) => {
         setObjavaOcjena(e);
     }
 
-    const izradi = async () => {
-        if (!zadChecked){
+    const izradi = async (e) => {
+        e.preventDefault();
         try {
-        const res = await axios.post('http://localhost:5000/api/nova-objava', { nazivObjave: objavaIme, tekst: objavaTekst }, { withCredentials: true });
-        const data = await res.data;
-        return data;
+          const res = await axios.post(
+            'http://localhost:5000/api/nova-objava',
+            { naslov: objavaIme, sadrzaj: objavaTekst },
+            { withCredentials: true }
+          );
+          const data = res.data;
+          return data;
         } catch (error) {
-        console.error(error);
-        alert('Nismo uspjeli kreirati objavu.');
+          console.error(error);
+          alert('Nismo uspjeli kreirati objavu.');
         }
-    }else{
-        try {
-            const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
+    // else{
+    //     try {
+    //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
     
-            const data = await res.data;
-            return data;
-            } catch (error) {
-            console.error(error);
-            alert('Nismo uspjeli kreirati zadatak.');
-         }
-        }
+    //         const data = await res.data;
+    //         return data;
+    //         } catch (error) {
+    //         console.error(error);
+    //         alert('Nismo uspjeli kreirati zadatak.');
+    //      }
+    //     }
     };
 
   return (

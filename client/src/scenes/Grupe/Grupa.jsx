@@ -68,7 +68,7 @@ const Grupa = () => {
               setGrupa(data)
               setObjave(data.objave)
             })
-          }, 1000 * 29);
+          }, 1000 * 28 * 60 * 60);
     
           return () => clearInterval(interval);// eslint-disable-next-line
       }, []);
