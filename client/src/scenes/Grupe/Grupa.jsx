@@ -14,7 +14,7 @@ const Grupa = () => {
 
     const { id } = useParams();
 
-    const [objave, setObjave] = useState();
+    const [objave, setObjave] = useState([]);
     const [grupa, setGrupa] = useState();
     const [user, setUser] = useState();
     const [groups, setGroups] = useState([]);
@@ -72,16 +72,15 @@ const Grupa = () => {
     
           return () => clearInterval(interval);// eslint-disable-next-line
       }, []);
-
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
           <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
-          {ObjavaModal && (<NewObjava onClose={() => setObjavaModalOpen(false)}/>)}
+          {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
           <div className="main">
-          {objave?.lenght > 0 ? (
-            objave.map(item => (
-              <Objava item={item}/>
+          {objave.lenght > 0 ? (
+            objave.map(objava => (
+              <Objava item={objava}/>
             ))) : (
               <div className="karticaZadatka">
               <div className="ikona_ime_kartica">

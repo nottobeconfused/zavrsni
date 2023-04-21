@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const NewObjava = ({ onClose }) => {
+const NewObjava = ({ onClose, id }) => {
     const [zadChecked, setZadChecked] = useState(false)
     const [objavaIme, setObjavaIme] = useState('');
     const [objavaTekst, setObjavaTekst] = useState('');
     const [objavaDatumOd, setObjavaDatumOd] = useState('');
     const [objavaDatumDo, setObjavaDatumDo] = useState('');
     const [objavaOcjena, setObjavaOcjena] = useState('');
+    
 
     const handleNaziv = (e) => {
         setObjavaIme(e);
@@ -30,11 +32,11 @@ const NewObjava = ({ onClose }) => {
         e.preventDefault();
         try {
           const res = await axios.post(
-            'http://localhost:5000/api/nova-objava',
+            `http://localhost:5000/api/${id}/nova-objava`,
             { naslov: objavaIme, sadrzaj: objavaTekst },
             { withCredentials: true }
-          );
-          const data = res.data;
+          )
+          const data = await res.data;
           return data;
         } catch (error) {
           console.error(error);

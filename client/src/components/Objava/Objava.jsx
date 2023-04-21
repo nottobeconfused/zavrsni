@@ -1,12 +1,12 @@
 import React from 'react'
 
 function Objava({item}) {
+  console.log(item)
   return (
     <div className="karticaZadatka">
             <div className="ikona_ime_kartica">
                   <i className="uil uil-polygon" id="uil">{item.grupa}</i>
-            <p>{item.nazivZadatka}</p>
-            <p>{item.admin}</p>
+            <p>{item.nazivObjave}</p>
             </div>
             <div className="opis_kartica">
                 <p>{item.tekst}</p>

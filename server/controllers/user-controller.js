@@ -145,28 +145,28 @@ const novaGrupa = async(req, res, next) => {
   const novaObjava = async (req, res, next) => {
     const { naslov, sadrzaj } = req.body;
     const userId = req.id;
-  
+    const { id } = req.params;
+      const grupa = await Grupa.findById(id);
+      if (!grupa) {
+        return res.status(400).json({ message: 'Grupa nije pronađena!' });
+      }
     try {
       // Create a new Objava object
       const novaObjava = new Objava({
         nazivObjave: naslov,
         tekst: sadrzaj,
         admin: userId,
+        grupa: grupa.imeGrupe,
       });
   
       // Save the new Objava object to the database
       await novaObjava.save();
   
       // Add the new Objava object to the relevant Grupa object's objave array
-      const { id } = req.params;
-      const grupa = await Grupa.findById(id);
-      if (!grupa) {
-        return res.status(400).json({ message: 'Grupa nije pronađena!' });
-      }
+      
       grupa.objave.push(novaObjava);
       await grupa.save();
   
-      // Send a response back to the client with the newly created Objava object
       res.status(201).json({ novaObjava });
     } catch (err) {
       console.error(err.message);
