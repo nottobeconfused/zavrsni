@@ -7,6 +7,10 @@ const objavaSchema = new Schema({
         type: String,
         default: "",
     },
+    grupaId: {
+        type: String,
+        default: "",
+    },
     nazivObjave: {
         type: String,
         required: true,

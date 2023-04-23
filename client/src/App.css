@@ -656,6 +656,11 @@ textarea{
   outline: 3px solid rgb(72, 146, 72);
   color: rgb(90, 182, 90);
 }
+.objavaIznad{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;

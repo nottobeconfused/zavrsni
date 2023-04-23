@@ -179,7 +179,7 @@ const novaGrupa = async(req, res, next) => {
         nazivObjave: naslov,
         tekst: sadrzaj,
         admin: userId,
-        grupa: grupa.imeGrupe,
+        grupa: {imeGrupe: grupa.imeGrupe, id: grupa.id},
       });
   
       // Save the new Objava object to the database
@@ -195,7 +195,36 @@ const novaGrupa = async(req, res, next) => {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-  };                           
+  };        
+  const urediObjavu = async (req, res, next) => {
+    const { naslov, sadrzaj } = req.body;
+  const objavaId = req.params.id;
+  const userId = req.id;
+  try {
+    const objava = await Objava.findById(objavaId);
+    if (!objava) {
+      return res.status(404).json({ message: 'Objava nije pronađena!' });
+    }
+    if (objava.admin.toString() !== userId) {
+      return res.status(401).json({ message: 'Nemate ovlasti za ažuriranje objave!' });
+    }
+    objava.nazivObjave = naslov;
+    objava.tekst = sadrzaj;
+    await objava.save();
+    const grupa = await Grupa.findById(objava.grupa.id);
+    if (!grupa) {
+      return res.status(404).json({ message: 'Grupa nije pronađena!' });
+    }
+    const objavaIndex = grupa.objave.findIndex((obj) => obj._id.toString() === objavaId);
+    grupa.objave[objavaIndex].nazivObjave = naslov;
+    grupa.objave[objavaIndex].tekst = sadrzaj;
+    await grupa.save();
+    res.status(200).json({ objava });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+  };                
                                                                                                                                                            
 const refreshToken = (req, res, next) => {
     const cookies = req.headers.cookie;
@@ -254,5 +283,6 @@ exports.getUser = getUser;
 exports.getObjave = getObjave;
 exports.novaGrupa = novaGrupa;
 exports.novaObjava = novaObjava;
+exports.urediObjavu = urediObjavu;
 exports.refreshToken = refreshToken;
 exports.logout = logout;

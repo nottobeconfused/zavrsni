@@ -29,7 +29,6 @@ const NewObjava = ({ onClose, id }) => {
     }
 
     const izradi = async (e) => {
-        e.preventDefault();
         try {
           const res = await axios.post(
             `http://localhost:5000/api/${id}/nova-objava`,
@@ -154,7 +153,7 @@ const NewObjava = ({ onClose, id }) => {
         </div>
 
         <div className="ob-funkcije objava-gumbi">
-            <button className="gumb-ob" id="delete">Obriši</button>
+            <button className="gumb-ob" id="delete" onClick={onClose}>Obriši</button>
             <button className="gumb-ob" id="cancel" onClick={onClose}>Cancel</button>
             <button className="gumb-ob" id="save" onClick={izradi}>Spremi</button>
         </div>
