@@ -106,9 +106,32 @@ const getGrupa = async (req, res, next) => {
         res.status(404).json({ message: err.message });
       }
 }
+const getObjave = async (req, res, next) => {
+  try {
+    const userId = req.id;
+    let user;
+    try {
+      user = await User.findById(userId, "-password").populate("grupe");
+    } catch (err) {
+      return new Error(err);
+    }
+
+    const grupaIds = user.grupe.map(grupa => grupa.id);
+
+    const promises = grupaIds.map(grupaId => Grupa.findById(grupaId));
+
+    const results = await Promise.all(promises);
+
+    const objave = results.reduce((acc, curr) => [...acc, ...curr.objave], []);
+
+    res.status(200).json(objave);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+}
 
 const novaGrupa = async(req, res, next) => {
-    const { imeGrupe } = req.params;
+    const { imeGrupe } = req.body;
     const userId = req.id;
   
     try {
@@ -228,6 +251,7 @@ exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getGrupa = getGrupa;
 exports.getUser = getUser;
+exports.getObjave = getObjave;
 exports.novaGrupa = novaGrupa;
 exports.novaObjava = novaObjava;
 exports.refreshToken = refreshToken;

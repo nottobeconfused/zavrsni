@@ -1,7 +1,6 @@
 import React from 'react'
 
 function Objava({item}) {
-  console.log(item)
   return (
     <div className="karticaZadatka">
             <div className="ikona_ime_kartica">

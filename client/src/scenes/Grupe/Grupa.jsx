@@ -78,9 +78,9 @@ const Grupa = () => {
           <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
           <div className="main">
-          {objave.lenght > 0 ? (
+          {objave.length > 0 ? (
             objave.map(objava => (
-              <Objava item={objava}/>
+              <Objava item={objava} key={objava._id}/>
             ))) : (
               <div className="karticaZadatka">
               <div className="ikona_ime_kartica">

@@ -25,7 +25,6 @@ const Navigacija = ({grupe, user, otvoreno}) => {
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
-  
 
     return (
         <>
@@ -57,6 +56,7 @@ const Navigacija = ({grupe, user, otvoreno}) => {
     </header>
     {isGrupeOpen && (
     <div className="grupice">
+      
       {grupe.map(grupa => {
         return (
                 <Link className="link" to={`/grupe/${grupa.id}`} key={grupa.id}>

@@ -21,6 +21,13 @@ const Naslovna = () => {
       const data = await res.data;
       return data;
   }
+  const sentRequestGetObjave = async () => {
+    const res = await axios.get('http://localhost:5000/api/objave', {
+          withCredentials: true
+      }).catch((err) => console.log(err));
+      const data = await res.data;
+      return data;
+  }
 
   const refreshToken = async () => {
       const res = await axios
@@ -41,6 +48,9 @@ const Naslovna = () => {
           setUser(data.user)
           setGroups(data.user.grupe);
         });
+        sentRequestGetObjave().then((data) => {
+          setObjave(data)
+        })
 
       let interval = setInterval(() => {
         refreshToken().then((data) => {
@@ -52,19 +62,15 @@ const Naslovna = () => {
       return () => clearInterval(interval);
 
     }, []);
-
-
-
     
-  const Objave = [{...objave}];
     return (
         <>
         <Navigacija grupe={groups} user={user} otvoreno={otvoreno}/>
         <NavTop user={user} />
         <div className="main">
-        {Objave?.lenght > 0 ? (
-          Objave.map(item => (
-            <Objava item={item}/>
+        {objave?.length > 0 ? (
+          objave.map(item => (
+            <Objava item={item} key={item._id}/>
           ))) : (
             <div className="karticaZadatka">
             <div className="ikona_ime_kartica">
