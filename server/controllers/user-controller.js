@@ -179,7 +179,8 @@ const novaGrupa = async(req, res, next) => {
         nazivObjave: naslov,
         tekst: sadrzaj,
         admin: userId,
-        grupa: {imeGrupe: grupa.imeGrupe, id: grupa.id},
+        grupa: grupa.imeGrupe, 
+        grupaId: grupa.id,
       });
   
       // Save the new Objava object to the database
