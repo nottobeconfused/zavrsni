@@ -3,6 +3,7 @@ const Grupa = require('../model/Grupa');
 const Objava = require('../model/Objava');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose')
 
 const signup = async(req, res, next) => {
     const { korisnickoIme, email, password} = req.body;
@@ -213,13 +214,20 @@ const novaGrupa = async(req, res, next) => {
     objava.tekst = sadrzaj;
     await objava.save();
     const grupa = await Grupa.findById(grupaId);
-    if (!grupa) {
-      return res.status(404).json({ message: 'Grupa nije pronađena!' });
-    }
-    const objavaIndex = grupa.objave.findIndex((obj) => obj._id.toString() === objavaId);
-    grupa.objave[objavaIndex].nazivObjave = naslov;
-    grupa.objave[objavaIndex].tekst = sadrzaj;
-    await grupa.save();
+if (!grupa) {
+  return res.status(404).json({ message: 'Grupa nije pronađena!' });
+}
+
+const objavaIndex = grupa.objave.findIndex(objava => objava._id.toString() === objavaId);
+if (objavaIndex === -1) {
+  return res.status(404).json({ message: 'Objava nije pronađena u grupi!' });
+}
+
+grupa.objave[objavaIndex].nazivObjave = naslov;
+grupa.objave[objavaIndex].tekst = sadrzaj;
+
+await grupa.save();
+    
     res.status(200).json({ objava });
   } catch (err) {
     console.error(err.message);
