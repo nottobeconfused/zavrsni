@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
 const NewObjava = ({ onClose, id }) => {
     const [zadChecked, setZadChecked] = useState(false)
@@ -29,6 +28,7 @@ const NewObjava = ({ onClose, id }) => {
     }
 
     const izradi = async (e) => {
+        if(!zadChecked){
         try {
           const res = await axios.post(
             `http://localhost:5000/api/${id}/nova-objava`,
@@ -41,17 +41,18 @@ const NewObjava = ({ onClose, id }) => {
           console.error(error);
           alert('Nismo uspjeli kreirati objavu.');
         }
-    // else{
-    //     try {
-    //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
+    }
+    else{
+        try {
+            const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
     
-    //         const data = await res.data;
-    //         return data;
-    //         } catch (error) {
-    //         console.error(error);
-    //         alert('Nismo uspjeli kreirati zadatak.');
-    //      }
-    //     }
+            const data = await res.data;
+            return data;
+            } catch (error) {
+            console.error(error);
+            alert('Nismo uspjeli kreirati zadatak.');
+         }
+        }
     };
 
   return (

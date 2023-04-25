@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
-const ObjavaOtvoreno = ({ onClose, id, tekst, naziv, grupaId}) => {
+const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
     const [objavaIme, setObjavaIme] = useState(naziv);
     const [objavaTekst, setObjavaTekst] = useState(tekst);
     
@@ -18,8 +17,8 @@ const ObjavaOtvoreno = ({ onClose, id, tekst, naziv, grupaId}) => {
     const uredi = async (e) => {
         try {
           const res = await axios.post(
-            `http://localhost:5000/api/objava/${id}`,
-            { naslov: objavaIme, sadrzaj: objavaTekst },
+            `http://localhost:5000/api/objava/${objavaId}`,
+            { naslov: objavaIme, sadrzaj: objavaTekst, grupaId: grupaId },
             { withCredentials: true }
           )
           const data = await res.data;

@@ -198,7 +198,7 @@ const novaGrupa = async(req, res, next) => {
     }
   };        
   const urediObjavu = async (req, res, next) => {
-    const { naslov, sadrzaj } = req.body;
+    const { naslov, sadrzaj, grupaId} = req.body;
   const objavaId = req.params.id;
   const userId = req.id;
   try {
@@ -212,7 +212,7 @@ const novaGrupa = async(req, res, next) => {
     objava.nazivObjave = naslov;
     objava.tekst = sadrzaj;
     await objava.save();
-    const grupa = await Grupa.findById(objava.grupa.id);
+    const grupa = await Grupa.findById(grupaId);
     if (!grupa) {
       return res.status(404).json({ message: 'Grupa nije pronađena!' });
     }

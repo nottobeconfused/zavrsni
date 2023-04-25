@@ -23,7 +23,7 @@ function Objava({item}) {
             </div>
         </div>
         {isObjavaOpen && (
-          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} id={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId}/> 
+          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} objavaId={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId}/> 
         )}
     </>
   )
