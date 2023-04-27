@@ -98,6 +98,44 @@ async function getUser(req, res, next) {
     }
     return res.status(200).json({ user });
 }
+const dodajKorisnikaUGrupu = async (req, res, next) => {
+  try {
+    const grupaId = req.params.id;
+    const noviId = req.body.id;
+    const userId = req.id;
+
+    // provjeri postoji li korisnik s danim ID-jem
+    const korisnik = await User.findById(noviId);
+    if (!korisnik) {
+      return res.status(404).json({ message: "Korisnik nije pronađen." });
+    }
+
+    // provjeri postoji li grupa s danim ID-jem i je li otvorena
+    const grupa = await Grupa.findById(grupaId);
+    if (!grupa) {
+      return res.status(404).json({ message: "Tražena grupa nije pronađena ili nije otvorena." });
+    }
+
+    // provjeri je li trenutni korisnik admin grupe
+    if (!grupa.admin.equals(userId)) {
+      return res.status(403).json({ message: "Samo admin grupe može dodavati korisnike u grupu." });
+    }
+
+    // provjeri je li korisnik već dodan u grupu
+    if (korisnik.grupe.includes(grupaId)) {
+      return res.status(400).json({ message: "Korisnik je već dodan u traženu grupu." });
+    }
+
+    // dodaj korisnika u grupu i ažuriraj njegove grupe u njegovoj tablici
+    await Grupa.findByIdAndUpdate(grupaId, { $push: { korisnici: korisnik._id } });
+    await User.findByIdAndUpdate(userId, { $push: { grupe: { id: grupa._id, imeGrupe: grupa.imeGrupe } } });
+
+    res.status(200).json({ message: "Korisnik je uspješno dodan u grupu." });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getGrupa = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -110,26 +148,35 @@ const getGrupa = async (req, res, next) => {
 const getObjave = async (req, res, next) => {
   try {
     const userId = req.id;
-    let user;
-    try {
-      user = await User.findById(userId, "-password").populate("grupe");
-    } catch (err) {
-      return new Error(err);
-    }
 
+    const user = await User.findById(userId, "-password").populate("grupe");
     const grupaIds = user.grupe.map(grupa => grupa.id);
 
-    const promises = grupaIds.map(grupaId => Grupa.findById(grupaId));
-
-    const results = await Promise.all(promises);
-
-    const objave = results.reduce((acc, curr) => [...acc, ...curr.objave], []);
+    const objave = await Objava.find({ grupaId: { $in: grupaIds } });
 
     res.status(200).json(objave);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    next(err);
   }
 }
+const getObjaveIzGrupe = async (req, res, next) => {
+  try {
+    const grupaId = req.params.id;
+
+    // provjera je li grupa otvorena
+    const grupa = await Grupa.findById(grupaId);
+    if (!grupa) {
+      return res.status(404).json({ message: "Tražena grupa nije pronađena ili nije otvorena." });
+    }
+
+    const objave = await Objava.find({ grupaId });
+
+    res.status(200).json(objave);
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 const novaGrupa = async(req, res, next) => {
     const { imeGrupe } = req.body;
@@ -189,7 +236,7 @@ const novaGrupa = async(req, res, next) => {
   
       // Add the new Objava object to the relevant Grupa object's objave array
       
-      grupa.objave.push(novaObjava);
+      grupa.objave.push({id: novaObjava._id});
       await grupa.save();
   
       res.status(201).json({ novaObjava });
@@ -199,7 +246,7 @@ const novaGrupa = async(req, res, next) => {
     }
   };        
   const urediObjavu = async (req, res, next) => {
-    const { naslov, sadrzaj, grupaId} = req.body;
+    const { naslov, sadrzaj} = req.body;
   const objavaId = req.params.id;
   const userId = req.id;
   try {
@@ -213,21 +260,7 @@ const novaGrupa = async(req, res, next) => {
     objava.nazivObjave = naslov;
     objava.tekst = sadrzaj;
     await objava.save();
-    const grupa = await Grupa.findById(grupaId);
-if (!grupa) {
-  return res.status(404).json({ message: 'Grupa nije pronađena!' });
-}
-
-const objavaIndex = grupa.objave.findIndex(objava => objava._id.toString() === objavaId);
-if (objavaIndex === -1) {
-  return res.status(404).json({ message: 'Objava nije pronađena u grupi!' });
-}
-
-grupa.objave[objavaIndex].nazivObjave = naslov;
-grupa.objave[objavaIndex].tekst = sadrzaj;
-
-await grupa.save();
-    
+   
     res.status(200).json({ objava });
   } catch (err) {
     console.error(err.message);
@@ -289,7 +322,9 @@ exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getGrupa = getGrupa;
 exports.getUser = getUser;
+exports.dodajKorisnikaUGrupu = dodajKorisnikaUGrupu;
 exports.getObjave = getObjave;
+exports.getObjaveIzGrupe = getObjaveIzGrupe;
 exports.novaGrupa = novaGrupa;
 exports.novaObjava = novaObjava;
 exports.urediObjavu = urediObjavu;

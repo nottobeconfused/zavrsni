@@ -11,6 +11,7 @@ import NewObjava from '../../components/novaObjava/novaObjava';
 const Grupa = () => {
 
   const [ObjavaModal, setObjavaModalOpen] = useState(false);
+  const [KorisnikModal, setKorisnikModelOpen] = useState(false);
 
     const { id } = useParams();
 
@@ -34,6 +35,13 @@ const Grupa = () => {
         const data = await res.data;
         return data;
     }
+    const sendRequestGrupaObjave = async () => {
+      const res = await axios.get(`http://localhost:5000/api/grupe-objave/${id}`, {
+          withCredentials: true
+      }).catch((err) => console.log(err));
+      const data = await res.data;
+      return data;
+  }
 
     const refreshToken = async () => {
       const res = await axios
@@ -51,7 +59,9 @@ const Grupa = () => {
   
           sendRequestGrupa().then((data) => {
             setGrupa(data)
-            setObjave(data.objave)
+          });
+          sendRequestGrupaObjave().then((data) => {
+            setObjave(data)
           });
           sendRequest().then((data) => {
             setUser(data.user)
@@ -66,8 +76,10 @@ const Grupa = () => {
             });
             sendRequestGrupa().then((data) => {
               setGrupa(data)
-              setObjave(data.objave)
             })
+            sendRequestGrupaObjave().then((data) => {
+              setObjave(data)
+            });
           }, 1000 * 28 * 60 * 60);
     
           return () => clearInterval(interval);// eslint-disable-next-line
