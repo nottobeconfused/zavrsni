@@ -22,8 +22,11 @@ const NewGroup = ({ onClose }) => {
     <div>
       <h2>Izradi novu grupu</h2>
       <input type="text" placeholder="Group Name" value={groupName} onChange={(e) => setGroupName(e.target.value)} />
-      <button onClick={createGroup} className="gumb_otvori gumb">Izradi grupu</button>
-      <button onClick={onClose} className="gumb_otvori gumb">Cancel</button>
+      <div className='gumbi-Ngrupa'>
+        <button onClick={createGroup} className="gumb_otvori gumb">Izradi grupu</button>
+        <button onClick={onClose} className="gumb_otvori gumb">Zatvori</button>
+      </div>
+      
     </div>
   );
 };

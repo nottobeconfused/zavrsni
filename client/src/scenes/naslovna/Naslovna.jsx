@@ -66,7 +66,7 @@ const Naslovna = () => {
     return (
         <>
         <Navigacija grupe={groups} user={user} otvoreno={otvoreno}/>
-        <NavTop user={user} />
+        <NavTop user={user}/>
         <div className="main">
         {objave?.length > 0 ? (
           objave.map(item => (

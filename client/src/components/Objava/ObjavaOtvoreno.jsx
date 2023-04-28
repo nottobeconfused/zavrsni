@@ -84,7 +84,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
 
         <div className="ob-funkcije objava-gumbi">
             <button className="gumb-ob" id="delete" onClick={onClose}>Obriši</button>
-            <button className="gumb-ob" id="cancel" onClick={onClose}>Cancel</button>
+            <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
             <button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>
         </div>
 

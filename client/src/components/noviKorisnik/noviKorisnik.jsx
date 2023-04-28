@@ -1,46 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const NewKorisnik = ({ onClose, id }) => {
     const [pretraga, setPretraga] = useState('');
     const [korisnici, setKorisnici] = useState([]);
-    const [korisnikId, setKorisnikId] = useState('');
+    const [odabraniKorisnici, setOdabraniKorisnici] = useState([]);
     
 
     const handleNaziv = (e) => {
         setPretraga(e);
     }
-    const handlekorisnik = (e) => {
-     setKorisnikId(e);
- }
+    const odaberiKorisnika = (korisnik) => {
+      setOdabraniKorisnici(odabraniKorisnici => [...odabraniKorisnici, korisnik]);
+    };
+    
 
-    const dodaj = async (e) => {
+    const dodaj = async () => {
         try {
           const res = await axios.post(
             `http://localhost:5000/api/dodaj-korisnika/${id}`,
-            { id: korisnikId },
+            { korisnikIds: odabraniKorisnici.map(korisnik => korisnik._id) },
             { withCredentials: true }
           )
           const data = await res.data;
           return data;
         } catch (error) {
           console.error(error);
-          alert('Nismo uspjeli kreirati objavu.');
+          alert('Nismo uspjeli dodati korisnika.');
         }
     };
-    const getKorisnici = async (e) => {
-     try {
-       const res = await axios.get(
-         `http://localhost:5000/api/korisnici`,
-         { withCredentials: true }
-       )
-       const data = await res.data;
-       return data;
-     } catch (error) {
-       console.error(error);
-       alert('Nismo uspjeli kreirati objavu.');
-     }
- };
+    
+    useEffect(() => {
+      const getKorisnici = async () => {
+        try {
+          let res;
+          if (pretraga.length === 0 || pretraga.length > 1) {
+            res = await axios.get(`http://localhost:5000/api/korisnici/${pretraga}`, { withCredentials: true });
+          } else {
+            res = await axios.get(`http://localhost:5000/api/korisnici`, { withCredentials: true });
+          }
+          setKorisnici(res.data);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      getKorisnici();
+    }, [pretraga]);
 
   return (
     <div className="novaObjavaBackground">
@@ -54,22 +59,48 @@ const NewKorisnik = ({ onClose, id }) => {
                  type="text"
                 name="ob-ime" 
                 id="ob-ime" 
-                placeholder="Naziv objave"
-                onChange={(e) => handleNaziv(e.target.value)} 
+                placeholder="korisničko ime | email"
+                onChange={e => handleNaziv(e.target.value)} 
                 />
             </div>
 
-            <div className="objava-polje objava-tekst">
-                
+            <div className="objava-polje objava-tekst korisnici">
+              <p>Rezultati pretrage:</p>
+            {korisnici?.length > 0 ? (
+            korisnici.map(korisnik => (
+              <div className="korisnik" key={korisnik._id} onClick={() => odaberiKorisnika(korisnik)}>
+                <p>{korisnik.korisnickoIme}</p>
+                <p>{korisnik.email}</p>
+              </div>
+            ))) : (
+              <div className="karticaZadatka">
+              <div className="ikona_ime_kartica">
+              <p>Nema korisnika u bazi!</p>
+              </div>
+          </div>
+            )}
             </div>
-            <div className="objava-polje objava-tekst odabrano">
-                
+            <div className="objava-polje objava-tekst korisnici">
+              <p>Odabrani korisnici:</p>
+            {odabraniKorisnici?.length > 0 ? (
+            odabraniKorisnici.map(korisnik => (
+              <div className="korisnik" key={korisnik._id}>
+                <p>{korisnik.korisnickoIme}</p>
+                <p>{korisnik.email}</p>
+              </div>
+            ))) : (
+              <div className="karticaZadatka">
+              <div className="ikona_ime_kartica">
+              <p>Nema odabranih korisnika!</p>
+              </div>
+          </div>
+            )}
             </div>
         </div>
 
         <div className="ob-funkcije objava-gumbi">
-            <button className="gumb-ob" id="cancel" onClick={onClose}>Cancel</button>
-            <button className="gumb-ob" id="save" onClick={dodaj}>Spremi</button>
+            <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
+            <button className="gumb-ob" id="save" onClick={dodaj}>Dodaj</button>
         </div>
 
         </div>

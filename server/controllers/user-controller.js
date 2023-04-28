@@ -98,43 +98,59 @@ async function getUser(req, res, next) {
     }
     return res.status(200).json({ user });
 }
-const dodajKorisnikaUGrupu = async (req, res, next) => {
-  try {
-    const grupaId = req.params.id;
-    const noviId = req.body.id;
-    const userId = req.id;
-
-    // provjeri postoji li korisnik s danim ID-jem
-    const korisnik = await User.findById(noviId);
-    if (!korisnik) {
-      return res.status(404).json({ message: "Korisnik nije pronađen." });
+  const dodajKorisnikaUGrupu = async (req, res, next) => {
+    try {
+      const grupaId = req.params.id;
+      const korisnikIds = req.body.korisnikIds;
+      const userId = req.id;
+  
+      // provjeri postoji li grupa s danim ID-jem i je li otvorena
+      const grupa = await Grupa.findById(grupaId);
+      if (!grupa) {
+        return res.status(404).json({ message: "Tražena grupa nije pronađena ili nije otvorena." });
+      }
+  
+      // provjeri je li trenutni korisnik admin grupe
+      if (grupa.admin.toString() !== userId) {
+        return res.status(403).json({ message: "Samo admin grupe može dodavati korisnike u grupu." });
+      }
+  
+      // provjeri postoji li barem jedan korisnik s danim ID-jem
+      const korisnici = await User.find({ _id: { $in: korisnikIds } });
+      if (korisnici.length !== korisnikIds.length) {
+        return res.status(404).json({ message: "Neki od korisnika nisu pronađeni." });
+      }
+  
+      // dodaj korisnike u grupu i ažuriraj njihove grupe u njihovim tablicama
+      await Grupa.findByIdAndUpdate(grupaId, { $addToSet: { users: { $each: korisnikIds } } });
+      await User.updateMany({ _id: { $in: korisnikIds } }, { $addToSet: { grupe: { id: grupa._id, imeGrupe: grupa.imeGrupe } } });
+  
+      res.status(200).json({ message: "Korisnici su uspješno dodani u grupu." });
+    } catch (err) {
+      next(err);
     }
-
-    // provjeri postoji li grupa s danim ID-jem i je li otvorena
-    const grupa = await Grupa.findById(grupaId);
-    if (!grupa) {
-      return res.status(404).json({ message: "Tražena grupa nije pronađena ili nije otvorena." });
+  };
+  const getKorisnici = async (req, res, next) => {
+    const { pretraga } = req.params;
+  
+    try {
+      let korisnici = [];
+  
+      if (pretraga) {
+        const keys = ["korisnickoIme", "email"];
+        korisnici = await User.find({
+          $or: keys.map((key) => ({ [key]: { $regex: pretraga, $options: "i" } })),
+        }).limit(10);
+      } else {
+        korisnici = await User.find().limit(10);
+      }
+  
+      res.json(korisnici);
+    } catch (err) {
+      next(err);
     }
+  };
 
-    // provjeri je li trenutni korisnik admin grupe
-    if (!grupa.admin.equals(userId)) {
-      return res.status(403).json({ message: "Samo admin grupe može dodavati korisnike u grupu." });
-    }
-
-    // provjeri je li korisnik već dodan u grupu
-    if (korisnik.grupe.includes(grupaId)) {
-      return res.status(400).json({ message: "Korisnik je već dodan u traženu grupu." });
-    }
-
-    // dodaj korisnika u grupu i ažuriraj njegove grupe u njegovoj tablici
-    await Grupa.findByIdAndUpdate(grupaId, { $push: { korisnici: korisnik._id } });
-    await User.findByIdAndUpdate(userId, { $push: { grupe: { id: grupa._id, imeGrupe: grupa.imeGrupe } } });
-
-    res.status(200).json({ message: "Korisnik je uspješno dodan u grupu." });
-  } catch (err) {
-    next(err);
-  }
-};
 
 const getGrupa = async (req, res, next) => {
     try {
@@ -322,6 +338,7 @@ exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getGrupa = getGrupa;
 exports.getUser = getUser;
+exports.getKorisnici = getKorisnici;
 exports.dodajKorisnikaUGrupu = dodajKorisnikaUGrupu;
 exports.getObjave = getObjave;
 exports.getObjaveIzGrupe = getObjaveIzGrupe;

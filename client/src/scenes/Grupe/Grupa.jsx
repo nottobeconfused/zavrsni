@@ -7,11 +7,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from 'react-router-dom';
 import NewObjava from '../../components/novaObjava/novaObjava';
+import NewKorisnik from '../../components/noviKorisnik/noviKorisnik';
 
 const Grupa = () => {
 
   const [ObjavaModal, setObjavaModalOpen] = useState(false);
   const [KorisnikModal, setKorisnikModelOpen] = useState(false);
+  const [ObjavaOtvoreno, setObjavaOtvoreno] = useState(false);
 
     const { id } = useParams();
 
@@ -87,8 +89,9 @@ const Grupa = () => {
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
-          <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
+          <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
+          {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)}/>)}
           <div className="main">
           {objave.length > 0 ? (
             objave.map(objava => (

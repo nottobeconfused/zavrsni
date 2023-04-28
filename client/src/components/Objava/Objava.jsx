@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import NewObjava from '../novaObjava/novaObjava';
 import ObjavaOtvoreno from './ObjavaOtvoreno';
 
 function Objava({item}) {
@@ -19,7 +18,6 @@ function Objava({item}) {
                 <p id="od">{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
             </div>
                 <div className="gumb_otvori gumb" onClick={() => setIsObjavaOpen(true)}>Otvori</div>
-                <div className="gumb_vise gumb"><i className="uil uil-ellipsis-v" id="uil"></i></div>
             </div>
         </div>
         {isObjavaOpen && (

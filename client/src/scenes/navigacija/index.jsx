@@ -45,8 +45,7 @@ const Navigacija = ({grupe, user, otvoreno}) => {
                 </div>
             
             
-                <div className={activeItem === "nav-gumb" ? "otvoreno" : ""} onClick={() => {
-                  handleItemClick("nav-gumb");
+                <div className="nav-gumb gumb" onClick={() => {
                   toggleGrupe()
               }}>
                         <i className="uil uil-cell"></i>

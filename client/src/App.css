@@ -661,6 +661,24 @@ textarea{
   top: 0;
   left: 0;
 }
+.gumbi-Ngrupa{
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-around;
+}
+.korisnici{
+  display: flex;
+  gap: 0.5rem;
+}
+.korisnik{
+  background-color: var(--iznad);
+  border-radius: calc(var(--radius) - 0.2rem);
+  padding: 0.5rem 1rem;
+}
+.korisnik p:nth-child(1){
+  font-size: 1.3rem;
+  text-decoration: underline;
+}
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -674,6 +692,9 @@ textarea{
   width: 8px;
 }
   @media only screen and (max-width: 1080px) {
+    #uil{
+      font-size: 1.2rem;
+    }
     header{
         justify-content: space-evenly;
         width: 98%;
