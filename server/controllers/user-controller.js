@@ -142,7 +142,7 @@ async function getUser(req, res, next) {
           $or: keys.map((key) => ({ [key]: { $regex: pretraga, $options: "i" } })),
         }).limit(10);
       } else {
-        korisnici = await User.find().limit(10);
+        korisnici = await User.find().limit(5);
       }
   
       res.json(korisnici);

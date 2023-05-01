@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const NewKorisnik = ({ onClose, id }) => {
+const NewKorisnik = ({ onClose, id, grupa}) => {
     const [pretraga, setPretraga] = useState('');
     const [korisnici, setKorisnici] = useState([]);
     const [odabraniKorisnici, setOdabraniKorisnici] = useState([]);
+    console.log(grupa)
     
 
     const handleNaziv = (e) => {
         setPretraga(e);
     }
     const odaberiKorisnika = (korisnik) => {
-      setOdabraniKorisnici(odabraniKorisnici => [...odabraniKorisnici, korisnik]);
+      if (!odabraniKorisnici.includes(korisnik._id)) {
+        setOdabraniKorisnici(odabraniKorisnici => [...odabraniKorisnici, korisnik]);
+      }
     };
     
 
@@ -66,19 +69,27 @@ const NewKorisnik = ({ onClose, id }) => {
 
             <div className="objava-polje objava-tekst korisnici">
               <p>Rezultati pretrage:</p>
-            {korisnici?.length > 0 ? (
-            korisnici.map(korisnik => (
-              <div className="korisnik" key={korisnik._id} onClick={() => odaberiKorisnika(korisnik)}>
-                <p>{korisnik.korisnickoIme}</p>
-                <p>{korisnik.email}</p>
-              </div>
-            ))) : (
-              <div className="karticaZadatka">
-              <div className="ikona_ime_kartica">
-              <p>Nema korisnika u bazi!</p>
-              </div>
-          </div>
-            )}
+              {korisnici?.length > 0 ? (
+                korisnici.map(korisnik => (
+                  <div
+                    className={`korisnik${korisnik.grupe.some(k => k.id === grupa._id) ? " zeleno" : ""}`}
+                    key={korisnik._id}
+                    onClick={() => !korisnik.grupe.some(k => k.id === grupa._id) && odaberiKorisnika(korisnik)}
+                  >
+                    <p>{korisnik.korisnickoIme}</p>
+                    <p>{korisnik.email}</p>
+                    {korisnik.grupe.some(k => k.id === grupa._id) && (
+                      <i>Korisnik je u ovoj grupi!</i>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="karticaZadatka">
+                  <div className="ikona_ime_kartica">
+                    <p>Nema korisnika u bazi!</p>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="objava-polje objava-tekst korisnici">
               <p>Odabrani korisnici:</p>

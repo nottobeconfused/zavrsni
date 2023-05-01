@@ -283,7 +283,7 @@ header{
   align-items: center;
   flex-direction: column;
   gap: 1.5rem;
-  position: absolute;
+  position: fixed;
   top: 15%;
   left: 3.6rem;
   flex-wrap: nowrap;
@@ -535,7 +535,9 @@ textarea{
 .novaObjavaBackground{
   padding: 3rem 0;
   z-index: 4;
-  position: absolute;
+  position: fixed;
+  top: -0rem;
+  left: -0rem;
   width: 100vw;
   height: 100vh;
   background-color: rgb(0, 0, 0, 0.7);
@@ -557,6 +559,12 @@ textarea{
   height: 100%;
   grid-template-columns: auto;
   row-gap: 0.4rem;
+}
+.korisnik.zeleno{
+  background-color: green;
+}
+.zauzeto{
+  background-color: red;
 }
 .objava-polje{
   padding: 1rem;

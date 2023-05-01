@@ -13,7 +13,6 @@ const Grupa = () => {
 
   const [ObjavaModal, setObjavaModalOpen] = useState(false);
   const [KorisnikModal, setKorisnikModelOpen] = useState(false);
-  const [ObjavaOtvoreno, setObjavaOtvoreno] = useState(false);
 
     const { id } = useParams();
 
@@ -91,7 +90,7 @@ const Grupa = () => {
           <Navigacija grupe={groups} user={user}/>
           <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
-          {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)}/>)}
+          {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa}/>)}
           <div className="main">
           {objave.length > 0 ? (
             objave.map(objava => (
