@@ -170,7 +170,7 @@ const getObjave = async (req, res, next) => {
 
     const objave = await Objava.find({ grupaId: { $in: grupaIds } });
 
-    res.status(200).json(objave);
+   await  res.status(200).json(objave);
   } catch (err) {
     next(err);
   }
@@ -324,7 +324,7 @@ const refreshToken = (req, res, next) => {
         });
         res.cookie(String(user.id), token, {
             path: '/',
-            expires: new Date(Date.now() + 1000 * 60 * 59),
+            expires: new Date(Date.now() + 1000 * 60 * 58),
             httpOnly: true,
             sameSite: 'lax',
         });

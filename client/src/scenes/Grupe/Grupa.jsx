@@ -112,7 +112,7 @@ const Grupa = () => {
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
           {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa}/>)}
           <div className="main">
-  <div className='odabir-objave'>
+              <div className='odabir-objave'>
     <div className="ob-funkcije ob-zad">
       <div className="odabir radio">
         <input
@@ -139,6 +139,7 @@ const Grupa = () => {
       </div>
     </div>
   </div>
+  
   {objave?.length > 0 ? (
     sortirajObjave(objave, sortiranje)?.map(item => (
       <Objava item={item} key={item._id} user={user} grupa={grupa} edit={true}/>
