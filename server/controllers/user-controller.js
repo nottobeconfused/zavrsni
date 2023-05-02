@@ -283,7 +283,26 @@ const novaGrupa = async(req, res, next) => {
     res.status(500).send('Server Error');
   }
   };                
-                                                                                                                                                           
+    
+  const obrisiObjavu = async (req, res, next) => {
+  const objavaId = req.params.id;
+  const userId = req.id;
+  try {
+    const objava = await Objava.findById(objavaId);
+    if (!objava) {
+      return res.status(404).json({ message: 'Objava nije pronađena!' });
+    }
+    if (objava.admin.toString() !== userId) {
+      return res.status(401).json({ message: 'Nemate ovlasti za ažuriranje objave!' });
+    }
+    await objava.remove();
+   
+    res.status(200).json({ message: "Objava uspješno obrisana!" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+  }; 
 const refreshToken = (req, res, next) => {
     const cookies = req.headers.cookie;
     const prevToken = cookies.split("=")[1];
@@ -345,5 +364,6 @@ exports.getObjaveIzGrupe = getObjaveIzGrupe;
 exports.novaGrupa = novaGrupa;
 exports.novaObjava = novaObjava;
 exports.urediObjavu = urediObjavu;
+exports.obrisiObjavu = obrisiObjavu;
 exports.refreshToken = refreshToken;
 exports.logout = logout;

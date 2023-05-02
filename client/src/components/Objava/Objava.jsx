@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ObjavaOtvoreno from './ObjavaOtvoreno';
 
-function Objava({item}) {
+function Objava({item, user, grupa, edit}) {
   const [isObjavaOpen, setIsObjavaOpen] = useState(false);
   return (
     <>
@@ -21,7 +21,7 @@ function Objava({item}) {
             </div>
         </div>
         {isObjavaOpen && (
-          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} objavaId={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId}/> 
+          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} objavaId={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId} user={user} grupa={grupa} edit={edit}/> 
         )}
     </>
   )

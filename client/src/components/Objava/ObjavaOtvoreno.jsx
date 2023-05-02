@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
+const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa, edit}) => {
     const [objavaIme, setObjavaIme] = useState(naziv);
     const [objavaTekst, setObjavaTekst] = useState(tekst);
-    
+    const [ifAdmin, setIfAdmin] = useState();
 
+    
     const handleNaziv = (e) => {
         setObjavaIme(e);
     }
@@ -13,6 +14,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
     const handleTekst = (e) => {
         setObjavaTekst(e);
     }
+        
 
     const uredi = async (e) => {
         try {
@@ -39,6 +41,39 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
     //      }
     //     }
     };
+    
+    const obrisi = async (e) => {
+        try {
+            await axios.post(
+            `http://localhost:5000/api/objava-brisanje/${objavaId}`,
+            { withCredentials: true }
+          )
+        } catch (error) {
+          console.error(error);
+          alert('Nemate ovlasti za brisanje.');
+        }
+    // else{
+    //     try {
+    //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
+    
+    //         const data = await res.data;
+    //         return data;
+    //         } catch (error) {
+    //         console.error(error);
+    //         alert('Nismo uspjeli kreirati zadatak.');
+    //      }
+    //     }
+    };
+    useEffect(() => {
+        if(edit){
+        if (grupa.admin === user._id) {
+          setIfAdmin(true);
+        } else {
+          setIfAdmin(false);
+        }
+    }
+      },[]);
+      
 
   return (
      <div className='objavaIznad'>
@@ -50,6 +85,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
 
             <div className="objava-polje objava-naziv">
                 <label className="ob-label" htmlFor="ob-ime">Naziv objave</label>
+                {edit ? (
                 <input 
                 className="ob-input"
                  type="text"
@@ -59,11 +95,22 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
                 defaultValue={naziv}
                 onChange={(e) => handleNaziv(e.target.value)} 
                 />
+                ):(
+                <input 
+                className="ob-input"
+                 type="text"
+                name="ob-ime" 
+                id="ob-ime"
+                defaultValue={naziv}
+                disabled={true}
+                />
+                )}
             </div>
 
             <div className="objava-polje objava-tekst">
                 <label className="ob-label" htmlFor="ob-txt">Tekst objave</label>
-                <textarea 
+                {edit ? (
+                    <textarea 
                 className="ob-input" 
                 name="ob-txt" 
                 id="ob-txt" 
@@ -73,6 +120,18 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
                 defaultValue={tekst}
                 onChange={(e) => handleTekst(e.target.value)} 
                 />
+                ) : (
+                    <textarea 
+                    className="ob-input" 
+                    name="ob-txt" 
+                    id="ob-txt" 
+                    cols="auto" 
+                    rows="7" 
+                    defaultValue={tekst}
+                    disabled={true}
+                    /> 
+                )}
+                
             </div>
 
             <div className="objava-polje objava-datoteke">
@@ -83,9 +142,9 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId}) => {
         </div>
 
         <div className="ob-funkcije objava-gumbi">
-            <button className="gumb-ob" id="delete" onClick={onClose}>Obriši</button>
+            {edit &&  (<button className="gumb-ob" id="delete" onClick={obrisi}>Obriši</button>)}
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
-            <button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>
+            {edit && (<button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>)}
         </div>
 
         </div>

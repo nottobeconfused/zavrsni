@@ -444,6 +444,13 @@ color: var(--isticanje);
   flex-direction: column;
   padding-bottom: 10%;
 }
+.odabir-objave{
+  background-color: var(--iznad);
+  width: 60%;
+  padding: 0.3rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius);
+}
 .karticaZadatka{
   background-color: var(--iznad);
   box-shadow: var(--boxShadow);

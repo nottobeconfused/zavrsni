@@ -13,6 +13,7 @@ const Grupa = () => {
 
   const [ObjavaModal, setObjavaModalOpen] = useState(false);
   const [KorisnikModal, setKorisnikModelOpen] = useState(false);
+  const [sortiranje, setSortiranje] = useState(false);
 
     const { id } = useParams();
 
@@ -54,6 +55,25 @@ const Grupa = () => {
       const data = await res.data;
       return data;
     };
+
+    function sortirajObjave(objave, setSortiranje) {
+      if (setSortiranje) {
+        return objave?.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      } else {
+        return objave?.sort((a, b) => {
+          return new Date(a.createdAt) - new Date(b.createdAt);
+        });
+      }
+    }
+    function handleChangeSort() {
+        setSortiranje(false);
+    }
+    function handleGoBack() {
+      setSortiranje(true);
+      sortirajObjave(objave, setSortiranje)
+    }
   
   
       useEffect(() => {
@@ -92,20 +112,48 @@ const Grupa = () => {
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
           {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa}/>)}
           <div className="main">
-          {objave.length > 0 ? (
-            objave.map(objava => (
-              <Objava item={objava} key={objava._id}/>
-            ))) : (
-              <div className="karticaZadatka">
-              <div className="ikona_ime_kartica">
-                    <i className="uil uil-polygon" id="uil">
-                      Još nemate objava!
-                    </i>
-              <p></p>
-              </div>
-          </div>
-            )}
-          </div>
+  <div className='odabir-objave'>
+    <div className="ob-funkcije ob-zad">
+      <div className="odabir radio">
+        <input
+          className="radio_input"
+          onClick={() => handleChangeSort()}
+          defaultChecked
+          type="radio"
+          name="ob-zad"
+          id="ob"
+        />
+        <label className="radio_label" htmlFor="ob">
+          najstarije
+        </label>
+        <input
+          className="radio_input"
+          onClick={() => handleGoBack()}
+          type="radio"
+          name="ob-zad"
+          id="zad"
+        />
+        <label className="radio_label" htmlFor="zad">
+          najnovije
+        </label>
+      </div>
+    </div>
+  </div>
+  {objave?.length > 0 ? (
+    sortirajObjave(objave, sortiranje)?.map(item => (
+      <Objava item={item} key={item._id} user={user} grupa={grupa} edit={true}/>
+    ))
+  ) : (
+    <div className="karticaZadatka">
+      <div className="ikona_ime_kartica">
+        <i className="uil uil-polygon" id="uil">
+          Još nemate objava!
+        </i>
+        <p></p>
+      </div>
+    </div>
+  )}
+</div>
           </>
       )
   }
