@@ -101,7 +101,7 @@ const Grupa = () => {
             sendRequestGrupaObjave().then((data) => {
               setObjave(data)
             });
-          }, 1000 * 28 * 60 * 60);
+          }, 1000 * 60 * 60);
     
           return () => clearInterval(interval);// eslint-disable-next-line
       }, []);

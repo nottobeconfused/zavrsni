@@ -61,7 +61,7 @@ const login = async (req, res, next) => {
 
     res.cookie(String(existingUser._id), token, {
         path: '/',
-        expires: new Date(Date.now() + 1000 * 60 * 59),
+        expires: new Date(Date.now() + 1000 * 60 * 58),
         httpOnly: true,
         sameSite: 'lax',
     });
@@ -70,20 +70,20 @@ const login = async (req, res, next) => {
 };
 
 const verifyToken = (req, res, next) => {
-    const cookies = req.headers.cookie;
-    const token = cookies.split("=")[1];
-    if (!token) {
-      res.status(404).json({ message: "No token found" });
+  const cookies = req.headers.cookie;
+  const token = cookies.split("=")[1];
+  if (!token) {
+    return res.status(404).json({ message: "No token found" });
+  }
+  jwt.verify(String(token), process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(400).json({ message: "Invalid Token" });
     }
-    jwt.verify(String(token), process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.status(400).json({ message: "Invalid Token" });
-      }
-      console.log(user.id);
-      req.id = user.id;
-    });
+    console.log(user.id);
+    req.id = user.id;
     next();
-  };
+  });
+};
 
 async function getUser(req, res, next) {
     const userId = req.id;
@@ -324,7 +324,7 @@ const refreshToken = (req, res, next) => {
         });
         res.cookie(String(user.id), token, {
             path: '/',
-            expires: new Date(Date.now() + 1000 * 60 * 58),
+            expires: new Date(Date.now() + 1000 * 60 * 57),
             httpOnly: true,
             sameSite: 'lax',
         });

@@ -85,7 +85,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
 
             <div className="objava-polje objava-naziv">
                 <label className="ob-label" htmlFor="ob-ime">Naziv objave</label>
-                {edit ? (
+                {edit && ifAdmin ? (
                 <input 
                 className="ob-input"
                  type="text"
@@ -109,7 +109,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
 
             <div className="objava-polje objava-tekst">
                 <label className="ob-label" htmlFor="ob-txt">Tekst objave</label>
-                {edit ? (
+                {edit && ifAdmin  ? (
                     <textarea 
                 className="ob-input" 
                 name="ob-txt" 
@@ -144,7 +144,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
         <div className="ob-funkcije objava-gumbi">
             {edit &&  (<button className="gumb-ob" id="delete" onClick={obrisi}>Obriši</button>)}
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
-            {edit && (<button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>)}
+            {edit &&  (<button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>)}
         </div>
 
         </div>
