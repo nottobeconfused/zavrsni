@@ -142,9 +142,9 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
         </div>
 
         <div className="ob-funkcije objava-gumbi">
-            {edit &&  (<button className="gumb-ob" id="delete" onClick={obrisi}>Obriši</button>)}
+            {edit && ifAdmin ? (<button className="gumb-ob" id="delete" onClick={obrisi}>Obriši</button>) : null}
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
-            {edit &&  (<button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>)}
+            {edit && ifAdmin ? (<button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>) : null}
         </div>
 
         </div>
