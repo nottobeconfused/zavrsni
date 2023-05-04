@@ -3,7 +3,8 @@ const Grupa = require('../model/Grupa');
 const Objava = require('../model/Objava');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Datoteka = require('../model/Datoteka.js');
 
 const signup = async(req, res, next) => {
     const { korisnickoIme, email, password} = req.body;
@@ -231,6 +232,7 @@ const novaGrupa = async(req, res, next) => {
   };    
   const novaObjava = async (req, res, next) => {
     const { naslov, sadrzaj } = req.body;
+    const file = req.file.path;
     const userId = req.id;
     const { id } = req.params;
       const grupa = await Grupa.findById(id);
@@ -238,6 +240,7 @@ const novaGrupa = async(req, res, next) => {
         return res.status(400).json({ message: 'Grupa nije pronađena!' });
       }
     try {
+      const datoteka = await Datoteka.create({file})
       // Create a new Objava object
       const novaObjava = new Objava({
         nazivObjave: naslov,
@@ -245,6 +248,7 @@ const novaGrupa = async(req, res, next) => {
         admin: userId,
         grupa: grupa.imeGrupe, 
         grupaId: grupa.id,
+        datoteke: datoteka._id,
       });
   
       // Save the new Objava object to the database

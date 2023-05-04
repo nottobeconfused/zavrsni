@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Form, Formik } from 'formik';
+import { array, object, string } from 'yup';
+import { MultipleFileUpload } from '../Dropzone/MultipleFileUpload';
 
 const NewObjava = ({ onClose, id }) => {
     const [zadChecked, setZadChecked] = useState(false)
@@ -99,7 +102,38 @@ const NewObjava = ({ onClose, id }) => {
 
             <div className="objava-polje objava-datoteke">
                 <label className="ob-label" htmlFor="ob-file">Datoteke</label>
-                <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple/>
+                <Formik
+          initialValues={{ files: [] }}
+          validationSchema={object({
+            files: array(
+              object({
+                url: string().required(),
+              })
+            ),
+          })}
+          onSubmit={(values) => {
+            return new Promise((res) => setTimeout(res, 2000));
+          }}
+        >
+          {({ values, errors, isValid, isSubmitting }) => (
+            <Form className='file-upload'>
+              <div>
+                <MultipleFileUpload name="files" />
+
+                <div>
+                  <button
+                  id='save'
+                  className="gumb-ob"
+                    disabled={!isValid || isSubmitting}
+                    type="submit"
+                  >
+                    Pošalji
+                  </button>
+                </div>
+              </div>
+            </Form>
+          )}
+        </Formik>
             </div>
 
                 {zadChecked && (
@@ -155,7 +189,7 @@ const NewObjava = ({ onClose, id }) => {
 
         <div className="ob-funkcije objava-gumbi">
             <button className="gumb-ob" id="delete" onClick={onClose}>Obriši</button>
-            <button className="gumb-ob" id="cancel" onClick={onClose}>Cancel</button>
+            <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
             <button className="gumb-ob" id="save" onClick={izradi}>Spremi</button>
         </div>
 

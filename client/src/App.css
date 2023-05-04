@@ -580,9 +580,21 @@ textarea{
   background-color: var(--iznad-objava);
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
+
 .ob-label{
   padding-bottom: 1%;
+}
+.files{
+  background-color: var(--iznad);
+  border-radius: calc(var(--radius) - 0.2rem);
+}
+.file{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem;
 }
 .ob-input{
   background-color: rgb(164, 189, 169);
@@ -608,7 +620,9 @@ textarea{
   padding: 0.5% 1%;
   cursor: pointer;
 }
-
+.err{
+  color: red;
+}
 .odabir{
   width: 15rem;
   padding: 1% 5%;
@@ -647,6 +661,12 @@ textarea{
   grid-template-columns: auto auto;
   column-gap: 0.4rem;
 }
+#dat-odabir{
+  border: 2px dotted #5a5a5acc;
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin: 1rem 0;
+}
 #delete{
   background-color: rgb(129, 58, 58);
 }
@@ -684,6 +704,14 @@ textarea{
 .korisnici{
   display: flex;
   gap: 0.5rem;
+}
+.file-upload{
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.file-upload  div{
+  width: 100%;
 }
 .korisnik{
   background-color: var(--iznad);

@@ -136,7 +136,11 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
 
             <div className="objava-polje objava-datoteke">
                 <label className="ob-label" htmlFor="ob-file">Datoteke</label>
+                {edit && ifAdmin  ? (
                 <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple/>
+                ) : (
+                <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple disabled={true}/>
+                )}
             </div>
 
         </div>

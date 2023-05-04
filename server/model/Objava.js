@@ -17,9 +17,9 @@ const objavaSchema = new Schema({
         min: 2,
         max: 60,
     },
-    putDoDatoteka: {
-        type: String,
-        default: "",
+    datoteke: {
+        type: Array,
+        default: []
     },
     tekst: {
         type: String,
