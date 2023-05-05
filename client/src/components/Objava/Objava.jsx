@@ -14,6 +14,7 @@ function Objava({item, user, grupa, edit}) {
                 <p>{item.tekst}</p>
             </div>
             <div className="gumbi_kartica">
+            <div className="od">komentari: {item.komentari.length}</div>
             <div className="od">
                 <p id="od">{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
             </div>
@@ -21,7 +22,7 @@ function Objava({item, user, grupa, edit}) {
             </div>
         </div>
         {isObjavaOpen && (
-          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} objavaId={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId} user={user} grupa={grupa} edit={edit}/> 
+          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} komentari={item.komentari} objavaId={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId} user={user} grupa={grupa} edit={edit}/> 
         )}
     </>
   )

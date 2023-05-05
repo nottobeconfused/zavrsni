@@ -179,12 +179,6 @@ const NewObjava = ({ onClose, id }) => {
                 </>
                 )}
 
-
-            <div className="objava-polje objava-komentari">
-                <label className="ob-label" htmlFor="ob-komentar">Komentari</label>
-                <textarea className="ob-input" name="ob-komentar" id="ob-komentar" cols="auto" rows="3" placeholder="Komentar..."></textarea>
-            </div>
-
         </div>
 
         <div className="ob-funkcije objava-gumbi">

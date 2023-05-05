@@ -4,7 +4,11 @@ import axios from 'axios';
 const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa, edit}) => {
     const [objavaIme, setObjavaIme] = useState(naziv);
     const [objavaTekst, setObjavaTekst] = useState(tekst);
+    const [objavaKomentar, setObjavaKomentar] = useState("");
+    const [objavaKomentari, setObjavaKomentari] = useState([]);
     const [ifAdmin, setIfAdmin] = useState();
+
+    console.log(objavaKomentari)
 
     
     const handleNaziv = (e) => {
@@ -14,6 +18,10 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
     const handleTekst = (e) => {
         setObjavaTekst(e);
     }
+
+    const handleKomentar = (e) => {
+      setObjavaKomentar(e);
+  }
         
 
     const uredi = async (e) => {
@@ -41,6 +49,37 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
     //      }
     //     }
     };
+    const dodajKomentar = async (e) => {
+      try {
+        const res = await axios.post(
+          `http://localhost:5000/api/objava-komentar/${objavaId}`,
+          { sadrzaj: objavaKomentar },
+          { withCredentials: true }
+        )
+        const data = await res.data;
+        return data;
+      } catch (error) {
+        console.error(error);
+        alert('Nismo uspjeli pohraniti komentar.');
+      }
+  // else{
+  //     try {
+  //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
+  
+  //         const data = await res.data;
+  //         return data;
+  //         } catch (error) {
+  //         console.error(error);
+  //         alert('Nismo uspjeli kreirati zadatak.');
+  //      }
+  //     }
+  };
+  const sendRequestObjavaKomentari = async () => {
+    const res = await axios.get(`http://localhost:5000/api/objava-komentari/${objavaId}`, {
+        withCredentials: true
+    }).catch((err) => console.log(err));
+    return res.data;
+}
     
     const obrisi = async (e) => {
         try {
@@ -65,6 +104,9 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
     //     }
     };
     useEffect(() => {
+      sendRequestObjavaKomentari().then((data) => {
+        setObjavaKomentari(data)
+      });
         if(edit){
         if (grupa.admin === user._id) {
           setIfAdmin(true);
@@ -141,6 +183,30 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
                 ) : (
                 <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple disabled={true}/>
                 )}
+            </div>
+
+            <div className="objava-polje objava-komentari">
+                <label className="ob-label" htmlFor="ob-komentar">Novi komentar:</label>
+                <textarea className="ob-input" name="ob-komentar" id="ob-komentar" cols="auto" rows="3" placeholder="Komentar..." onChange={(e) => handleKomentar(e.target.value)} ></textarea>
+                <div><button className="gumb-ob" id="save" onClick={dodajKomentar}>Spremi komentar</button></div>
+                <div className="objava-polje objava-tekst korisnici">
+              <p>Komentari:</p>
+              {objavaKomentari?.length > 0 ? (
+                  objavaKomentari?.map(item => (
+                    <div className=" korisnik komentar" key={item._id}>
+                      <div className='kom-info'>
+                        <i>{item.user}</i>
+                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
+                      </div>
+                      <div>{item.tekst}</div>
+                  </div>
+                ))
+              ) : (
+                  <div>
+                    <p>Nema komentara!</p>
+                  </div>
+              )}
+              </div>
             </div>
 
         </div>

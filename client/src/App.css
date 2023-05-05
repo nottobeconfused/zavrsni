@@ -570,6 +570,14 @@ textarea{
 .korisnik.zeleno{
   background-color: green;
 }
+.komentar{
+  font-size: 1em;
+}
+.kom-info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .zauzeto{
   background-color: red;
 }
@@ -662,7 +670,7 @@ textarea{
   column-gap: 0.4rem;
 }
 #dat-odabir{
-  border: 2px dotted #5a5a5acc;
+  border: 3px dashed #5a5a5acc;
   border-radius: var(--radius);
   padding: 2rem;
   margin: 1rem 0;

@@ -29,6 +29,10 @@ const objavaSchema = new Schema({
         type: String,
         default: "",
     },
+    komentari: {
+        type: Array,
+        default: []
+    },
 },
 {timestamps: true }
 );
