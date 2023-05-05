@@ -6,7 +6,12 @@ const datotekaSchema = new Schema({
      file: {
           type: String,
           default: "",
-     }
+          required: true, 
+     },
+     objavaId: {
+          type: String,
+          default: "",
+     },
 },
      {timestamps: true }
      );

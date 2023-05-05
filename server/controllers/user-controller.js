@@ -5,6 +5,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const Datoteka = require('../model/Datoteka.js');
+const path = require("path");
+const asyncWrapper = require("../middleware/asyncWrapper.js")
 const Komentar = require('../model/Komentar.js');
 
 const signup = async(req, res, next) => {
@@ -251,31 +253,30 @@ const novaGrupa = async(req, res, next) => {
   };    
   const novaObjava = async (req, res, next) => {
     const { naslov, sadrzaj } = req.body;
-    //const file = req.file.path;
     const userId = req.id;
+    const file = req.file;
     const { id } = req.params;
-      const grupa = await Grupa.findById(id);
-      if (!grupa) {
-        return res.status(400).json({ message: 'Grupa nije pronađena!' });
-      }
+    const grupa = await Grupa.findById(id);
+    if (!grupa) {
+      return res.status(400).json({ message: 'Grupa nije pronađena!' });
+    }
     try {
-      //const datoteka = await Datoteka.create({file})
       // Create a new Objava object
       const novaObjava = new Objava({
         nazivObjave: naslov,
         tekst: sadrzaj,
         admin: userId,
-        grupa: grupa.imeGrupe, 
+        grupa: grupa.imeGrupe,
         grupaId: grupa.id,
-        //datoteke: datoteka._id,
       });
-  
+      if (file) {
+        const item = await Datoteka.create({ file: file.path, objavaId: novaObjava._id });
+        novaObjava.datoteke.push({ id: item._id });
+      }
       // Save the new Objava object to the database
       await novaObjava.save();
-  
       // Add the new Objava object to the relevant Grupa object's objave array
-      
-      grupa.objave.push({id: novaObjava._id});
+      grupa.objave.push({ id: novaObjava._id });
       await grupa.save();
   
       res.status(201).json({ novaObjava });
@@ -283,7 +284,28 @@ const novaGrupa = async(req, res, next) => {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-  };        
+  };
+  const getDatoteka = async (req, res) => {
+    const datotekaId = req.body;
+    try{
+         const items = await Datoteka.find(datotekaId);
+         res.status(200).json({items});
+    }catch (error){
+         console.log(error)
+    }
+};
+
+
+const downloadDatoteka = asyncWrapper(async (req, res) => {
+    const { id } = req.params;
+    const item = await Datoteka.findById(id);
+    if(!item){
+         return next(new Error("No item found!"));
+    }
+    const file = item.file;
+    const filePath = path.join(__dirname, `../${file}`);
+    res.download(filePath);
+});        
   const urediObjavu = async (req, res, next) => {
     const { naslov, sadrzaj} = req.body;
   const objavaId = req.params.id;
@@ -418,5 +440,7 @@ exports.novaObjava = novaObjava;
 exports.urediObjavu = urediObjavu;
 exports.dodajKomentar = dodajKomentar;
 exports.obrisiObjavu = obrisiObjavu;
+exports.getDatoteka = getDatoteka;
+exports.downloadDatoteka = downloadDatoteka;
 exports.refreshToken = refreshToken;
 exports.logout = logout;

@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Form, Formik } from 'formik';
-import { array, object, string } from 'yup';
-import { MultipleFileUpload } from '../Dropzone/MultipleFileUpload';
 
 const NewObjava = ({ onClose, id }) => {
     const [zadChecked, setZadChecked] = useState(false)
@@ -102,38 +99,7 @@ const NewObjava = ({ onClose, id }) => {
 
             <div className="objava-polje objava-datoteke">
                 <label className="ob-label" htmlFor="ob-file">Datoteke</label>
-                <Formik
-          initialValues={{ files: [] }}
-          validationSchema={object({
-            files: array(
-              object({
-                url: string().required(),
-              })
-            ),
-          })}
-          onSubmit={(values) => {
-            return new Promise((res) => setTimeout(res, 2000));
-          }}
-        >
-          {({ values, errors, isValid, isSubmitting }) => (
-            <Form className='file-upload'>
-              <div>
-                <MultipleFileUpload name="files" />
-
-                <div>
-                  <button
-                  id='save'
-                  className="gumb-ob"
-                    disabled={!isValid || isSubmitting}
-                    type="submit"
-                  >
-                    Pošalji
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
+                <input type='file' multiple></input>
             </div>
 
                 {zadChecked && (

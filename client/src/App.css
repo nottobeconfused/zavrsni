@@ -538,6 +538,7 @@ color: var(--isticanje);
 textarea{
   resize: none;
   overflow-y: scroll;
+  color: black;
 }
 .novaObjavaBackground{
   padding: 3rem 0;
@@ -835,6 +836,9 @@ textarea{
   }
   .ob-modal{
     width: 95%;
+}
+.odabir-objave{
+  width: 96%;
 }
 textarea{
     width: 100%;
