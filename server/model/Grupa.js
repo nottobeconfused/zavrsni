@@ -24,6 +24,10 @@ const grupaSchema = new Schema({
     admin : {
         type: String,
         default: ""
+    },
+    tip : {
+        type: Boolean,
+        default: false
     }
 },
 {timestamps: true }

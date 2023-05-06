@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import '../../App.css';
 import ModalNovo from "./ModalNovo";
 import ModalProfil from "./MofdalProfil";
 
-const NavTop = ({user, grupa, setObjavaModalOpen, setKorisnikModelOpen}) => {
+const NavTop = ({user, grupa, setObjavaModalOpen, setKorisnikModelOpen, tipGrupe, ifAdmin}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenP, setIsOpenP] = useState(false);
-
+    
+        
     return (
         <>
         
@@ -20,9 +21,9 @@ const NavTop = ({user, grupa, setObjavaModalOpen, setKorisnikModelOpen}) => {
             <div className="nav-top-funkcije">
                 <div className="funkcije">
                     <div >
-                    <button onClick={() => setIsOpen(true)}
-                    className="gumb-novo gumb-nav gumb"><i className="uil uil-plus-circle"></i></button>
-                       <ModalNovo open={isOpen} onClose={() => setIsOpen(false)} setObjavaModalOpen={setObjavaModalOpen} setKorisnikModelOpen={setKorisnikModelOpen}/> 
+                    {tipGrupe === true || ifAdmin ? (<button onClick={() => setIsOpen(true)}
+                    className="gumb-novo gumb-nav gumb"><i className="uil uil-plus-circle"></i></button> ) : null}
+                     <ModalNovo open={isOpen} onClose={() => setIsOpen(false)} setObjavaModalOpen={setObjavaModalOpen} setKorisnikModelOpen={setKorisnikModelOpen}/>
                     </div>
                     <div className="gumb-nav">
                 <div className="profil-slika dropdown-container gumb" onClick={() => setIsOpenP(true)}>

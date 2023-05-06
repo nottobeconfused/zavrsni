@@ -14,6 +14,7 @@ const Grupa = () => {
   const [ObjavaModal, setObjavaModalOpen] = useState(false);
   const [KorisnikModal, setKorisnikModelOpen] = useState(false);
   const [sortiranje, setSortiranje] = useState(false);
+  const [tipGrupe, setTipGrupe] = useState();
 
     const { id } = useParams();
 
@@ -77,9 +78,10 @@ const Grupa = () => {
   
   
       useEffect(() => {
-  
+        
           sendRequestGrupa().then((data) => {
             setGrupa(data)
+            setTipGrupe(data.tip)
           });
           sendRequestGrupaObjave().then((data) => {
             setObjave(data)
@@ -89,7 +91,6 @@ const Grupa = () => {
             setGroups(data.user.grupe);
             
           });
-
           let interval = setInterval(() => {
             refreshToken().then((data) => {
               setGroups(data.user.grupe);
@@ -108,7 +109,7 @@ const Grupa = () => {
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
-          <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
+          <NavTop  tipGrupe={tipGrupe} user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
           {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa}/>)}
           <div className="main">

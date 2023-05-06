@@ -28,8 +28,8 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
     setLoading(true);
     try{
         const res = await axios.get(`http://localhost:5000/api/objava-datoteke/${objavaId}`);
-        setObjavaDatoteke(res.data.items);
         setLoading(false);
+        return res.data;
     } catch (error) {
         console.log(error);
     }
@@ -131,9 +131,11 @@ const downloadDatoteka = async (datId) => {
     //     }
     };
     useEffect(() => {
-      getDatoteke()
       sendRequestObjavaKomentari().then((data) => {
         setObjavaKomentari(data)
+      });
+      getDatoteke().then((data) => {
+        setObjavaDatoteke(data)
       });
         if(edit){
         if (grupa.admin === user._id) {
@@ -207,9 +209,45 @@ const downloadDatoteka = async (datId) => {
             <div className="objava-polje objava-datoteke">
                 <label className="ob-label" htmlFor="ob-file">Datoteke</label>
                 {edit && ifAdmin  ? (
+                  <>
                 <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple/>
+                <div className="objava-polje objava-tekst korisnici">
+              {objavaDatoteke?.length > 0 ? (
+                  objavaDatoteke?.map(item => (
+                    <div className=" korisnik komentar" key={item._id}>
+                      <div className='kom-info'>
+                        <i>{item.file}</i>
+                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
+                        <button className="gumb-ob" id="delete">Obriši</button>
+                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
+                      </div>
+                  </div>
+                ))
+              ) : (
+                  <div>
+                    <p>Nema datoteka!</p>
+                  </div>
+              )}
+              </div>
+              </>
                 ) : (
-                <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple disabled={true}/>
+                  <div className="objava-polje objava-tekst korisnici">
+              {objavaDatoteke?.length > 0 ? (
+                  objavaDatoteke?.map(item => (
+                    <div className=" korisnik komentar" key={item._id}>
+                      <div className='kom-info'>
+                        <i>{item.file}</i>
+                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
+                        <button className="gumb-ob" id="save" onClick={uredi}>Preuzmi</button>
+                      </div>
+                  </div>
+                ))
+              ) : (
+                  <div>
+                    <p>Nema datoteka!</p>
+                  </div>
+              )}
+              </div>
                 )}
             </div>
 

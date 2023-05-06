@@ -290,21 +290,22 @@ const novaGrupa = async(req, res, next) => {
     }
   };
   const getDatoteka = async (req, res) => {
-    const id = req.params;
+    const objavaId = req.params.id;
     try{
-      const objava = await Objava.findById(id);
-      const datIds = objava.datoteke.map(dat => dat.id);
-
-    const datoteke = await Datoteka.find({ objavaId: { $in: datIds } });
-         res.status(200).json({datoteke});
+      const objava = await Objava.findById(objavaId);
+      if (!objava) {
+        return res.status(404).json({ message: "Tražena objava nije pronađena ili nije otvorena." });
+      }
+    const datoteke = await Datoteka.find({ objavaId });
+         res.status(200).json(datoteke);
     }catch (error){
          console.log(error)
     }
 };
 
 
-const downloadDatoteka = asyncWrapper(async (req, res) => {
-    const { id } = req.params;
+const downloadDatoteka = asyncWrapper(async (req, res, next) => {
+    const id = req.params.id;
     const item = await Datoteka.findById(id);
     if(!item){
          return next(new Error("No item found!"));
