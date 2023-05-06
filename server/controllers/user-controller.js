@@ -272,13 +272,17 @@ const novaGrupa = async(req, res, next) => {
       if (file) {
         const item = await Datoteka.create({ file: file.path, objavaId: novaObjava._id });
         novaObjava.datoteke.push({ id: item._id });
-      }
-      // Save the new Objava object to the database
+        // Save the new Objava object to the database
       await novaObjava.save();
       // Add the new Objava object to the relevant Grupa object's objave array
       grupa.objave.push({ id: novaObjava._id });
       await grupa.save();
-  
+      } else {
+        await novaObjava.save();
+      // Add the new Objava object to the relevant Grupa object's objave array
+      grupa.objave.push({ id: novaObjava._id });
+      await grupa.save();
+      }
       res.status(201).json({ novaObjava });
     } catch (err) {
       console.error(err.message);
@@ -286,10 +290,13 @@ const novaGrupa = async(req, res, next) => {
     }
   };
   const getDatoteka = async (req, res) => {
-    const datotekaId = req.body;
+    const id = req.params;
     try{
-         const items = await Datoteka.find(datotekaId);
-         res.status(200).json({items});
+      const objava = await Objava.findById(id);
+      const datIds = objava.datoteke.map(dat => dat.id);
+
+    const datoteke = await Datoteka.find({ objavaId: { $in: datIds } });
+         res.status(200).json({datoteke});
     }catch (error){
          console.log(error)
     }

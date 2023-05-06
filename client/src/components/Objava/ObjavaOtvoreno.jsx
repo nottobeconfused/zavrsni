@@ -8,7 +8,8 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
     const [objavaKomentari, setObjavaKomentari] = useState([]);
     const [ifAdmin, setIfAdmin] = useState();
 
-    console.log(objavaKomentari)
+    const [objavaDatoteke, setObjavaDatoteke] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     
     const handleNaziv = (e) => {
@@ -23,6 +24,32 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
       setObjavaKomentar(e);
   }
         
+  const getDatoteke = async () => {
+    setLoading(true);
+    try{
+        const res = await axios.get(`http://localhost:5000/api/objava-datoteke/${objavaId}`);
+        setObjavaDatoteke(res.data.items);
+        setLoading(false);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const downloadDatoteka = async (datId) => {
+  try{
+    const res = await axios.get(
+      `http://localhost:5000/api/objava-datoteke-download/${datId}`,
+      {responseType: 'blob'},
+    );
+    const blob = new Blob([res.data], {type: res.data.type});
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = res.headers['content-disposition'].split('filename=')[1];
+    link.click();
+  } catch (error) {
+    console.log(error);
+  }
+}
 
     const uredi = async (e) => {
         try {
@@ -104,6 +131,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
     //     }
     };
     useEffect(() => {
+      getDatoteke()
       sendRequestObjavaKomentari().then((data) => {
         setObjavaKomentari(data)
       });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import axios from 'axios';
 
 const NewObjava = ({ onClose, id }) => {
@@ -8,7 +8,7 @@ const NewObjava = ({ onClose, id }) => {
     const [objavaDatumOd, setObjavaDatumOd] = useState('');
     const [objavaDatumDo, setObjavaDatumDo] = useState('');
     const [objavaOcjena, setObjavaOcjena] = useState('');
-    
+    const fileInputRef = useRef(null);
 
     const handleNaziv = (e) => {
         setObjavaIme(e);
@@ -27,12 +27,16 @@ const NewObjava = ({ onClose, id }) => {
         setObjavaOcjena(e);
     }
 
+
     const izradi = async (e) => {
+        e.preventDefault();
         if(!zadChecked){
         try {
+            const formData = new FormData();
+            formData.append("file", fileInputRef.current.files[0]);
           const res = await axios.post(
             `http://localhost:5000/api/${id}/nova-objava`,
-            { naslov: objavaIme, sadrzaj: objavaTekst },
+            { naslov: objavaIme, sadrzaj: objavaTekst},formData,
             { withCredentials: true }
           )
           const data = await res.data;
@@ -99,7 +103,7 @@ const NewObjava = ({ onClose, id }) => {
 
             <div className="objava-polje objava-datoteke">
                 <label className="ob-label" htmlFor="ob-file">Datoteke</label>
-                <input type='file' multiple></input>
+                <input type='file' ref={fileInputRef}></input>
             </div>
 
                 {zadChecked && (

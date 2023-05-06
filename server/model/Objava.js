@@ -13,9 +13,7 @@ const objavaSchema = new Schema({
     },
     nazivObjave: {
         type: String,
-        required: true,
-        min: 2,
-        max: 60,
+        default: "nova-objava"
     },
     datoteke: {
         type: Array,
