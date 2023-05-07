@@ -315,7 +315,7 @@ const novaGrupa = async(req, res, next) => {
 
 
 const downloadDatoteka = asyncWrapper(async (req, res, next) => {
-    const id = req.params.id;
+    const {id} = req.params;
     const item = await Datoteka.findById(id);
     if(!item){
          return next(new Error("No item found!"));
@@ -325,24 +325,47 @@ const downloadDatoteka = asyncWrapper(async (req, res, next) => {
     res.download(filePath);
 });        
 const urediObjavu = async (req, res, next) => {
-  const { naslov, sadrzaj, OD, DO, ocjena } = req.body;
-  const objavaId = req.params.id;
+  const naslov = req.body.naslov;
+  const sadrzaj = req.body.sadrzaj;
+  const OD = req.body.OD;
+  const DO = req.body.DO;
+  const ocjena = req.body.ocjena;
   const userId = req.id;
+  const { id } = req.params;
+
   try {
-    const objava = await Objava.findById(objavaId);
+    // Find the existing Objava object
+    const objava = await Objava.findById(id);
     if (!objava) {
-      return res.status(404).json({ message: 'Objava nije pronađena!' });
+      return res.status(400).json({ message: 'Objava nije pronađena!' });
     }
-    if (objava.admin.toString() !== userId) {
-      return res.status(401).json({ message: 'Nemate ovlasti za ažuriranje objave!' });
+    // Check if the user is the admin of the group the Objava belongs to
+    const grupa = await Grupa.findById(objava.grupaId);
+    if (!grupa) {
+      return res.status(400).json({ message: 'Grupa nije pronađena!' });
     }
+    if (grupa.admin.toString() !== userId) {
+      return res.status(401).json({ message: 'Nemate ovlasti za ažuriranje ove objave!' });
+    }
+
+    // Update the Objava object
     objava.nazivObjave = naslov;
     objava.tekst = sadrzaj;
     objava.od = OD;
     objava.do = DO;
     objava.ocjena = ocjena;
+
+    // Check if the user uploaded a new file
+    const file = req.file;
+    if (file) {
+      const item = await Datoteka.create({ file: file.path, objavaId: id});
+      objava.datoteke.push({ id: item._id });
+      // Save the new Objava object to the database
     await objava.save();
-   
+    }
+
+    await objava.save();
+
     res.status(200).json({ objava });
   } catch (err) {
     console.error(err.message);

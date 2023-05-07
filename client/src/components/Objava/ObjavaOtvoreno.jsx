@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupaId, user, grupa, edit, ifZadatak}) => {
@@ -14,6 +14,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupa
     const [ifAdmin, setIfAdmin] = useState();
 
     const [objavaDatoteke, setObjavaDatoteke] = useState([]);
+    const fileInputRef = useRef(null);
     const [loading, setLoading] = useState(false);
 
     
@@ -55,30 +56,43 @@ const downloadDatoteka = async (datId) => {
       `http://localhost:5000/api/objava-datoteke-download/${datId}`,
       {responseType: 'blob'},
     );
-    const blob = new Blob([res.data], {type: res.data.type});
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = res.headers['content-disposition'].split('filename=')[1];
-    link.click();
+    const blob = new Blob([res.data], { type: res.data.type });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "untitled";
+      link.click();
   } catch (error) {
     console.log(error);
   }
 }
 
-    const uredi = async (e) => {
-        try {
-          const res = await axios.post(
-            `http://localhost:5000/api/objava/${objavaId}`,
-            { naslov: objavaIme, sadrzaj: objavaTekst, grupaId: grupaId , OD: objavaDatumOd, DO: objavaDatumDo, ocjena: objavaOcjena},
-            { withCredentials: true }
-          )
-          const data = await res.data;
-          return data;
-        } catch (error) {
-          console.error(error);
-          alert('Nismo uspjeli kreirati objavu.');
-        }
-      }
+const uredi = async (e) => {
+  e.preventDefault()
+  try {
+    const formData = new FormData();
+    formData.append("naslov", objavaIme);
+    formData.append("sadrzaj", objavaTekst);
+    formData.append("OD", objavaDatumOd);
+    formData.append("DO", objavaDatumDo);
+    formData.append("ocjena", objavaOcjena);
+
+    const fileInput = fileInputRef.current;
+    if (fileInput.files.length > 0) {
+      formData.append("file", fileInput.files[0]);
+    }
+
+    const res = await axios.post(
+      `http://localhost:5000/api/objava/${objavaId}`,
+      formData,
+      { withCredentials: true }
+    );
+    const data = await res.data;
+    return data;
+  } catch (error) {
+    console.error(error);
+    alert('Nismo uspjeli urediti objavu.');
+  }
+};
     const dodajKomentar = async (e) => {
       try {
         const res = await axios.post(
@@ -92,17 +106,6 @@ const downloadDatoteka = async (datId) => {
         console.error(error);
         alert('Nismo uspjeli pohraniti komentar.');
       }
-  // else{
-  //     try {
-  //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
-  
-  //         const data = await res.data;
-  //         return data;
-  //         } catch (error) {
-  //         console.error(error);
-  //         alert('Nismo uspjeli kreirati zadatak.');
-  //      }
-  //     }
   };
   const sendRequestObjavaKomentari = async () => {
     const res = await axios.get(`http://localhost:5000/api/objava-komentari/${objavaId}`, {
@@ -121,17 +124,6 @@ const downloadDatoteka = async (datId) => {
           console.error(error);
           alert('Nemate ovlasti za brisanje.');
         }
-    // else{
-    //     try {
-    //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
-    
-    //         const data = await res.data;
-    //         return data;
-    //         } catch (error) {
-    //         console.error(error);
-    //         alert('Nismo uspjeli kreirati zadatak.');
-    //      }
-    //     }
     };
     const obrisiDatoteku = async (datId) => {
       try {
@@ -143,17 +135,6 @@ const downloadDatoteka = async (datId) => {
         console.error(error);
         alert('Nemate ovlasti za brisanje.');
       }
-  // else{
-  //     try {
-  //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
-  
-  //         const data = await res.data;
-  //         return data;
-  //         } catch (error) {
-  //         console.error(error);
-  //         alert('Nismo uspjeli kreirati zadatak.');
-  //      }
-  //     }
   };
     useEffect(() => {
       sendRequestObjavaKomentari().then((data) => {
@@ -235,7 +216,7 @@ const downloadDatoteka = async (datId) => {
                 <label className="ob-label" htmlFor="ob-file">Datoteke</label>
                 {edit && ifAdmin  ? (
                   <>
-                <input className="ob-input" type="file" name="ob-file" id="ob-file" multiple/>
+                <input className="ob-input" type="file" name="ob-file" id="ob-file" ref={fileInputRef}/>
                 <div className="objava-polje objava-tekst korisnici">
               {objavaDatoteke?.length > 0 ? (
                   objavaDatoteke?.map(item => (
