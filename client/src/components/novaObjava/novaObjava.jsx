@@ -7,7 +7,7 @@ const NewObjava = ({ onClose, id }) => {
     const [objavaTekst, setObjavaTekst] = useState('');
     const [objavaDatumOd, setObjavaDatumOd] = useState('');
     const [objavaDatumDo, setObjavaDatumDo] = useState('');
-    const [objavaOcjena, setObjavaOcjena] = useState('');
+    const [objavaOcjena, setObjavaOcjena] = useState('100');
     const fileInputRef = useRef(null);
 
     const handleNaziv = (e) => {
@@ -30,35 +30,28 @@ const NewObjava = ({ onClose, id }) => {
 
     const izradi = async (e) => {
         e.preventDefault();
-        if(!zadChecked){
-        try {
+          try {
             const formData = new FormData();
             formData.append("file", fileInputRef.current.files[0]);
-          const res = await axios.post(
-            `http://localhost:5000/api/${id}/nova-objava`,
-            formData,
-            { naslov: objavaIme, sadrzaj: objavaTekst},
-            { withCredentials: true }
-          )
-          const data = await res.data;
-          return data;
-        } catch (error) {
-          console.error(error);
-          alert('Nismo uspjeli kreirati objavu.');
-        }
-    }
-    else{
-        try {
-            const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
-    
+            formData.append("naslov", objavaIme);
+            formData.append("sadrzaj", objavaTekst);
+            formData.append("OD", objavaDatumOd);
+            formData.append("DO", objavaDatumDo);
+            formData.append("ocjena", objavaOcjena);
+            formData.append("ifZadatak", zadChecked)
+            const res = await axios.post(
+              `http://localhost:5000/api/${id}/nova-objava`,
+              formData,
+              { withCredentials: true }
+            )
             const data = await res.data;
             return data;
-            } catch (error) {
+          } catch (error) {
             console.error(error);
-            alert('Nismo uspjeli kreirati zadatak.');
-         }
-        }
-    };
+            alert('Nismo uspjeli kreirati objavu.');
+          }
+        
+      };
 
   return (
     <div className="novaObjavaBackground">

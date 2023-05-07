@@ -252,11 +252,17 @@ const novaGrupa = async(req, res, next) => {
     }               
   };    
   const novaObjava = async (req, res, next) => {
-    const { naslov, sadrzaj } = req.body;
+    const naslov = req.body.naslov;
+    const sadrzaj = req.body.sadrzaj;
+    const OD = req.body.OD;
+    const DO = req.body.DO;
+    const ocjena = req.body.ocjena;
+    const ifZadatak = req.body.ifZadatak;
     const userId = req.id;
     const file = req.file;
     const { id } = req.params;
     const grupa = await Grupa.findById(id);
+    console.log(naslov, sadrzaj, userId, id)
     if (!grupa) {
       return res.status(400).json({ message: 'Grupa nije pronađena!' });
     }
@@ -268,6 +274,10 @@ const novaGrupa = async(req, res, next) => {
         admin: userId,
         grupa: grupa.imeGrupe,
         grupaId: grupa.id,
+        od: OD, 
+        do: DO, 
+        ocjena: ocjena,
+        ifZadatak: ifZadatak,
       });
       if (file) {
         const item = await Datoteka.create({ file: file.path, objavaId: novaObjava._id});
@@ -314,8 +324,8 @@ const downloadDatoteka = asyncWrapper(async (req, res, next) => {
     const filePath = path.join(__dirname, `../${file}`);
     res.download(filePath);
 });        
-  const urediObjavu = async (req, res, next) => {
-    const { naslov, sadrzaj} = req.body;
+const urediObjavu = async (req, res, next) => {
+  const { naslov, sadrzaj, OD, DO, ocjena } = req.body;
   const objavaId = req.params.id;
   const userId = req.id;
   try {
@@ -328,6 +338,9 @@ const downloadDatoteka = asyncWrapper(async (req, res, next) => {
     }
     objava.nazivObjave = naslov;
     objava.tekst = sadrzaj;
+    objava.od = OD;
+    objava.do = DO;
+    objava.ocjena = ocjena;
     await objava.save();
    
     res.status(200).json({ objava });
@@ -335,7 +348,7 @@ const downloadDatoteka = asyncWrapper(async (req, res, next) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-  };     
+};    
   const dodajKomentar = async (req, res, next) => {
     const { sadrzaj } = req.body;
   const objavaId = req.params.id;

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const objavaSchema = new Schema({
+const zadatakSchema = new Schema({
     grupa: {
         type: String,
         default: "",
@@ -42,13 +42,9 @@ const objavaSchema = new Schema({
     ocjena: {
      type: String,
         default: "",
-    },
-    ifZadatak: {
-        type: Boolean,
-        default: false,
     }
 },
 {timestamps: true }
 );
 
-module.exports = mongoose.model('Objava', objavaSchema);
+module.exports = mongoose.model('Zadatak', zadatakSchema);

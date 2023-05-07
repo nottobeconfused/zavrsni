@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa, edit}) => {
+const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupaId, user, grupa, edit, ifZadatak}) => {
     const [objavaIme, setObjavaIme] = useState(naziv);
     const [objavaTekst, setObjavaTekst] = useState(tekst);
     const [objavaKomentar, setObjavaKomentar] = useState("");
     const [objavaKomentari, setObjavaKomentari] = useState([]);
+
+    const [objavaDatumOd, setObjavaDatumOd] = useState(OD);
+    const [objavaDatumDo, setObjavaDatumDo] = useState(DO);
+    const [objavaOcjena, setObjavaOcjena] = useState(ocjena);
+
     const [ifAdmin, setIfAdmin] = useState();
 
     const [objavaDatoteke, setObjavaDatoteke] = useState([]);
@@ -19,6 +24,16 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
     const handleTekst = (e) => {
         setObjavaTekst(e);
     }
+
+    const handleDatumOd = (e) => {
+      setObjavaDatumOd(e);
+  }
+  const handleDatumDo = (e) => {
+      setObjavaDatumDo(e);
+  }
+  const handleObjavaOcjena = (e) => {
+      setObjavaOcjena(e);
+  }
 
     const handleKomentar = (e) => {
       setObjavaKomentar(e);
@@ -54,7 +69,7 @@ const downloadDatoteka = async (datId) => {
         try {
           const res = await axios.post(
             `http://localhost:5000/api/objava/${objavaId}`,
-            { naslov: objavaIme, sadrzaj: objavaTekst, grupaId: grupaId },
+            { naslov: objavaIme, sadrzaj: objavaTekst, grupaId: grupaId , OD: objavaDatumOd, DO: objavaDatumDo, ocjena: objavaOcjena},
             { withCredentials: true }
           )
           const data = await res.data;
@@ -63,18 +78,7 @@ const downloadDatoteka = async (datId) => {
           console.error(error);
           alert('Nismo uspjeli kreirati objavu.');
         }
-    // else{
-    //     try {
-    //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
-    
-    //         const data = await res.data;
-    //         return data;
-    //         } catch (error) {
-    //         console.error(error);
-    //         alert('Nismo uspjeli kreirati zadatak.');
-    //      }
-    //     }
-    };
+      }
     const dodajKomentar = async (e) => {
       try {
         const res = await axios.post(
@@ -271,6 +275,51 @@ const downloadDatoteka = async (datId) => {
               </div>
                 )}
             </div>
+
+            {ifZadatak && (
+                    <>
+                <div className='objava-oddo'>
+                    <div className="objava-polje">
+                        <label htmlFor="od">OD datuma:</label>
+                        <input 
+                        className="ob-input" 
+                        type="date" 
+                        name="od" 
+                        id="od" 
+                        defaultValue={OD}
+                        onChange={(e) => handleDatumOd(e.target.value)} 
+                        />
+                    </div>
+                    <div className="objava-polje">
+                        <label htmlFor="do">DO datuma:</label>
+                        <input 
+                        className="ob-input" 
+                        type="date" 
+                        name="do" 
+                        id="do" 
+                        defaultValue={DO}
+                        onChange={(e) => handleDatumDo(e.target.value)} 
+                        />
+                    </div>
+                </div>
+
+                <div className='objava-polje ob-ocjena'>
+                    <label htmlFor="ocjena">Ocjena:</label>
+                    <section>
+                    <p>___ / <input 
+                        className="ob-input" 
+                        type="number" 
+                        name="ocjena" 
+                        id="ocjena" 
+                        min={0} 
+                        max={100} 
+                        defaultValue={ocjena}
+                        onChange={(e) => handleObjavaOcjena(e.target.value)} 
+                        /></p>
+                    </section>
+                </div>
+                </>
+                )}
 
             <div className="objava-polje objava-komentari">
                 <label className="ob-label" htmlFor="ob-komentar">Novi komentar:</label>

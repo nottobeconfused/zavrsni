@@ -22,7 +22,7 @@ function Objava({item, user, grupa, edit}) {
             </div>
         </div>
         {isObjavaOpen && (
-          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} komentari={item.komentari} objavaId={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId} user={user} grupa={grupa} edit={edit}/> 
+          <ObjavaOtvoreno onClose={() => setIsObjavaOpen(false)} ifZadatak={item.ifZadatak} OD={item.od} DO={item.do} ocjena={item.ocjena} komentari={item.komentari} objavaId={item._id} naziv={item.nazivObjave} tekst={item.tekst} grupaId={item.grupaId} user={user} grupa={grupa} edit={edit}/> 
         )}
     </>
   )
