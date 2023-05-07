@@ -12,7 +12,7 @@ const NewOdgovor = ({ objavaId }) => {
     const dodajKomentarUzadacu = async (e) => {
      try {
        const res = await axios.post(
-         `http://localhost:5000/api/objava-odgovor-komentar/${objavaId}`,
+         `http://localhost:5000/api/odgovor-komentar/${objavaId}`,
          { sadrzaj: odgovorKomentar },
          { withCredentials: true }
        )
@@ -55,7 +55,6 @@ const NewOdgovor = ({ objavaId }) => {
             <div className="objava-polje objava-komentari">
                 <label className="ob-label" htmlFor="ob-komentar">Komentar uz zadaću:</label>
                 <textarea className="ob-input" name="ob-komentar" id="ob-komentar" cols="auto" rows="3" placeholder="Komentar..." onChange={(e) => handleKomentar(e.target.value)} ></textarea>
-                <div><button className="gumb-ob" id="save" onClick={dodajKomentarUzadacu}>Spremi komentar</button></div>
             </div>
 
         <div className="ob-funkcije objava-gumbi">

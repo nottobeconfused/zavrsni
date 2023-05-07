@@ -331,6 +331,19 @@ const novaGrupa = async(req, res, next) => {
          console.log(error)
     }
 };
+const getDatotekaIzOdgovora = async (req, res) => {
+  const odgovorId = req.params;
+  try{
+    const odgovor = await Odgovor.findById(odgovorId);
+    if (!odgovor) {
+      return res.status(404).json({ message: "Tražena objava nije pronađena ili nije otvorena." });
+    }
+  const datoteke = await Datoteka.find({ odgovorId });
+       res.status(200).json(datoteke);
+  }catch (error){
+       console.log(error)
+  }
+};
 
 
 const downloadDatoteka = asyncWrapper(async (req, res, next) => {
@@ -420,9 +433,38 @@ const urediObjavu = async (req, res, next) => {
     res.status(500).send('Server Error');
   }
   }; 
+  const dodajKomentarUzZadacu = async (req, res, next) => {
+    const { sadrzaj } = req.body;
+  const {objavaId} = req.params.id;
+  const userId = req.id;
+  try {
+    const odgovor = await Odgovor.find(objavaId);
+    if (!odgovor) {
+      return res.status(404).json({ message: 'Objava nije pronađena!' });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Korisnik nije pronađen!' });
+    }
+
+    const noviKomentar = new Komentar({
+      user: user.korisnickoIme,
+      tekst: sadrzaj,
+      objavaId: objavaId,
+    })
+    
+    await noviKomentar.save();
+    odgovor.komentari.push({id: noviKomentar._id});
+   await odgovor.save();
+    res.status(200).json({ odgovor });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+  };
   
   const dodajOdgovor = async (req, res, next) => {
-    const {  komentar } = req.body;
+    const { komentar } = req.body;
   const objavaId = req.params.id;
   const userId = req.id;
   try {
@@ -436,13 +478,13 @@ const urediObjavu = async (req, res, next) => {
     }
 
     const noviOdgovor = new Odgovor({
-      user: user.korisnickoIme,
+      admin: userId,
       komentari: komentar,
       objavaId: objavaId,
     })
     const file = req.file;
     if (file) {
-      const item = await Datoteka.create({ file: file.path, objavaId: id});
+      const item = await Datoteka.create({ file: file.path, objavaId: noviOdgovor._id});
       noviOdgovor.datoteke.push({ id: item._id });
       // Save the new Objava object to the database
     await noviOdgovor.save();
@@ -557,10 +599,12 @@ exports.novaGrupa = novaGrupa;
 exports.novaObjava = novaObjava;
 exports.urediObjavu = urediObjavu;
 exports.dodajKomentar = dodajKomentar;
+exports.dodajKomentarUzZadacu =dodajKomentarUzZadacu;
 exports.dodajOdgovor = dodajOdgovor;
 exports.obrisiObjavu = obrisiObjavu;
 exports.getDatoteka = getDatoteka;
 exports.downloadDatoteka = downloadDatoteka;
 exports.obrisiDatoteku =obrisiDatoteku;
+exports.getDatotekaIzOdgovora = getDatotekaIzOdgovora;
 exports.refreshToken = refreshToken;
 exports.logout = logout;

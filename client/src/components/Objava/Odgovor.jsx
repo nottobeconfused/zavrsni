@@ -1,10 +1,18 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function Odgovor(item) {
 
      const [odgovorDatoteke, setOdgovorDatoteke] = useState()
 
+     const getDatoteke = async () => {
+      try{
+          const res = await axios.get(`http://localhost:5000/api/objava-odgovor-datoteke/${item._id}`);
+          return res.data;
+      } catch (error) {
+          console.log(error);
+      }
+  }
      const downloadDatoteka = async (datId) => {
           try{
             const res = await axios.get(
@@ -20,20 +28,30 @@ export default function Odgovor(item) {
             console.log(error);
           }
         }
+        useEffect(() => {
+          getDatoteke().then((data) => {
+            setOdgovorDatoteke(data)
+          });
+          },[]);
 
   return (
      <>
-     
-         <div className=" korisnik komentar" key={item._id}>
+     {odgovorDatoteke?.length > 0 ? (
+      odgovorDatoteke.map(dat => {
+        <>
+        <div className=" korisnik komentar" key={dat._id}>
            <div className='kom-info'>
              <div>
-             <i>{item.file}</i>
-             <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
+             <i>{dat.file}</i>
+             <p>{new Date(dat.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
              </div>
              <div className='btn-file'>
-             <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
+             <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(dat._id)}>Preuzmi</button>
              </div>
            </div>
            </div>
+       </>
+      })
+     ):null}
            </>
 )}

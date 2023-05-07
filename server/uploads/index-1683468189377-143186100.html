@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autobusna karta</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Autobusna Karta</h1>
+    </header>
+    <main>
+        <div class="obrazac">
+            <form>
+                <div class="element">
+                    <div class="ImePrezime">
+                        <label for="imePrezime" class="obavezno">ime i prezime:</label>
+                        <input type="text" name="imePrezime" id="imePrezime" minlength="6" maxlength="32" required onfocus="povecaj()">
+                        </div>
+                        <div class="Osobe">
+                            <div class="inline">
+                                <label for="brojOsoba" class="obavezno">broj odraslih</label> 
+                                <input  type="number" name="brojOsoba" id="brojOsoba" placeholder="1" min="1" required> 
+                            </div>
+                            <div class="inline">
+                                <label for="brojDjece" class="obavezno">broj djece</label> 
+                                <input  type="number" name="brojDjece" id="brojDjece" placeholder="0" min="0" required>  
+                            </div>
+                        </div>  
+                </div>
+                <div class="element">
+                    <div class="DatumPutovanja" class="obavezno">
+                        <div>
+                            <label for="datumPol" class="obavezno">Datum polaska</label>
+                            <input type="date" name="datumPol" id="datumPol" required min="dt">
+                        </div>
+                        <div>
+                            <label for="datumPov" class="obavezno">Datum povratka</label>
+                            <input type="date" name="datumPov" id="datumPov" required min="dt">
+                        </div>
+                    </div>
+                </div>
+                <div class="element">
+                    <div class="polaziste" >
+                        <label for="polaziste" class="obavezno">Polazište</label>
+                        <select name="polaziste" id="polaziste" required>
+                            <option value="PleaseChoose" selected>Please chose...</option>
+                            <option value="Zagreb">Zagreb</option>
+                            <option value="Budimpešta">Budimpešta</option>
+                            <option value="Ljubljana">Ljubljana</option>
+                            <option value="Rim">Rim</option>
+                            <option value="Sarajevo">Sarajevo</option>
+                            <option value="Beograd">Beograd</option>
+                        </select>
+                    </div>      
+                    <div class="odrediste">
+                        <label for="odrediste" class="obavezno">Odredište</label>
+                        <select name="odrediste" id="odrediste" required>
+                            <option value="PleaseChoose" selected>Please chose...</option>
+                            <option value="Zagreb">Zagreb</option>
+                            <option value="Budimpešta">Budimpešta</option>
+                            <option value="Ljubljana">Ljubljana</option>
+                            <option value="Rim">Rim</option>
+                            <option value="Sarajevo">Sarajevo</option>
+                            <option value="Beograd">Beograd</option>
+                        </select>
+                    </div>  
+                </div>
+            </form>
+            <button id="gumb">Book now!</button>
+        </div>
+    </main>
+    <script>
+        document.getElementById("datumPov").valueAsDate = new Date();
+        document.getElementById("datumPol").valueAsDate = new Date();
+    </script> 
+</body>
+</html>

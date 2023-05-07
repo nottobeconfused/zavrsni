@@ -24,6 +24,8 @@ const {
      novizadatak,
      dodajOdgovor,
      getOdgovoriIzObjave,
+     dodajKomentarUzZadacu,
+     getDatotekaIzOdgovora,
 } = require('../controllers/user-controller');
 const router = express.Router();
 
@@ -32,6 +34,7 @@ router.post("/login", login);
 router.get("/user", verifyToken, getUser);
 router.post("/nova-grupa", verifyToken, novaGrupa);
 router.post("/objava-komentar/:id", verifyToken, dodajKomentar);
+router.post("/odgovor-komentar/:id", verifyToken, dodajKomentarUzZadacu);
 router.route("/objava-odgovor/:id").post(upload.single('file'), verifyToken, dodajOdgovor);
 router.post("/objava-brisanje/:id", verifyToken, obrisiObjavu);
 router.get("/korisnici/:pretraga", verifyToken, getKorisnici);
@@ -46,6 +49,7 @@ router.route("/:id/nova-objava").post(upload.single('file'), verifyToken, novaOb
 router.route("/objava/:id").post(upload.single('file'), verifyToken, urediObjavu);
 router.route("/objava-datoteke-download/:id").get(verifyToken, downloadDatoteka);
 router.route("/objava-datoteke/:id").get(getDatoteka);
+router.route("/objava-odgovor-datoteke/:id").get(getDatotekaIzOdgovora);
 router.post("/datoteka-brisanje/:id", verifyToken, obrisiDatoteku);
 router.get("/refresh", refreshToken, verifyToken, getUser);
 router.post("/logout", verifyToken, logout);
