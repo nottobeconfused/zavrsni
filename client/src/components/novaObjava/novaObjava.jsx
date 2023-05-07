@@ -36,7 +36,8 @@ const NewObjava = ({ onClose, id }) => {
             formData.append("file", fileInputRef.current.files[0]);
           const res = await axios.post(
             `http://localhost:5000/api/${id}/nova-objava`,
-            { naslov: objavaIme, sadrzaj: objavaTekst},formData,
+            formData,
+            { naslov: objavaIme, sadrzaj: objavaTekst},
             { withCredentials: true }
           )
           const data = await res.data;

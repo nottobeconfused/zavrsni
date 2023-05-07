@@ -270,7 +270,7 @@ const novaGrupa = async(req, res, next) => {
         grupaId: grupa.id,
       });
       if (file) {
-        const item = await Datoteka.create({ file: file.path, objavaId: novaObjava._id });
+        const item = await Datoteka.create({ file: file.path, objavaId: novaObjava._id});
         novaObjava.datoteke.push({ id: item._id });
         // Save the new Objava object to the database
       await novaObjava.save();
@@ -384,6 +384,21 @@ const downloadDatoteka = asyncWrapper(async (req, res, next) => {
     res.status(500).send('Server Error');
   }
   }; 
+  const obrisiDatoteku = async (req, res, next) => {
+    const datId = req.params.id;
+    try {
+      const datoteka = await Datoteka.findById(datId);
+      if (!datoteka) {
+        return res.status(404).json({ message: 'Datoteka nije pronađena!' });
+      }
+      await datoteka.remove();
+     
+      res.status(200).json({ message: "Datoteka uspješno obrisana!" });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+    };
 const refreshToken = (req, res, next) => {
     const cookies = req.headers.cookie;
     const prevToken = cookies.split("=")[1];
@@ -450,5 +465,6 @@ exports.dodajKomentar = dodajKomentar;
 exports.obrisiObjavu = obrisiObjavu;
 exports.getDatoteka = getDatoteka;
 exports.downloadDatoteka = downloadDatoteka;
+exports.obrisiDatoteku =obrisiDatoteku;
 exports.refreshToken = refreshToken;
 exports.logout = logout;

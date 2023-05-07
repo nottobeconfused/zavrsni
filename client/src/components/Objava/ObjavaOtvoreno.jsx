@@ -34,7 +34,6 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, grupaId, user, grupa,
         console.log(error);
     }
 }
-
 const downloadDatoteka = async (datId) => {
   try{
     const res = await axios.get(
@@ -130,6 +129,28 @@ const downloadDatoteka = async (datId) => {
     //      }
     //     }
     };
+    const obrisiDatoteku = async (datId) => {
+      try {
+          await axios.post(
+          `http://localhost:5000/api/datoteka-brisanje/${datId}`,
+          { withCredentials: true }
+        )
+      } catch (error) {
+        console.error(error);
+        alert('Nemate ovlasti za brisanje.');
+      }
+  // else{
+  //     try {
+  //         const res = await axios.post('http://localhost:5000/api/novi-zadatak', { nazivObjave: objavaIme, tekst: objavaTekst, od: objavaDatumOd, do: objavaDatumDo,  ocjena: objavaOcjena  }, { withCredentials: true });
+  
+  //         const data = await res.data;
+  //         return data;
+  //         } catch (error) {
+  //         console.error(error);
+  //         alert('Nismo uspjeli kreirati zadatak.');
+  //      }
+  //     }
+  };
     useEffect(() => {
       sendRequestObjavaKomentari().then((data) => {
         setObjavaKomentari(data)
@@ -218,7 +239,7 @@ const downloadDatoteka = async (datId) => {
                       <div className='kom-info'>
                         <i>{item.file}</i>
                         <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                        <button className="gumb-ob" id="delete">Obriši</button>
+                        <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>Obriši</button>
                         <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
                       </div>
                   </div>
@@ -238,7 +259,7 @@ const downloadDatoteka = async (datId) => {
                       <div className='kom-info'>
                         <i>{item.file}</i>
                         <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                        <button className="gumb-ob" id="save" onClick={uredi}>Preuzmi</button>
+                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
                       </div>
                   </div>
                 ))

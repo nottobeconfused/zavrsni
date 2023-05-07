@@ -20,6 +20,7 @@ const {
      getKomentariIzObjave,
      downloadDatoteka,
      getDatoteka,
+     obrisiDatoteku,
 } = require('../controllers/user-controller');
 const router = express.Router();
 
@@ -40,6 +41,7 @@ router.get("/objava-komentari/:id", verifyToken, getKomentariIzObjave);
 router.route("/:id/nova-objava").post(upload.single('file'), novaObjava);
 router.route("/objava-datoteke-download/:id").get(downloadDatoteka);
 router.route("/objava-datoteke/:id").get(getDatoteka);
+router.post("/datoteka-brisanje/:id", verifyToken, obrisiDatoteku);
 router.get("/refresh", refreshToken, verifyToken, getUser);
 router.post("/logout", verifyToken, logout);
 
