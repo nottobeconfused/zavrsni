@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Odgovor from './Odgovor';
 import NewOdgovor from './noviOdgovor';
+import OdgovorOtvoreno from './OdgovorOtvoreno';
 
 const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupaId, user, grupa, edit, ifZadatak, odgovori}) => {
     const [objavaIme, setObjavaIme] = useState(naziv);
@@ -10,6 +11,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupa
     const [objavaKomentari, setObjavaKomentari] = useState([]);
 
     const [objavaOdgovori, setObjavaOdgovori] = useState(odgovori)
+    const [objavaOdgovoreno, setObjavaOdgovoreno] = useState(false);
 
     const [objavaDatumOd, setObjavaDatumOd] = useState(OD);
     const [objavaDatumDo, setObjavaDatumDo] = useState(DO);
@@ -323,7 +325,7 @@ const sendRequestObjavaOdgovori = async () => {
                 {ifZadatak && ifAdmin === false ? (
                   <div className="objava-polje objava-datoteke odgovori">
                     <p>Predaja zadaće:</p>
-                  <NewOdgovor objavaId={objavaId} />
+                      <NewOdgovor objavaId={objavaId}/>
                 </div>
                 ):null}
                 
@@ -335,13 +337,38 @@ const sendRequestObjavaOdgovori = async () => {
                     <div className="objava-polje objava-tekst korisnici">
                   {objavaOdgovori?.length > 0 ? (
                       objavaOdgovori?.map(item => (
-                        <Odgovor key={item._id} item={item}/>
-                    ))
-                  ) : (
-                      <div>
-                        <p>Nema odgovora!</p>
+                        <div className=" korisnik komentar" key={item.id}>
+                      <div className='kom-info'>
+                        <i>{item.admin}</i>
+                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
                       </div>
-                  )}
+                      <div>
+                      {item.datoteke?.map((dat) => (
+                    <div className=" korisnik komentar" key={dat.id}>
+                      <div className='kom-info'>
+                        <p>{dat.id}</p>
+                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(dat.id)}>Preuzmi</button>
+                      </div>
+                  </div>
+                ))}
+                      </div>
+                      <div>
+                      Komentari uz zadaću:
+                      {item.komentari?.map(kom => (
+                    <div className=" korisnik komentar" key={kom.id}>
+                      <div className='kom-info'>
+                        {kom}
+                      </div>
+                  </div>
+                ))}
+                      </div>
+                  </div>
+                ))
+              ) : (
+                  <div>
+                    <p>Nema komentara!</p>
+                  </div>
+              )}
                   </div>
                   </>
               </div>): null}

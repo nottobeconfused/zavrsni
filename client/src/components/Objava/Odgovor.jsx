@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
-export default function Odgovor(item) {
+export default function Odgovor({id, item}) {
 
      const [odgovorDatoteke, setOdgovorDatoteke] = useState()
 
      const getDatoteke = async () => {
       try{
-          const res = await axios.get(`http://localhost:5000/api/objava-odgovor-datoteke/${item._id}`);
+          const res = await axios.get(`http://localhost:5000/api/objava-odgovor-datoteke/${id}`);
           return res.data;
       } catch (error) {
           console.log(error);
@@ -39,10 +39,10 @@ export default function Odgovor(item) {
      {odgovorDatoteke?.length > 0 ? (
       odgovorDatoteke.map(dat => {
         <>
-        <div className=" korisnik komentar" key={dat._id}>
+        <div className=" korisnik komentar" key={item.id}>
            <div className='kom-info'>
              <div>
-             <i>{dat.file}</i>
+             <i>{item.id}</i>
              <p>{new Date(dat.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
              </div>
              <div className='btn-file'>

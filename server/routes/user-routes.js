@@ -21,7 +21,6 @@ const {
      downloadDatoteka,
      getDatoteka,
      obrisiDatoteku,
-     novizadatak,
      dodajOdgovor,
      getOdgovoriIzObjave,
      dodajKomentarUzZadacu,

@@ -9,21 +9,6 @@ const NewOdgovor = ({ objavaId }) => {
         setOdgovorKomentar(e);
     }
 
-    const dodajKomentarUzadacu = async (e) => {
-     try {
-       const res = await axios.post(
-         `http://localhost:5000/api/odgovor-komentar/${objavaId}`,
-         { sadrzaj: odgovorKomentar },
-         { withCredentials: true }
-       )
-       const data = await res.data;
-       return data;
-     } catch (error) {
-       console.error(error);
-       alert('Nismo uspjeli pohraniti komentar.');
-     }
- };
-
 
     const izradi = async (e) => {
         e.preventDefault();
