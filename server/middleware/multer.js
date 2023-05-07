@@ -13,22 +13,33 @@ const storage = multer.diskStorage({
         },
 });
 
-const fileFilter = (req, file, cb) =>{
-     if(
-          file.mimetype === "image/jpeg" ||
-          file.mimetype === "image/png" ||
-          file.mimetype === "application/pdf" 
-     ){
-          cb(null, true);
+const fileFilter = (req, file, cb) => {
+     const allowedFileTypes = [
+       'text/plain',
+       'application/x-rar-compressed',
+       'application/zip',
+       'application/msword',
+       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+       'application/vnd.ms-powerpoint',
+       'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+       'text/html',
+       'text/css',
+       'image/jpeg',
+       'image/png',
+       'application/pdf'
+     ];
+   
+     if (allowedFileTypes.includes(file.mimetype)) {
+       cb(null, true);
      } else {
-          cb(null, false);
+       cb(null, false);
      }
-};
+   };
 
 const upload = multer({
      storage: storage,
      limits: {
-          fileSize: 1024 * 1024 * 5,
+          fileSize: 1024 * 1024 * 50,
      },
      fileFilter: fileFilter,
 });

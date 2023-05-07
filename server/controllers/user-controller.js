@@ -8,6 +8,7 @@ const Datoteka = require('../model/Datoteka.js');
 const path = require("path");
 const asyncWrapper = require("../middleware/asyncWrapper.js")
 const Komentar = require('../model/Komentar.js');
+const Odgovor = require('../model/Odgovor.js');
 
 const signup = async(req, res, next) => {
     const { korisnickoIme, email, password} = req.body;
@@ -215,6 +216,24 @@ const getKomentariIzObjave = async (req, res, next) => {
   }
 };
 
+const getOdgovoriIzObjave = async (req, res, next) => {
+  try {
+    const objavaId = req.params.id;
+
+    // provjera je li grupa otvorena
+    const objava = await Objava.findById(objavaId);
+    if (!objava) {
+      return res.status(404).json({ message: "Tražena objava nije pronađena ili nije otvorena." });
+    }
+
+    const odgovori = await Odgovor.find({ objavaId });
+
+    res.status(200).json(odgovori);
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 const novaGrupa = async(req, res, next) => {
     const { imeGrupe } = req.body;
@@ -391,6 +410,7 @@ const urediObjavu = async (req, res, next) => {
       tekst: sadrzaj,
       objavaId: objavaId,
     })
+    
     await noviKomentar.save();
     objava.komentari.push({id: noviKomentar._id});
    await objava.save();
@@ -399,7 +419,45 @@ const urediObjavu = async (req, res, next) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-  };           
+  }; 
+  
+  const dodajOdgovor = async (req, res, next) => {
+    const {  komentar } = req.body;
+  const objavaId = req.params.id;
+  const userId = req.id;
+  try {
+    const objava = await Objava.findById(objavaId);
+    if (!objava) {
+      return res.status(404).json({ message: 'Objava nije pronađena!' });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Korisnik nije pronađen!' });
+    }
+
+    const noviOdgovor = new Odgovor({
+      user: user.korisnickoIme,
+      komentari: komentar,
+      objavaId: objavaId,
+    })
+    const file = req.file;
+    if (file) {
+      const item = await Datoteka.create({ file: file.path, objavaId: id});
+      noviOdgovor.datoteke.push({ id: item._id });
+      // Save the new Objava object to the database
+    await noviOdgovor.save();
+    }
+    await noviOdgovor.save();
+    await objava.save();
+    
+    objava.odgovori.push({id: noviOdgovor._id});
+   await objava.save();
+    res.status(200).json({ objava });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+  };
     
   const obrisiObjavu = async (req, res, next) => {
   const objavaId = req.params.id;
@@ -494,10 +552,12 @@ exports.dodajKorisnikaUGrupu = dodajKorisnikaUGrupu;
 exports.getObjave = getObjave;
 exports.getObjaveIzGrupe = getObjaveIzGrupe;
 exports.getKomentariIzObjave = getKomentariIzObjave;
+exports.getOdgovoriIzObjave = getOdgovoriIzObjave;
 exports.novaGrupa = novaGrupa;
 exports.novaObjava = novaObjava;
 exports.urediObjavu = urediObjavu;
 exports.dodajKomentar = dodajKomentar;
+exports.dodajOdgovor = dodajOdgovor;
 exports.obrisiObjavu = obrisiObjavu;
 exports.getDatoteka = getDatoteka;
 exports.downloadDatoteka = downloadDatoteka;

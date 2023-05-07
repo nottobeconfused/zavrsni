@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import Odgovor from './Odgovor';
+import NewOdgovor from './noviOdgovor';
 
-const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupaId, user, grupa, edit, ifZadatak}) => {
+const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupaId, user, grupa, edit, ifZadatak, odgovori}) => {
     const [objavaIme, setObjavaIme] = useState(naziv);
     const [objavaTekst, setObjavaTekst] = useState(tekst);
     const [objavaKomentar, setObjavaKomentar] = useState("");
     const [objavaKomentari, setObjavaKomentari] = useState([]);
+
+    const [objavaOdgovori, setObjavaOdgovori] = useState(odgovori)
 
     const [objavaDatumOd, setObjavaDatumOd] = useState(OD);
     const [objavaDatumDo, setObjavaDatumDo] = useState(DO);
@@ -107,11 +111,18 @@ const uredi = async (e) => {
         alert('Nismo uspjeli pohraniti komentar.');
       }
   };
+  
   const sendRequestObjavaKomentari = async () => {
     const res = await axios.get(`http://localhost:5000/api/objava-komentari/${objavaId}`, {
         withCredentials: true
     }).catch((err) => console.log(err));
     return res.data;
+}
+const sendRequestObjavaOdgovori = async () => {
+  const res = await axios.get(`http://localhost:5000/api/objava-odgovori/${objavaId}`, {
+      withCredentials: true
+  }).catch((err) => console.log(err));
+  return res.data;
 }
     
     const obrisi = async (e) => {
@@ -139,6 +150,9 @@ const uredi = async (e) => {
     useEffect(() => {
       sendRequestObjavaKomentari().then((data) => {
         setObjavaKomentari(data)
+      });
+      sendRequestObjavaOdgovori().then((data) => {
+        setObjavaOdgovori(data)
       });
       getDatoteke().then((data) => {
         setObjavaDatoteke(data)
@@ -222,10 +236,14 @@ const uredi = async (e) => {
                   objavaDatoteke?.map(item => (
                     <div className=" korisnik komentar" key={item._id}>
                       <div className='kom-info'>
+                        <div>
                         <i>{item.file}</i>
                         <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                        <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>Obriši</button>
+                        </div>
+                        <div className='btn-file'>
+                          <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>Obriši</button>
                         <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
+                        </div>
                       </div>
                   </div>
                 ))
@@ -257,6 +275,7 @@ const uredi = async (e) => {
                 )}
             </div>
 
+            
             {ifZadatak && (
                     <>
                 <div className='objava-oddo'>
@@ -301,6 +320,32 @@ const uredi = async (e) => {
                 </div>
                 </>
                 )}
+                {ifZadatak && ifAdmin === false ? (
+                  <div className="objava-polje objava-datoteke odgovori">
+                    <p>Predaja zadaće:</p>
+                  <NewOdgovor objavaId={objavaId} />
+                </div>
+                ):null}
+                
+
+                {ifZadatak && ifAdmin ? (
+                <div className="objava-polje objava-datoteke odgovori">
+                    <label className="ob-label" htmlFor="ob-file">Odgovori</label>
+                      <>
+                    <div className="objava-polje objava-tekst korisnici">
+                  {objavaOdgovori?.length > 0 ? (
+                      objavaOdgovori?.map(item => (
+                        <Odgovor key={item._id} item={item}/>
+                    ))
+                  ) : (
+                      <div>
+                        <p>Nema odgovora!</p>
+                      </div>
+                  )}
+                  </div>
+                  </>
+              </div>): null}
+                
 
             <div className="objava-polje objava-komentari">
                 <label className="ob-label" htmlFor="ob-komentar">Novi komentar:</label>

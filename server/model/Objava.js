@@ -46,7 +46,12 @@ const objavaSchema = new Schema({
     ifZadatak: {
         type: Boolean,
         default: false,
-    }
+    },
+    odgovori: {
+        type: Array,
+        default: []
+    },
+
 },
 {timestamps: true }
 );
