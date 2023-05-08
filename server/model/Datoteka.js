@@ -12,6 +12,10 @@ const datotekaSchema = new Schema({
           type: String,
           default: "",
      },
+     userId: {
+          type: String,
+          default: "",
+     },
 },
      {timestamps: true }
      );

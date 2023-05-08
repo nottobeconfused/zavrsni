@@ -7,7 +7,6 @@ const NewObjava = ({ onClose, id }) => {
     const [objavaTekst, setObjavaTekst] = useState('');
     const [objavaDatumOd, setObjavaDatumOd] = useState('');
     const [objavaDatumDo, setObjavaDatumDo] = useState('');
-    const [objavaOcjena, setObjavaOcjena] = useState('100');
     const fileInputRef = useRef(null);
 
     const handleNaziv = (e) => {
@@ -23,9 +22,6 @@ const NewObjava = ({ onClose, id }) => {
     const handleDatumDo = (e) => {
         setObjavaDatumDo(e);
     }
-    const handleObjavaOcjena = (e) => {
-        setObjavaOcjena(e);
-    }
 
 
     const izradi = async (e) => {
@@ -37,7 +33,6 @@ const NewObjava = ({ onClose, id }) => {
             formData.append("sadrzaj", objavaTekst);
             formData.append("OD", objavaDatumOd);
             formData.append("DO", objavaDatumDo);
-            formData.append("ocjena", objavaOcjena);
             formData.append("ifZadatak", zadChecked)
             const res = await axios.post(
               `http://localhost:5000/api/${id}/nova-objava`,
@@ -123,22 +118,6 @@ const NewObjava = ({ onClose, id }) => {
                         onChange={(e) => handleDatumDo(e.target.value)} 
                         />
                     </div>
-                </div>
-
-                <div className='objava-polje ob-ocjena'>
-                    <label htmlFor="ocjena">Ocjena:</label>
-                    <section>
-                        <p>___ / <input 
-                        className="ob-input" 
-                        type="number" 
-                        name="ocjena" 
-                        id="ocjena" 
-                        min={0} 
-                        max={100} 
-                        defaultValue={100}
-                        onChange={(e) => handleObjavaOcjena(e.target.value)} 
-                        /></p>
-                    </section>
                 </div>
                 </>
                 )}

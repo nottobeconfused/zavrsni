@@ -48,7 +48,7 @@ router.route("/:id/nova-objava").post(upload.single('file'), verifyToken, novaOb
 router.route("/objava/:id").post(upload.single('file'), verifyToken, urediObjavu);
 router.route("/objava-datoteke-download/:id").get(verifyToken, downloadDatoteka);
 router.route("/objava-datoteke/:id").get(getDatoteka);
-router.route("/objava-odgovor-datoteke/:id").get(getDatotekaIzOdgovora);
+router.route("/odgovor-datoteke/:id").get(getDatotekaIzOdgovora);
 router.post("/datoteka-brisanje/:id", verifyToken, obrisiDatoteku);
 router.get("/refresh", refreshToken, verifyToken, getUser);
 router.post("/logout", verifyToken, logout);

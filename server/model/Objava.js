@@ -39,10 +39,6 @@ const objavaSchema = new Schema({
      type: String,
         default: "",
     },
-    ocjena: {
-     type: String,
-        default: "",
-    },
     ifZadatak: {
         type: Boolean,
         default: false,

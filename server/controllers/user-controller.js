@@ -275,7 +275,6 @@ const novaGrupa = async(req, res, next) => {
     const sadrzaj = req.body.sadrzaj;
     const OD = req.body.OD;
     const DO = req.body.DO;
-    const ocjena = req.body.ocjena;
     const ifZadatak = req.body.ifZadatak;
     const userId = req.id;
     const file = req.file;
@@ -295,7 +294,6 @@ const novaGrupa = async(req, res, next) => {
         grupaId: grupa.id,
         od: OD, 
         do: DO, 
-        ocjena: ocjena,
         ifZadatak: ifZadatak,
       });
       if (file) {
@@ -332,13 +330,14 @@ const novaGrupa = async(req, res, next) => {
     }
 };
 const getDatotekaIzOdgovora = async (req, res) => {
-  const odgovorId = req.params.id;
+  const objavaId = req.params.id;
+  const userId = req.body;
   try{
-    const odgovor = await Odgovor.findById(odgovorId);
-    if (!odgovor) {
+    const objava = await Objava.findById(objavaId);
+    if (!objava) {
       return res.status(404).json({ message: "Tražena objava nije pronađena ili nije otvorena." });
     }
-    const datoteke = await Datoteka.find({ odgovorId });
+    const datoteke = await Datoteka.find(userId);
     res.status(200).json(datoteke);
   } catch (error) {
     console.log(error);
@@ -361,7 +360,6 @@ const urediObjavu = async (req, res, next) => {
   const sadrzaj = req.body.sadrzaj;
   const OD = req.body.OD;
   const DO = req.body.DO;
-  const ocjena = req.body.ocjena;
   const userId = req.id;
   const { id } = req.params;
 

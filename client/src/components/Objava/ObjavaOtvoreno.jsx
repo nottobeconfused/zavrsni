@@ -38,9 +38,6 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupa
   const handleDatumDo = (e) => {
       setObjavaDatumDo(e);
   }
-  const handleObjavaOcjena = (e) => {
-      setObjavaOcjena(e);
-  }
 
     const handleKomentar = (e) => {
       setObjavaKomentar(e);
@@ -278,7 +275,7 @@ const sendRequestObjavaOdgovori = async () => {
             </div>
 
             
-            {ifZadatak && (
+            {ifZadatak && edit && ifAdmin ? (
                     <>
                 <div className='objava-oddo'>
                     <div className="objava-polje">
@@ -304,28 +301,39 @@ const sendRequestObjavaOdgovori = async () => {
                         />
                     </div>
                 </div>
-
-                <div className='objava-polje ob-ocjena'>
-                    <label htmlFor="ocjena">Ocjena:</label>
-                    <section>
-                    <p>___ / <input 
+                </>
+                ) : (
+                  <>
+                <div className='objava-oddo'>
+                    <div className="objava-polje">
+                        <label htmlFor="od">OD datuma:</label>
+                        <input 
                         className="ob-input" 
-                        type="number" 
-                        name="ocjena" 
-                        id="ocjena" 
-                        min={0} 
-                        max={100} 
-                        defaultValue={ocjena}
-                        onChange={(e) => handleObjavaOcjena(e.target.value)} 
-                        /></p>
-                    </section>
+                        type="date" 
+                        name="od" 
+                        id="od" 
+                        defaultValue={OD} 
+                        disabled={true}
+                        />
+                    </div>
+                    <div className="objava-polje">
+                        <label htmlFor="do">DO datuma:</label>
+                        <input 
+                        className="ob-input" 
+                        type="date" 
+                        name="do" 
+                        id="do" 
+                        defaultValue={DO}
+                        disabled={true}
+                        />
+                    </div>
                 </div>
                 </>
                 )}
                 {ifZadatak && ifAdmin === false ? (
                   <div className="objava-polje objava-datoteke odgovori">
                     <p>Predaja zadaće:</p>
-                      <NewOdgovor objavaId={objavaId}/>
+                      <NewOdgovor objavaId={objavaId} user={user}/>
                 </div>
                 ):null}
                 
