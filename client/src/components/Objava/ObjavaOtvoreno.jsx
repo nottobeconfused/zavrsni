@@ -337,7 +337,7 @@ const sendRequestObjavaOdgovori = async () => {
                     <div className="objava-polje objava-tekst korisnici">
                   {objavaOdgovori?.length > 0 ? (
                       objavaOdgovori?.map(item => (
-                        <div className=" korisnik komentar" key={item.id}>
+                        <div className=" korisnik komentar" key={item._id}>
                       <div className='kom-info'>
                         <i>{item.admin}</i>
                         <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
@@ -346,7 +346,7 @@ const sendRequestObjavaOdgovori = async () => {
                       {item.datoteke?.map((dat) => (
                     <div className=" korisnik komentar" key={dat.id}>
                       <div className='kom-info'>
-                        <p>{dat.id}</p>
+                        <p>{dat.file}</p>
                         <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(dat.id)}>Preuzmi</button>
                       </div>
                   </div>
