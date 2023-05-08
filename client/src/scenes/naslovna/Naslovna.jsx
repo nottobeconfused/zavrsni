@@ -117,7 +117,7 @@ const Naslovna = () => {
   </div>
   {objave?.length > 0 ? (
     sortirajObjave(objave, sortiranje)?.map(item => (
-      <Objava item={item} key={item._id} edit={false}/>
+      <Objava item={item} key={item.id} edit={false}/>
     ))
   ) : (
     <div className="karticaZadatka">

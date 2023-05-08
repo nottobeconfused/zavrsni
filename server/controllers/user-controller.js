@@ -330,15 +330,18 @@ const novaGrupa = async(req, res, next) => {
     }
 };
 const getDatotekaIzOdgovora = async (req, res) => {
-  const objavaId = req.params.id;
-  const userId = req.body;
-  try{
-    const objava = await Objava.findById(objavaId);
-    if (!objava) {
-      return res.status(404).json({ message: "Tražena objava nije pronađena ili nije otvorena." });
+  const userId = req.body.userId;
+  const odgovorId = req.params.id;
+
+  try {
+    const odgovor = await Odgovor.findOne({ userId });
+    if (!odgovor) {
+      return res.status(404).json({ message: "Traženi odgovor nije pronađen." });
     }
-    const datoteke = await Datoteka.find(userId);
+
+    const datoteke = odgovor.datoteke.filter(dat => dat.id === odgovorId);
     res.status(200).json(datoteke);
+
   } catch (error) {
     console.log(error);
   }
@@ -477,6 +480,7 @@ const urediObjavu = async (req, res, next) => {
 
     const noviOdgovor = new Odgovor({
       admin: user.korisnickoIme,
+      userId: user._id,
       komentari: komentar,
       objavaId: objavaId,
     })

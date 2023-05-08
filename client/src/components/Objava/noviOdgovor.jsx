@@ -3,63 +3,12 @@ import axios from 'axios';
 
 const NewOdgovor = ({ objavaId, user, id }) => {
     const fileInputRef = useRef(null);
-    const [ifAdmin, setIfAdmin] = useState();
 
     const handleKomentar = (e) => {
         setOdgovorKomentar(e);
     }
 
     const [odgovorKomentar, setOdgovorKomentar] = useState('');
-    const [odgovorDatoteke, setOdgovorDatoteke] = useState([]);
-
-    const getDatoteke = async () => {
-     try{
-         const res = await axios.get(`http://localhost:5000/api/odgovor-datoteke/${objavaId}`,
-         {userId: user._id},
-              { withCredentials: true })
-         return res.data;
-     } catch (error) {
-         console.log(error);
-     }
- }
-
-      const downloadDatoteka = async (datId) => {
-          try{
-            const res = await axios.get(
-              `http://localhost:5000/api/objava-datoteke-download/${datId}`,
-              {responseType: 'blob'},
-            );
-            const blob = new Blob([res.data], { type: res.data.type });
-              const link = document.createElement("a");
-              link.href = window.URL.createObjectURL(blob);
-              link.download = "untitled";
-              link.click();
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        const obrisi = async (e) => {
-          try {
-              await axios.post(
-              `http://localhost:5000/api/objava-brisanje/${objavaId}`,
-              { withCredentials: true }
-            )
-          } catch (error) {
-            console.error(error);
-            alert('Nemate ovlasti za brisanje.');
-          }
-      };
-      const obrisiDatoteku = async (datId) => {
-        try {
-            await axios.post(
-            `http://localhost:5000/api/datoteka-brisanje/${datId}`,
-            { withCredentials: true }
-          )
-        } catch (error) {
-          console.error(error);
-          alert('Nemate ovlasti za brisanje.');
-        }
-    };
         
 
     const izradi = async (e) => {
@@ -81,61 +30,12 @@ const NewOdgovor = ({ objavaId, user, id }) => {
           }
         
       };
-      useEffect(() =>{
-        getDatoteke().then((data) => {
-             setOdgovorDatoteke(data)
-           });
-      }, [])
 
   return (
      <>
             <div className="objava-polje objava-datoteke">
                 <label className="ob-label" htmlFor="ob-file">Datoteke</label>
-                {ifAdmin  ? (
-                  <>
                 <input className="ob-input" type="file" name="ob-file" id="ob-file" ref={fileInputRef}/>
-                <div className="objava-polje objava-tekst korisnici">
-              {odgovorDatoteke?.length > 0 ? (
-                  odgovorDatoteke?.map(item => (
-                    <div className=" korisnik komentar" key={item._id}>
-                      <div className='kom-info'>
-                        <div>
-                        <i>{item.file}</i>
-                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                        </div>
-                        <div className='btn-file'>
-                          <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>Obriši</button>
-                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
-                        </div>
-                      </div>
-                  </div>
-                ))
-              ) : (
-                  <div>
-                    <p>Nema datoteka!</p>
-                  </div>
-              )}
-              </div>
-              </>
-                ) : (
-                  <div className="objava-polje objava-tekst korisnici">
-              {odgovorDatoteke?.length > 0 ? (
-                  odgovorDatoteke?.map(item => (
-                    <div className=" korisnik komentar" key={item._id}>
-                      <div className='kom-info'>
-                        <i>{item.file}</i>
-                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
-                      </div>
-                  </div>
-                ))
-              ) : (
-                  <div>
-                    <p>Nema datoteka!</p>
-                  </div>
-              )}
-              </div>
-                )}
             </div>
 
             <div className="objava-polje objava-komentari">
@@ -144,7 +44,6 @@ const NewOdgovor = ({ objavaId, user, id }) => {
             </div>
 
         <div className="ob-funkcije objava-gumbi">
-            <button className="gumb-ob" id="delete">Obriši</button>
             <button className="gumb-ob" id="save" onClick={izradi}>Predaj zadaću</button>
         </div>
     </>

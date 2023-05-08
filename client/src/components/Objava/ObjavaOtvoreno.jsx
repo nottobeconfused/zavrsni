@@ -11,7 +11,6 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupa
     const [objavaKomentari, setObjavaKomentari] = useState([]);
 
     const [objavaOdgovori, setObjavaOdgovori] = useState(odgovori)
-    const [objavaOdgovoreno, setObjavaOdgovoreno] = useState(false);
 
     const [objavaDatumOd, setObjavaDatumOd] = useState(OD);
     const [objavaDatumDo, setObjavaDatumDo] = useState(DO);
@@ -275,61 +274,34 @@ const sendRequestObjavaOdgovori = async () => {
             </div>
 
             
-            {ifZadatak && edit && ifAdmin ? (
-                    <>
-                <div className='objava-oddo'>
-                    <div className="objava-polje">
-                        <label htmlFor="od">OD datuma:</label>
-                        <input 
-                        className="ob-input" 
-                        type="date" 
-                        name="od" 
-                        id="od" 
-                        defaultValue={OD}
-                        onChange={(e) => handleDatumOd(e.target.value)} 
-                        />
-                    </div>
-                    <div className="objava-polje">
-                        <label htmlFor="do">DO datuma:</label>
-                        <input 
-                        className="ob-input" 
-                        type="date" 
-                        name="do" 
-                        id="do" 
-                        defaultValue={DO}
-                        onChange={(e) => handleDatumDo(e.target.value)} 
-                        />
-                    </div>
-                </div>
-                </>
-                ) : (
-                  <>
-                <div className='objava-oddo'>
-                    <div className="objava-polje">
-                        <label htmlFor="od">OD datuma:</label>
-                        <input 
-                        className="ob-input" 
-                        type="date" 
-                        name="od" 
-                        id="od" 
-                        defaultValue={OD} 
-                        disabled={true}
-                        />
-                    </div>
-                    <div className="objava-polje">
-                        <label htmlFor="do">DO datuma:</label>
-                        <input 
-                        className="ob-input" 
-                        type="date" 
-                        name="do" 
-                        id="do" 
-                        defaultValue={DO}
-                        disabled={true}
-                        />
-                    </div>
-                </div>
-                </>
-                )}
+            {ifZadatak && edit && ifAdmin && (
+  <div className='objava-oddo'>
+    <div className="objava-polje">
+      <label htmlFor="od">OD datuma:</label>
+      <input 
+        className="ob-input" 
+        type="date" 
+        name="od" 
+        id="od" 
+        defaultValue={OD}
+        onChange={(e) => handleDatumOd(e.target.value)} 
+      />
+    </div>
+    <div className="objava-polje">
+      <label htmlFor="do">DO datuma:</label>
+      <input 
+        className="ob-input" 
+        type="date" 
+        name="do" 
+        id="do" 
+        defaultValue={DO}
+        onChange={(e) => handleDatumDo(e.target.value)} 
+      />
+    </div>
+  </div>
+)}
+{(!ifZadatak) && (<></>
+)}
                 {ifZadatak && ifAdmin === false ? (
                   <div className="objava-polje objava-datoteke odgovori">
                     <p>Predaja zadaće:</p>
@@ -338,48 +310,62 @@ const sendRequestObjavaOdgovori = async () => {
                 ):null}
                 
 
-                {ifZadatak && ifAdmin ? (
-                <div className="objava-polje objava-datoteke odgovori">
-                    <label className="ob-label" htmlFor="ob-file">Odgovori</label>
-                      <>
-                    <div className="objava-polje objava-tekst korisnici">
-                  {objavaOdgovori?.length > 0 ? (
-                      objavaOdgovori?.map(item => (
-                        <div className=" korisnik komentar" key={item._id}>
-                      <div className='kom-info'>
-                        <i>{item.admin}</i>
-                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                      </div>
-                      <div>
-                      {item.datoteke?.map((dat) => (
-                    <div className=" korisnik komentar" key={dat.id}>
-                      <div className='kom-info'>
-                        <p>{dat.file}</p>
-                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(dat.id)}>Preuzmi</button>
-                      </div>
+                {ifZadatak && edit ? (
+  <div className="objava-polje objava-datoteke odgovori">
+    <>
+      {ifAdmin ? (
+        <label className="ob-label" htmlFor="ob-file">Odgovori</label>
+      ) : null}
+      <div className="objava-polje objava-tekst korisnici">
+        {objavaOdgovori?.length > 0 ? (
+          objavaOdgovori?.map((item) => {
+            if (ifAdmin || item.userId === user._id) {
+              return (
+                <div className="korisnik komentar" key={item._id}>
+                  <div className="kom-info">
+                    <i>{item.admin}</i>
+                    <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
                   </div>
-                ))}
-                      </div>
-                      <div>
-                      Komentari uz zadaću:
-                      {item.komentari?.map(kom => (
-                    <div className=" korisnik komentar" key={kom.id}>
-                      <div className='kom-info'>
-                        {kom}
-                      </div>
-                  </div>
-                ))}
-                      </div>
-                  </div>
-                ))
-              ) : (
                   <div>
-                    <p>Nema komentara!</p>
+                    {item.datoteke?.map((dat) => (
+                      <div className="korisnik komentar" key={dat.id}>
+                        <div className="kom-info">
+                          <p>{dat.file}</p>
+                          <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(dat.id)}>Preuzmi</button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-              )}
+                  <div>
+                    Komentari uz zadaću:
+                    {item.komentari?.map((kom) => (
+                      <div className="korisnik komentar" key={kom.id}>
+                        <div className="kom-info">
+                          {kom}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  </>
-              </div>): null}
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })
+        ) : (
+          <div>
+            <p>Nema komentara!</p>
+          </div>
+        )}
+      </div>
+      {!ifAdmin ? (
+        <div className="objava-polje">
+          <label className="ob-label" htmlFor="ob-file">Odgovori</label>
+        </div>
+      ) : null}
+    </>
+  </div>
+): null}
                 
 
             <div className="objava-polje objava-komentari">

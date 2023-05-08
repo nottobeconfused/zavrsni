@@ -15,6 +15,10 @@ const odgovorSchema = new Schema({
         type: String,
         default: "",
     },
+    userId: {
+        type: String,
+        default: "",
+    },
     komentari: {
         type: Array,
         default: []

@@ -16,6 +16,10 @@ const datotekaSchema = new Schema({
           type: String,
           default: "",
      },
+     odgovorId: {
+          type: String,
+          default: "",
+     },
 },
      {timestamps: true }
      );
