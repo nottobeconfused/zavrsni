@@ -22,8 +22,6 @@ function ModalProfil({open, onClose}) {
     if (!open) return null
     return (
       <div className='modal-profil' onClick={onClose}>
-      <div className="postavke dropdown-item modal-sredina"><i className="uil uil-setting"></i><p>Postavke</p></div>
-      <div className="profil dropdown-item modal-sredina"><i className="uil uil-user-circle"></i><p>Profil</p></div>
       <Link className='link' to="/login" onClick={handleLogout}>
       <div className="odjava dropdown-item modal-sredina"><i className="uil uil-sign-out-alt"></i><p>Odjava</p></div>
       </Link>

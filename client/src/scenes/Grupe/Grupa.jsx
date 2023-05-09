@@ -12,6 +12,7 @@ import NewKorisnik from '../../components/noviKorisnik/noviKorisnik';
 const Grupa = () => {
 
   const [ObjavaModal, setObjavaModalOpen] = useState(false);
+  const [PostavkeModal, setPostavkeModalOpen] = useState(false);
   const [KorisnikModal, setKorisnikModelOpen] = useState(false);
   const [sortiranje, setSortiranje] = useState(false);
 
@@ -110,7 +111,7 @@ const Grupa = () => {
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
-          <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
+          <NavTop user={user} grupa={grupa} setPostavkeModalOpen={() => setPostavkeModalOpen(true)} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
           {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa}/>)}
           <div className="main">

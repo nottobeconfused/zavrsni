@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Routes, Route, Link } from 'react-router-dom';
 import '../../App.css';
 import Naslovna from "../naslovna/Naslovna";
-import { OsobniProstor } from "../osobni-prostor/OsobniProstor";
 import axios from 'axios';
 import NewGroup from "../../components/novaGrupa/novaGrupa";
 import Grupa from "../Grupe/Grupa";
@@ -38,13 +37,6 @@ const Navigacija = ({grupe, user, otvoreno}) => {
                 </div>
             
             
-                <div className={activeItem === "osobniProstor" ? "otvoreno" : ""} onClick={() => handleItemClick("osobniProstor")}>
-                    <Link className="link" to="/osobni-prostor/:id">
-                        <i className="uil uil-user"></i>
-                    </Link>
-                </div>
-            
-            
                 <div className="nav-gumb gumb" onClick={() => {
                   toggleGrupe()
               }}>
@@ -74,7 +66,6 @@ const Navigacija = ({grupe, user, otvoreno}) => {
     )}
     <Routes>
         <Route path="/user" element={<Naslovna />} />
-        <Route path="/osobni-prostor" element={<OsobniProstor />} />
         <Route path={"/grupe/:id/*"} element={<Grupa grupe={grupe}/>}/>
     </Routes>
         </>
