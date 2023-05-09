@@ -331,6 +331,7 @@ const sendRequestObjavaOdgovori = async () => {
                       <div className="korisnik komentar" key={dat.id}>
                         <div className="kom-info">
                           <p>{dat.file}</p>
+                          <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>Obriši</button>
                           <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(dat.id)}>Preuzmi</button>
                         </div>
                       </div>
@@ -352,17 +353,8 @@ const sendRequestObjavaOdgovori = async () => {
               return null;
             }
           })
-        ) : (
-          <div>
-            <p>Nema komentara!</p>
-          </div>
-        )}
+        ) : null}
       </div>
-      {!ifAdmin ? (
-        <div className="objava-polje">
-          <label className="ob-label" htmlFor="ob-file">Odgovori</label>
-        </div>
-      ) : null}
     </>
   </div>
 ): null}

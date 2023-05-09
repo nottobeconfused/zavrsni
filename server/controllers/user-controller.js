@@ -386,7 +386,6 @@ const urediObjavu = async (req, res, next) => {
     objava.tekst = sadrzaj;
     objava.od = OD;
     objava.do = DO;
-    objava.ocjena = ocjena;
 
     // Check if the user uploaded a new file
     const file = req.file;
