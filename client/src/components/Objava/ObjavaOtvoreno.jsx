@@ -14,13 +14,11 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupa
 
     const [objavaDatumOd, setObjavaDatumOd] = useState(OD);
     const [objavaDatumDo, setObjavaDatumDo] = useState(DO);
-    const [objavaOcjena, setObjavaOcjena] = useState(ocjena);
 
     const [ifAdmin, setIfAdmin] = useState();
 
     const [objavaDatoteke, setObjavaDatoteke] = useState([]);
     const fileInputRef = useRef(null);
-    const [loading, setLoading] = useState(false);
 
     
     const handleNaziv = (e) => {
@@ -43,10 +41,8 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupa
   }
         
   const getDatoteke = async () => {
-    setLoading(true);
     try{
         const res = await axios.get(`http://localhost:5000/api/objava-datoteke/${objavaId}`);
-        setLoading(false);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -76,7 +72,6 @@ const uredi = async (e) => {
     formData.append("sadrzaj", objavaTekst);
     formData.append("OD", objavaDatumOd);
     formData.append("DO", objavaDatumDo);
-    formData.append("ocjena", objavaOcjena);
 
     const fileInput = fileInputRef.current;
     if (fileInput.files.length > 0) {
@@ -134,6 +129,19 @@ const sendRequestObjavaOdgovori = async () => {
           alert('Nemate ovlasti za brisanje.');
         }
     };
+
+    const obrisiOdgovor = async (e) => {
+      try {
+          await axios.post(
+          `http://localhost:5000/api/odgovor-brisanje/${e}`,
+          { withCredentials: true }
+        )
+      } catch (error) {
+        console.error(error);
+        alert('Nemate ovlasti za brisanje.');
+      }
+  };
+
     const obrisiDatoteku = async (datId) => {
       try {
           await axios.post(
@@ -347,13 +355,20 @@ const sendRequestObjavaOdgovori = async () => {
                       </div>
                     ))}
                   </div>
+                  <div className="ob-funkcije objava-gumbi">
+                  <button className="gumb-ob" id="delete" onClick={() => obrisiOdgovor(item._id)}>Obriši</button>
+                  </div>
                 </div>
               );
             } else {
               return null;
             }
           })
-        ) : null}
+        ) : (
+          <div>
+                    <p>Nema odgovora!</p>
+                  </div>
+        )}
       </div>
     </>
   </div>

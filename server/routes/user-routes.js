@@ -25,6 +25,7 @@ const {
      getOdgovoriIzObjave,
      dodajKomentarUzZadacu,
      getDatotekaIzOdgovora,
+     obrisiOdgovor,
 } = require('../controllers/user-controller');
 const router = express.Router();
 
@@ -36,6 +37,7 @@ router.post("/objava-komentar/:id", verifyToken, dodajKomentar);
 router.post("/odgovor-komentar/:id", verifyToken, dodajKomentarUzZadacu);
 router.route("/objava-odgovor/:id").post(upload.single('file'), verifyToken, dodajOdgovor);
 router.post("/objava-brisanje/:id", verifyToken, obrisiObjavu);
+router.post("/odgovor-brisanje/:id", verifyToken, obrisiOdgovor);
 router.get("/korisnici/:pretraga", verifyToken, getKorisnici);
 router.get("/korisnici", verifyToken, getKorisnici);
 router.post("/dodaj-korisnika/:id", verifyToken, dodajKorisnikaUGrupu)

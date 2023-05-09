@@ -521,6 +521,25 @@ const urediObjavu = async (req, res, next) => {
     res.status(500).send('Server Error');
   }
   }; 
+  const obrisiOdgovor= async (req, res, next) => {
+    const odgovorId = req.params.id;
+    const userId = req.id;
+    try {
+      const odgovor = await Odgovor.findById(odgovorId);
+      if (!odgovor) {
+        return res.status(404).json({ message: 'Objava nije pronađena!' });
+      }
+      if (odgovor.userId.toString() !== userId) {
+        return res.status(401).json({ message: 'Nemate ovlasti za ažuriranje objave!' });
+      }
+      await odgovor.remove();
+     
+      res.status(200).json({ message: "Objava uspješno obrisana!" });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+    }; 
   const obrisiDatoteku = async (req, res, next) => {
     const datId = req.params.id;
     try {
@@ -603,6 +622,7 @@ exports.dodajKomentar = dodajKomentar;
 exports.dodajKomentarUzZadacu =dodajKomentarUzZadacu;
 exports.dodajOdgovor = dodajOdgovor;
 exports.obrisiObjavu = obrisiObjavu;
+exports.obrisiOdgovor = obrisiOdgovor;
 exports.getDatoteka = getDatoteka;
 exports.downloadDatoteka = downloadDatoteka;
 exports.obrisiDatoteku =obrisiDatoteku;
