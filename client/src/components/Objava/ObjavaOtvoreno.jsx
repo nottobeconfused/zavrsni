@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import Odgovor from './Odgovor';
 import NewOdgovor from './noviOdgovor';
-import OdgovorOtvoreno from './OdgovorOtvoreno';
 
-const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupaId, user, grupa, edit, ifZadatak, odgovori}) => {
+const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, user, grupa, edit, ifZadatak, odgovori}) => {
     const [objavaIme, setObjavaIme] = useState(naziv);
     const [objavaTekst, setObjavaTekst] = useState(tekst);
     const [objavaKomentar, setObjavaKomentar] = useState("");
@@ -19,6 +17,8 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, ocjena, grupa
 
     const [objavaDatoteke, setObjavaDatoteke] = useState([]);
     const fileInputRef = useRef(null);
+
+    const [animationStatus, setAnimationStatus] = useState("initial");
 
     
     const handleNaziv = (e) => {
@@ -84,6 +84,7 @@ const uredi = async (e) => {
       { withCredentials: true }
     );
     const data = await res.data;
+    setAnimationStatus("success");
     return data;
   } catch (error) {
     console.error(error);
@@ -404,7 +405,14 @@ const sendRequestObjavaOdgovori = async () => {
         <div className="ob-funkcije objava-gumbi">
             {edit && ifAdmin ? (<button className="gumb-ob" id="delete" onClick={obrisi}>Obriši</button>) : null}
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
-            {edit && ifAdmin ? (<button className="gumb-ob" id="save" onClick={uredi}>Spremi</button>) : null}
+            {edit && ifAdmin ? (<button className="gumb-ob" id="save" onClick={uredi}>
+                    {animationStatus === "initial" && "Spremi"}
+                    {animationStatus === "success" && (
+                      <>
+                        <span>&#10003;</span> Spremljeno!
+                      </>
+                    )}
+                  </button>) : null}
         </div>
 
         </div>
