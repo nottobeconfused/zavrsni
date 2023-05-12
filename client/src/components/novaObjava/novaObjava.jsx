@@ -1,13 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-const NewObjava = ({ onClose, id }) => {
+const NewObjava = ({ onClose, id, grupa, user }) => {
     const [zadChecked, setZadChecked] = useState(false)
     const [objavaIme, setObjavaIme] = useState('');
     const [objavaTekst, setObjavaTekst] = useState('');
     const [objavaDatumOd, setObjavaDatumOd] = useState('');
     const [objavaDatumDo, setObjavaDatumDo] = useState('');
     const fileInputRef = useRef(null);
+
+    const [ifAdmin, setIfAdmin] = useState();
+
+    const [animationStatus, setAnimationStatus] = useState("initial");
 
     const handleNaziv = (e) => {
         setObjavaIme(e);
@@ -40,6 +44,7 @@ const NewObjava = ({ onClose, id }) => {
               { withCredentials: true }
             )
             const data = await res.data;
+            setAnimationStatus("success");
             return data;
           } catch (error) {
             console.error(error);
@@ -47,9 +52,18 @@ const NewObjava = ({ onClose, id }) => {
           }
         
       };
-
+      useEffect(() => {
+        if (grupa.admin === user._id) {
+            setIfAdmin(true);
+          } else {
+            setIfAdmin(false);
+          }
+      }, [] )
   return (
+    <>
+    {ifAdmin && (
     <div className="novaObjavaBackground">
+        
         <div className='ob-modal'>
             <div className="ob-funkcije ob-zad">
             <div className="odabir radio">
@@ -127,11 +141,21 @@ const NewObjava = ({ onClose, id }) => {
         <div className="ob-funkcije objava-gumbi">
             <button className="gumb-ob" id="delete" onClick={onClose}>Obriši</button>
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
-            <button className="gumb-ob" id="save" onClick={izradi}>Spremi</button>
+            {ifAdmin && (<button className="gumb-ob" id="save" onClick={izradi}>
+                    {animationStatus === "initial" && "Spremi"}
+                    {animationStatus === "success" && (
+                      <>
+                        <span>&#10003;</span> Spremljeno!
+                      </>
+                    )}
+                  </button>)}
         </div>
 
         </div>
     </div>
+
+  )}
+  </>
   );
 };
 

@@ -3,7 +3,7 @@ import '../../App.css';
 import ModalNovo from "./ModalNovo";
 import ModalProfil from "./MofdalProfil";
 
-const NavTop = ({user, grupa, setObjavaModalOpen, setKorisnikModelOpen, setPostavkeModalOpen}) => {
+const NavTop = ({user, grupa, setObjavaModalOpen, setKorisnikModelOpen}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenP, setIsOpenP] = useState(false); 
     return (

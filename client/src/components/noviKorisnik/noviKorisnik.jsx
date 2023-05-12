@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const NewKorisnik = ({ onClose, id, grupa}) => {
+const NewKorisnik = ({ onClose, id, grupa, user}) => {
     const [pretraga, setPretraga] = useState('');
     const [korisnici, setKorisnici] = useState([]);
     const [odabraniKorisnici, setOdabraniKorisnici] = useState([]);
-    console.log(grupa)
+
+    const [ifAdmin, setIfAdmin] = useState();
     
+    const [animationStatus, setAnimationStatus] = useState("initial");
 
     const handleNaziv = (e) => {
         setPretraga(e);
@@ -26,6 +28,7 @@ const NewKorisnik = ({ onClose, id, grupa}) => {
             { withCredentials: true }
           )
           const data = await res.data;
+          setAnimationStatus("success");
           return data;
         } catch (error) {
           console.error(error);
@@ -48,6 +51,12 @@ const NewKorisnik = ({ onClose, id, grupa}) => {
         }
       };
       getKorisnici();
+
+        if (grupa.admin === user._id) {
+          setIfAdmin(true);
+        } else {
+          setIfAdmin(false);
+        }
     }, [pretraga]);
 
   return (
@@ -91,7 +100,8 @@ const NewKorisnik = ({ onClose, id, grupa}) => {
                 </div>
               )}
             </div>
-            <div className="objava-polje objava-tekst korisnici">
+            {ifAdmin && (
+              <div className="objava-polje objava-tekst korisnici">
               <p>Odabrani korisnici:</p>
             {odabraniKorisnici?.length > 0 ? (
             odabraniKorisnici.map(korisnik => (
@@ -107,11 +117,20 @@ const NewKorisnik = ({ onClose, id, grupa}) => {
           </div>
             )}
             </div>
+            )}
+            
         </div>
 
         <div className="ob-funkcije objava-gumbi">
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
-            <button className="gumb-ob" id="save" onClick={dodaj}>Dodaj</button>
+            {ifAdmin && (<button className="gumb-ob" id="save" onClick={dodaj}>
+                    {animationStatus === "initial" && "Spremi"}
+                    {animationStatus === "success" && (
+                      <>
+                        <span>&#10003;</span> Spremljeno!
+                      </>
+                    )}
+                  </button>)}
         </div>
 
         </div>

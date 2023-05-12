@@ -125,6 +125,7 @@ const sendRequestObjavaOdgovori = async () => {
             `http://localhost:5000/api/objava-brisanje/${objavaId}`,
             { withCredentials: true }
           )
+          setAnimationStatus("success");
         } catch (error) {
           console.error(error);
           alert('Nemate ovlasti za brisanje.');
@@ -403,7 +404,13 @@ const sendRequestObjavaOdgovori = async () => {
         </div>
 
         <div className="ob-funkcije objava-gumbi">
-            {edit && ifAdmin ? (<button className="gumb-ob" id="delete" onClick={obrisi}>Obriši</button>) : null}
+            {edit && ifAdmin ? (<button className="gumb-ob" id="delete" onClick={obrisi}>
+              {animationStatus === "initial" && "Obriši"}
+                    {animationStatus === "success" && (
+                      <>
+                        <span>&#10003;</span> Obrisano | zatvorite modal!
+                      </>
+                    )}</button>) : null}
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
             {edit && ifAdmin ? (<button className="gumb-ob" id="save" onClick={uredi}>
                     {animationStatus === "initial" && "Spremi"}

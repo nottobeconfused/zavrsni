@@ -12,7 +12,6 @@ import NewKorisnik from '../../components/noviKorisnik/noviKorisnik';
 const Grupa = () => {
 
   const [ObjavaModal, setObjavaModalOpen] = useState(false);
-  const [PostavkeModal, setPostavkeModalOpen] = useState(false);
   const [KorisnikModal, setKorisnikModelOpen] = useState(false);
   const [sortiranje, setSortiranje] = useState(false);
 
@@ -79,17 +78,18 @@ const Grupa = () => {
   
   
       useEffect(() => {
-        
-          sendRequestGrupa().then((data) => {
-            setGrupa(data)
-          });
-          sendRequestGrupaObjave().then((data) => {
-            setObjave(data)
-          });
-          sendRequest().then((data) => {
+        sendRequest().then((data) => {
             setUser(data.user)
             setGroups(data.user.grupe);
             
+          });
+
+          sendRequestGrupaObjave().then((data) => {
+            setObjave(data)
+          });
+          
+          sendRequestGrupa().then((data) => {
+            setGrupa(data);
           });
           
           let interval = setInterval(() => {
@@ -105,15 +105,16 @@ const Grupa = () => {
             });
           }, 1000 * 60 * 60);
     
-          return () => clearInterval(interval);// eslint-disable-next-line
+          return () => clearInterval(interval)
           
       }, []);
       return (
           <>
           <Navigacija grupe={groups} user={user}/>
-          <NavTop user={user} grupa={grupa} setPostavkeModalOpen={() => setPostavkeModalOpen(true)} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
-          {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)}/>)}
-          {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa}/>)}
+          <NavTop user={user} grupa={grupa} setObjavaModalOpen={() => setObjavaModalOpen(true)} setKorisnikModelOpen={() => setKorisnikModelOpen(true)} onClose={() => setObjavaModalOpen(false)}/>
+          
+          {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)} grupa={grupa} user={user}/>)}
+          {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa} user={user}/>)}
           <div className="main">
               <div className='odabir-objave'>
     <div className="ob-funkcije ob-zad">
