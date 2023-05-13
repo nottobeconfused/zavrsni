@@ -103,6 +103,34 @@ async function getUser(req, res, next) {
     }
     return res.status(200).json({ user });
 }
+const ukloniKorisnikaIzGrupe = async (req, res, next) => {
+  try {
+    const grupaId = req.params.id;
+    const korisnikIds = req.body.korisnikId;
+    const userId = req.id;
+
+    // provjeri postoji li grupa s danim ID-jem i je li otvorena
+    const grupa = await Grupa.findById(grupaId);
+    if (!grupa) {
+      return res.status(404).json({ message: "Tražena grupa nije pronađena ili nije otvorena." });
+    }
+
+    // provjeri je li trenutni korisnik admin grupe
+    if (grupa.admin.toString() !== userId) {
+      return res.status(403).json({ message: "Samo admin grupe može dodavati korisnike u grupu." });
+    }
+
+    // Ukloni korisnike iz grupe i ažuriraj njihove grupe u njihovim tablicama
+    await Grupa.findByIdAndUpdate(grupaId, { $pull: { users: { $in: korisnikIds } } });
+    await User.updateMany({ _id: { $in: korisnikIds } }, { $pull: { grupe: { id: grupa._id } } });
+
+
+    res.status(200).json({ message: "Korisnici su uspješno dodani u grupu." });
+  } catch (err) {
+    next(err);
+  }
+};
+
   const dodajKorisnikaUGrupu = async (req, res, next) => {
     try {
       const grupaId = req.params.id;
@@ -245,17 +273,20 @@ const novaGrupa = async(req, res, next) => {
       if (existingGrupa) {
         return res.status(400).json({ message: 'Grupa već postoji!' });
       }
+      
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(400).json({ message: 'Korisnik nije pronađen!' });
+      }
   
       // Kreiraj novu grupu
       const novaGrupa = new Grupa({
         imeGrupe,
         admin: userId,
+        adminIme: user.korisnickoIme,
       });
       // Dodaj novu grupu u bazu podataka kod korisnika-admina
-      const user = await User.findById(userId);
-      if (!user) {
-        return res.status(400).json({ message: 'Korisnik nije pronađen!' });
-      }
+      
       // Spremi novu grupu u bazu podataka
       novaGrupa.users.push(userId);
       await novaGrupa.save();
@@ -433,6 +464,7 @@ const urediObjavu = async (req, res, next) => {
     res.status(500).send('Server Error');
   }
   }; 
+
   const dodajKomentarUzZadacu = async (req, res, next) => {
     const { sadrzaj } = req.body;
   const {objavaId} = req.params.id;
@@ -542,6 +574,7 @@ const urediObjavu = async (req, res, next) => {
     }; 
   const obrisiDatoteku = async (req, res, next) => {
     const datId = req.params.id;
+    console.log(datId)
     try {
       const datoteka = await Datoteka.findById(datId);
       if (!datoteka) {
@@ -611,6 +644,7 @@ exports.getGrupa = getGrupa;
 exports.getUser = getUser;
 exports.getKorisnici = getKorisnici;
 exports.dodajKorisnikaUGrupu = dodajKorisnikaUGrupu;
+exports.ukloniKorisnikaIzGrupe = ukloniKorisnikaIzGrupe;
 exports.getObjave = getObjave;
 exports.getObjaveIzGrupe = getObjaveIzGrupe;
 exports.getKomentariIzObjave = getKomentariIzObjave;

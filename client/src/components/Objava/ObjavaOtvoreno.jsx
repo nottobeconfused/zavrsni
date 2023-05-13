@@ -18,9 +18,11 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, user, grupa, 
     const [objavaDatoteke, setObjavaDatoteke] = useState([]);
     const fileInputRef = useRef(null);
 
+    const [animationStatusDatDel, setAnimationStatusDatDel] = useState("initial");
     const [animationStatus, setAnimationStatus] = useState("initial");
+    const [isDeleted, setIsDeleted] = useState(false);
+    const [isKom, setIsKom] = useState(false);
 
-    
     const handleNaziv = (e) => {
         setObjavaIme(e);
     }
@@ -66,6 +68,7 @@ const downloadDatoteka = async (datId) => {
 
 const uredi = async (e) => {
   e.preventDefault()
+  setAnimationStatus("success");
   try {
     const formData = new FormData();
     formData.append("naslov", objavaIme);
@@ -84,7 +87,6 @@ const uredi = async (e) => {
       { withCredentials: true }
     );
     const data = await res.data;
-    setAnimationStatus("success");
     return data;
   } catch (error) {
     console.error(error);
@@ -92,6 +94,7 @@ const uredi = async (e) => {
   }
 };
     const dodajKomentar = async (e) => {
+      setIsKom(true);
       try {
         const res = await axios.post(
           `http://localhost:5000/api/objava-komentar/${objavaId}`,
@@ -120,12 +123,12 @@ const sendRequestObjavaOdgovori = async () => {
 }
     
     const obrisi = async (e) => {
+      setIsDeleted(true);
         try {
             await axios.post(
             `http://localhost:5000/api/objava-brisanje/${objavaId}`,
             { withCredentials: true }
           )
-          setAnimationStatus("success");
         } catch (error) {
           console.error(error);
           alert('Nemate ovlasti za brisanje.');
@@ -144,15 +147,17 @@ const sendRequestObjavaOdgovori = async () => {
       }
   };
 
-    const obrisiDatoteku = async (datId) => {
+
+    const obrisiDatoteku = async (id) => {
+      setAnimationStatusDatDel("success");
       try {
-          await axios.post(
-          `http://localhost:5000/api/datoteka-brisanje/${datId}`,
+          await axios.get(
+          `http://localhost:5000/api/datoteka-brisanje/${id}`,
           { withCredentials: true }
         )
       } catch (error) {
         console.error(error);
-        alert('Nemate ovlasti za brisanje.');
+        alert('Došlo je do greške.');
       }
   };
     useEffect(() => {
@@ -234,54 +239,52 @@ const sendRequestObjavaOdgovori = async () => {
                 
             </div>
 
-            <div className="objava-polje objava-datoteke">
-                <label className="ob-label" htmlFor="ob-file">Datoteke</label>
-                {edit && ifAdmin  ? (
-                  <>
-                <input className="ob-input" type="file" name="ob-file" id="ob-file" ref={fileInputRef}/>
-                <div className="objava-polje objava-tekst korisnici">
-              {objavaDatoteke?.length > 0 ? (
-                  objavaDatoteke?.map(item => (
-                    <div className=" korisnik komentar" key={item._id}>
-                      <div className='kom-info'>
-                        <div>
-                        <i>{item.file}</i>
-                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                        </div>
-                        <div className='btn-file'>
-                          <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>Obriši</button>
-                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
-                        </div>
+              <div className="objava-polje objava-datoteke">
+              <label className="ob-label">Datoteke</label>
+              {edit && ifAdmin  ? (
+                <>
+              <input className="ob-input" type="file" name="ob-file" id="ob-file" ref={fileInputRef}/>
+              <div className="objava-polje objava-tekst korisnici">
+            {objavaDatoteke?.length > 0 ? (
+                objavaDatoteke?.map(item => (
+                  <div className=" korisnik komentar" key={item._id}>
+                    <div className='kom-info'>
+                      <div>
+                      <i>{item.file}</i>
+                      <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
                       </div>
-                  </div>
-                ))
-              ) : (
-                  <div>
-                    <p>Nema datoteka!</p>
-                  </div>
-              )}
-              </div>
-              </>
-                ) : (
-                  <div className="objava-polje objava-tekst korisnici">
-              {objavaDatoteke?.length > 0 ? (
-                  objavaDatoteke?.map(item => (
-                    <div className=" korisnik komentar" key={item._id}>
-                      <div className='kom-info'>
-                        <i>{item.file}</i>
-                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                        <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
+                      <div className='btn-file'>
+                        <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>{animationStatusDatDel === "initial" && "Obriši"}
+                  {animationStatusDatDel === "success" && (
+                    <>
+                      <span>&#10003;</span> Obrisano!
+                    </>
+                  )}</button>
+                      <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
                       </div>
-                  </div>
-                ))
-              ) : (
-                  <div>
-                    <p>Nema datoteka!</p>
-                  </div>
-              )}
-              </div>
-                )}
+                    </div>
+                </div>
+              ))
+            ) : null}
             </div>
+            </>
+              ) : (
+                <div className="objava-polje objava-tekst korisnici">
+            {objavaDatoteke?.length > 0 ? (
+                objavaDatoteke?.map(item => (
+                  <div className=" korisnik komentar" key={item._id}>
+                    <div className='kom-info'>
+                      <i>{item.file}</i>
+                      <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
+                      <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(item._id)}>Preuzmi</button>
+                    </div>
+                </div>
+              ))
+            ) : null}
+            </div>
+              )}
+          </div>
+            
 
             
             {ifZadatak && edit && ifAdmin && (
@@ -290,7 +293,7 @@ const sendRequestObjavaOdgovori = async () => {
       <label htmlFor="od">OD datuma:</label>
       <input 
         className="ob-input" 
-        type="date" 
+        type="datetime-local" 
         name="od" 
         id="od" 
         defaultValue={OD}
@@ -301,7 +304,7 @@ const sendRequestObjavaOdgovori = async () => {
       <label htmlFor="do">DO datuma:</label>
       <input 
         className="ob-input" 
-        type="date" 
+        type="datetime-local" 
         name="do" 
         id="do" 
         defaultValue={DO}
@@ -310,21 +313,32 @@ const sendRequestObjavaOdgovori = async () => {
     </div>
   </div>
 )}
-{(!ifZadatak) && (<></>
-)}
-                {ifZadatak && ifAdmin === false ? (
-                  <div className="objava-polje objava-datoteke odgovori">
-                    <p>Predaja zadaće:</p>
-                      <NewOdgovor objavaId={objavaId} user={user}/>
-                </div>
-                ):null}
+      {ifZadatak && ifAdmin === false ? (
+  <div className="objava-polje objava-datoteke odgovori">
+    <div className="korisnik komentar">
+      <p>Predaja zadaće:</p>
+      {objavaDatumOd && objavaDatumDo ? (
+        <>
+          <p>Zadatak se otvara: {new Date(objavaDatumOd).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
+          <p>Zadatak se zatvara: {new Date(objavaDatumDo).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
+        </>
+      ) : null}
+    </div>
+    {(new Date() > new Date(objavaDatumOd) && new Date() < new Date(objavaDatumDo)) || (!objavaDatumOd && !objavaDatumDo) ? (
+      <>
+        <NewOdgovor objavaId={objavaId} user={user} />
+      </>
+    ) : null}
+  </div>
+) : null}
+
                 
 
                 {ifZadatak && edit ? (
   <div className="objava-polje objava-datoteke odgovori">
     <>
       {ifAdmin ? (
-        <label className="ob-label" htmlFor="ob-file">Odgovori</label>
+        <label className="ob-label">Odgovori</label>
       ) : null}
       <div className="objava-polje objava-tekst korisnici">
         {objavaOdgovori?.length > 0 ? (
@@ -341,20 +355,20 @@ const sendRequestObjavaOdgovori = async () => {
                       <div className="korisnik komentar" key={dat.id}>
                         <div className="kom-info">
                           <p>{dat.file}</p>
-                          <button className="gumb-ob" id="delete" onClick={() => obrisiDatoteku(item._id)}>Obriši</button>
                           <button className="gumb-ob" id="save" onClick={() => downloadDatoteka(dat.id)}>Preuzmi</button>
                         </div>
                       </div>
                     ))}
                   </div>
                   <div>
-                    Komentari uz zadaću:
                     {item.komentari?.map((kom) => (
+                      <>Komentar:
                       <div className="korisnik komentar" key={kom.id}>
                         <div className="kom-info">
                           {kom}
                         </div>
                       </div>
+                      </>
                     ))}
                   </div>
                   <div className="ob-funkcije objava-gumbi">
@@ -380,37 +394,59 @@ const sendRequestObjavaOdgovori = async () => {
             <div className="objava-polje objava-komentari">
                 <label className="ob-label" htmlFor="ob-komentar">Novi komentar:</label>
                 <textarea className="ob-input" name="ob-komentar" id="ob-komentar" cols="auto" rows="3" placeholder="Komentar..." onChange={(e) => handleKomentar(e.target.value)} ></textarea>
-                <div><button className="gumb-ob" id="save" onClick={dodajKomentar}>Spremi komentar</button></div>
+                <div><button
+          className="gumb-ob"
+          id="save"
+          onClick={dodajKomentar}
+          disabled={isKom}
+        >
+          {isKom ? (
+            <>
+              <span>&#10003;</span> Pohranjeno!
+            </>
+          ) : (
+            "Dodaj komentar"
+          )}
+        </button></div>
                 <div className="objava-polje objava-tekst korisnici">
               <p>Komentari:</p>
               {objavaKomentari?.length > 0 ? (
-                  objavaKomentari?.map(item => (
-                    <div className=" korisnik komentar" key={item._id}>
-                      <div className='kom-info'>
-                        <i>{item.user}</i>
-                        <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
-                      </div>
-                      <div>{item.tekst}</div>
-                  </div>
-                ))
-              ) : (
-                  <div>
-                    <p>Nema komentara!</p>
-                  </div>
-              )}
+  objavaKomentari?.map((item) => (
+    <div className="korisnik komentar" key={item._id}>
+      <div className="kom-info">
+        <i>{item.user}</i>
+        <p>{new Date(item.createdAt).toLocaleString([], { year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric' })}</p>
+      </div>
+      <div>{item.tekst}</div>
+    </div>
+  ))
+) : (
+  <div>
+    <p>Nema komentara!</p>
+  </div>
+)}
               </div>
             </div>
 
         </div>
 
         <div className="ob-funkcije objava-gumbi">
-            {edit && ifAdmin ? (<button className="gumb-ob" id="delete" onClick={obrisi}>
-              {animationStatus === "initial" && "Obriši"}
-                    {animationStatus === "success" && (
-                      <>
-                        <span>&#10003;</span> Obrisano | zatvorite modal!
-                      </>
-                    )}</button>) : null}
+        {edit && ifAdmin ? (
+        <button
+          className="gumb-ob"
+          id="delete"
+          onClick={obrisi}
+          disabled={isDeleted}
+        >
+          {isDeleted ? (
+            <>
+              <span>&#10003;</span> Obrisano | zatvorite modal!
+            </>
+          ) : (
+            "Obriši"
+          )}
+        </button>
+      ) : null}
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
             {edit && ifAdmin ? (<button className="gumb-ob" id="save" onClick={uredi}>
                     {animationStatus === "initial" && "Spremi"}

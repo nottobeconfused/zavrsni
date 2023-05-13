@@ -116,7 +116,7 @@ const Grupa = () => {
           {ObjavaModal && (<NewObjava id={id} onClose={() => setObjavaModalOpen(false)} grupa={grupa} user={user}/>)}
           {KorisnikModal && (<NewKorisnik id={id} onClose={() => setKorisnikModelOpen(false)} grupa={grupa} user={user}/>)}
           <div className="main">
-              <div className='odabir-objave'>
+    <div className='odabir-objave'>
     <div className="ob-funkcije ob-zad">
       <div className="odabir radio">
         <input

@@ -26,6 +26,8 @@ const {
      dodajKomentarUzZadacu,
      getDatotekaIzOdgovora,
      obrisiOdgovor,
+     ukloniKorisnikaIzGrupe,
+     obrisiKomentar,
 } = require('../controllers/user-controller');
 const router = express.Router();
 
@@ -41,6 +43,7 @@ router.post("/odgovor-brisanje/:id", verifyToken, obrisiOdgovor);
 router.get("/korisnici/:pretraga", verifyToken, getKorisnici);
 router.get("/korisnici", verifyToken, getKorisnici);
 router.post("/dodaj-korisnika/:id", verifyToken, dodajKorisnikaUGrupu)
+router.post("/ukloni-korisnika/:id", verifyToken, ukloniKorisnikaIzGrupe)
 router.get("/objave", verifyToken, getObjave);
 router.get("/grupe/:id", verifyToken, refreshToken, getGrupa);
 router.get("/grupe-objave/:id", verifyToken, refreshToken, getObjaveIzGrupe);
@@ -51,7 +54,7 @@ router.route("/objava/:id").post(upload.single('file'), verifyToken, urediObjavu
 router.route("/objava-datoteke-download/:id").get(verifyToken, downloadDatoteka);
 router.route("/objava-datoteke/:id").get(getDatoteka);
 router.route("/odgovor-datoteke/:id").get(getDatotekaIzOdgovora);
-router.post("/datoteka-brisanje/:id", verifyToken, obrisiDatoteku);
+router.get("/datoteka-brisanje/:id", verifyToken, obrisiDatoteku);
 router.get("/refresh", refreshToken, verifyToken, getUser);
 router.post("/logout", verifyToken, logout);
 

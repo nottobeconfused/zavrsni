@@ -8,7 +8,6 @@ const NavTop = ({user, grupa, setObjavaModalOpen, setKorisnikModelOpen}) => {
     const [isOpenP, setIsOpenP] = useState(false); 
     return (
         <>
-        
         <div className="nav-top">
             <div className="nav-top-elementi">
             <div className="nav-top-naziv">
@@ -19,14 +18,14 @@ const NavTop = ({user, grupa, setObjavaModalOpen, setKorisnikModelOpen}) => {
             <div className="nav-top-funkcije">
                 <div className="funkcije">
                     <div >
-                        <button onClick={() => setIsOpen(true)}
+                        <button onClick={() => {setIsOpen(true); setIsOpenP(false)}}
                         className="gumb-novo gumb-nav gumb">
                         <i className="uil uil-plus-circle"></i>
                         </button>
                      <ModalNovo open={isOpen} onClose={() => setIsOpen(false)} setObjavaModalOpen={setObjavaModalOpen} setKorisnikModelOpen={setKorisnikModelOpen}/>
                     </div>
                     <div className="gumb-nav">
-                <div className="profil-slika dropdown-container gumb" onClick={() => setIsOpenP(true)}>
+                <div className="profil-slika dropdown-container gumb" onClick={() => {setIsOpenP(true); setIsOpen(false)}}>
                     {user && <p>{user.korisnickoIme}</p>}
                 <i className="uil uil-user-circle"></i>     
                 </div>       

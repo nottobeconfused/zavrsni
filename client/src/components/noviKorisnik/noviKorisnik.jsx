@@ -13,12 +13,17 @@ const NewKorisnik = ({ onClose, id, grupa, user}) => {
     const handleNaziv = (e) => {
         setPretraga(e);
     }
+
     const odaberiKorisnika = (korisnik) => {
-      if (!odabraniKorisnici.includes(korisnik._id)) {
-        setOdabraniKorisnici(odabraniKorisnici => [...odabraniKorisnici, korisnik]);
+      if (!odabraniKorisnici.some(item => item._id === korisnik._id)) {
+        setOdabraniKorisnici([...odabraniKorisnici, korisnik]);
       }
     };
     
+    const ukloniKorisnika = (korisnik) => {
+      const noviKorisnici = odabraniKorisnici.filter(item => item._id !== korisnik._id);
+      setOdabraniKorisnici(noviKorisnici);
+    };
 
     const dodaj = async () => {
         try {
@@ -34,6 +39,21 @@ const NewKorisnik = ({ onClose, id, grupa, user}) => {
           console.error(error);
           alert('Nismo uspjeli dodati korisnika.');
         }
+    };
+
+    const ukloni = async (korisnik) => {
+      try {
+        const res = await axios.post(
+          `http://localhost:5000/api/ukloni-korisnika/${grupa._id}`,
+          { korisnikId: korisnik },
+          { withCredentials: true }
+        );
+        const data = await res.data;
+        return data;
+      } catch (error) {
+        console.error(error);
+        alert("Nismo uspjeli ukloniti korisnika iz grupe.");
+      }
     };
     
     useEffect(() => {
@@ -79,45 +99,53 @@ const NewKorisnik = ({ onClose, id, grupa, user}) => {
             <div className="objava-polje objava-tekst korisnici">
               <p>Rezultati pretrage:</p>
               {korisnici?.length > 0 ? (
-                korisnici.map(korisnik => (
-                  <div
-                    className={`korisnik${korisnik.grupe.some(k => k.id === grupa._id) ? " zeleno" : ""}`}
-                    key={korisnik._id}
-                    onClick={() => !korisnik.grupe.some(k => k.id === grupa._id) && odaberiKorisnika(korisnik)}
-                  >
-                    <p>{korisnik.korisnickoIme}</p>
-                    <p>{korisnik.email}</p>
-                    {korisnik.grupe.some(k => k.id === grupa._id) && (
-                      <i>Korisnik je u ovoj grupi!</i>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <div className="karticaZadatka">
-                  <div className="ikona_ime_kartica">
-                    <p>Nema korisnika u bazi!</p>
-                  </div>
-                </div>
-              )}
+  korisnici.map(korisnik => (
+    <div
+      className={`korisnik${korisnik.grupe.some(k => k.id === grupa._id) ? " zeleno" : ""}`}
+      key={korisnik._id}
+      onClick={() => !korisnik.grupe.some(k => k.id === grupa._id) && odaberiKorisnika(korisnik)}
+    >
+      <p>{korisnik.korisnickoIme}</p>
+      <p>{korisnik.email}</p>
+      {korisnik.grupe.some(k => k.id === grupa._id) && (
+        <i>Korisnik je u ovoj grupi!</i>
+      )}
+      {ifAdmin && korisnik.grupe.some(k => k.id === grupa._id) && korisnik._id !== user._id && (
+  <div>
+    <button className="gumb-ob" id="delete" onClick={() => ukloni(korisnik._id)}>Ukloni</button>
+  </div>
+)}
+
+    </div>
+  ))
+) : (
+  <div className="karticaZadatka">
+    <div className="ikona_ime_kartica">
+      <p>Nema korisnika u bazi!</p>
+    </div>
+  </div>
+)}
             </div>
             {ifAdmin && (
-              <div className="objava-polje objava-tekst korisnici">
-              <p>Odabrani korisnici:</p>
-            {odabraniKorisnici?.length > 0 ? (
-            odabraniKorisnici.map(korisnik => (
-              <div className="korisnik" key={korisnik._id}>
-                <p>{korisnik.korisnickoIme}</p>
-                <p>{korisnik.email}</p>
-              </div>
-            ))) : (
-              <div className="karticaZadatka">
-              <div className="ikona_ime_kartica">
-              <p>Nema odabranih korisnika!</p>
-              </div>
-          </div>
-            )}
-            </div>
-            )}
+  <div className="objava-polje objava-tekst korisnici">
+    <p>Odabrani korisnici:</p>
+    {odabraniKorisnici?.length > 0 ? (
+      odabraniKorisnici.map(korisnik => (
+        <div className="korisnik" key={korisnik._id}>
+          <p>{korisnik.korisnickoIme}</p>
+          <p>{korisnik.email}</p>
+          <button className="gumb-ob" id="delete" onClick={() => ukloniKorisnika(korisnik)}>Ukloni</button>
+        </div>
+      ))
+    ) : (
+      <div className="karticaZadatka">
+        <div className="ikona_ime_kartica">
+          <p>Nema odabranih korisnika!</p>
+        </div>
+      </div>
+    )}
+  </div>
+)}
             
         </div>
 

@@ -9,6 +9,7 @@ const NewOdgovor = ({ objavaId, user, id }) => {
     }
 
     const [odgovorKomentar, setOdgovorKomentar] = useState('');
+    const [isPredano, setIsPredano] = useState(false);
         
 
     const izradi = async (e) => {
@@ -22,6 +23,7 @@ const NewOdgovor = ({ objavaId, user, id }) => {
               formData,
               { withCredentials: true }
             )
+            setIsPredano(true);
             const data = await res.data;
             return data;
           } catch (error) {
@@ -44,7 +46,20 @@ const NewOdgovor = ({ objavaId, user, id }) => {
             </div>
 
         <div className="ob-funkcije objava-gumbi">
-            <button className="gumb-ob" id="save" onClick={izradi}>Predaj zadaću</button>
+        <button
+          className="gumb-ob"
+          id="save"
+          onClick={izradi}
+          disabled={isPredano}
+        >
+          {isPredano ? (
+            <>
+              <span>&#10003;</span> Predano!
+            </>
+          ) : (
+            "Predaj zadaću"
+          )}
+        </button>
         </div>
     </>
   );

@@ -7,7 +7,7 @@ const grupaSchema = new Schema({
         type: String,
         required: true,
         min: 2,
-        max: 60,
+        max: 20,
     },
     putDoDatoteka: {
         type: String,
@@ -25,10 +25,10 @@ const grupaSchema = new Schema({
         type: String,
         default: ""
     },
-    tip : {
-        type: Boolean,
-        default: false
-    }
+    adminIme : {
+        type: String,
+        default: ""
+    },
 },
 {timestamps: true }
 );

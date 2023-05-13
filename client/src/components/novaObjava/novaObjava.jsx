@@ -11,7 +11,7 @@ const NewObjava = ({ onClose, id, grupa, user }) => {
 
     const [ifAdmin, setIfAdmin] = useState();
 
-    const [animationStatus, setAnimationStatus] = useState("initial");
+    const [isSaved, setIsSaved] = useState(false);
 
     const handleNaziv = (e) => {
         setObjavaIme(e);
@@ -43,8 +43,8 @@ const NewObjava = ({ onClose, id, grupa, user }) => {
               formData,
               { withCredentials: true }
             )
+            setIsSaved(true)
             const data = await res.data;
-            setAnimationStatus("success");
             return data;
           } catch (error) {
             console.error(error);
@@ -80,7 +80,7 @@ const NewObjava = ({ onClose, id, grupa, user }) => {
         <div className='novaObjava-modal'>
 
             <div className="objava-polje objava-naziv">
-                <label className="ob-label" htmlFor="ob-ime">Naziv objave</label>
+                <label className="ob-label" maxLength={50} htmlFor="ob-ime">Naziv objave</label>
                 <input 
                 className="ob-input"
                  type="text"
@@ -116,7 +116,7 @@ const NewObjava = ({ onClose, id, grupa, user }) => {
                         <label htmlFor="od">OD datuma:</label>
                         <input 
                         className="ob-input" 
-                        type="date" 
+                        type="datetime-local" 
                         name="od" 
                         id="od" 
                         onChange={(e) => handleDatumOd(e.target.value)} 
@@ -126,7 +126,7 @@ const NewObjava = ({ onClose, id, grupa, user }) => {
                         <label htmlFor="do">DO datuma:</label>
                         <input 
                         className="ob-input" 
-                        type="date" 
+                        type="datetime-local" 
                         name="do" 
                         id="do" 
                         onChange={(e) => handleDatumDo(e.target.value)} 
@@ -141,14 +141,22 @@ const NewObjava = ({ onClose, id, grupa, user }) => {
         <div className="ob-funkcije objava-gumbi">
             <button className="gumb-ob" id="delete" onClick={onClose}>Obriši</button>
             <button className="gumb-ob" id="cancel" onClick={onClose}>Zatvori</button>
-            {ifAdmin && (<button className="gumb-ob" id="save" onClick={izradi}>
-                    {animationStatus === "initial" && "Spremi"}
-                    {animationStatus === "success" && (
-                      <>
-                        <span>&#10003;</span> Spremljeno!
-                      </>
-                    )}
-                  </button>)}
+            {ifAdmin && (
+        <button
+          className="gumb-ob"
+          id="save"
+          onClick={izradi}
+          disabled={isSaved} 
+        >
+          {isSaved ? (
+            <>
+              <span>&#10003;</span> Spremljeno!
+            </>
+          ) : (
+            "Spremi"
+          )}
+        </button>
+      )}
         </div>
 
         </div>
