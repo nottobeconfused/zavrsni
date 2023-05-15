@@ -22,6 +22,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, user, grupa, 
     const [animationStatus, setAnimationStatus] = useState("initial");
     const [isDeleted, setIsDeleted] = useState(false);
     const [isKom, setIsKom] = useState(false);
+    const [deletedAnswers, setDeletedAnswers] = useState([]);
 
     const handleNaziv = (e) => {
         setObjavaIme(e);
@@ -51,20 +52,26 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, user, grupa, 
     }
 }
 const downloadDatoteka = async (datId) => {
-  try{
+  try {
     const res = await axios.get(
       `http://localhost:5000/api/objava-datoteke-download/${datId}`,
-      {responseType: 'blob'},
+      { responseType: 'blob' }
     );
+
+    const contentDisposition = res.headers['content-disposition'];
+    const fileName = contentDisposition
+      ? contentDisposition.split('filename=')[1].replace(/"/g, '')
+      : 'untitled';
+
     const blob = new Blob([res.data], { type: res.data.type });
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = "untitled";
-      link.click();
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 const uredi = async (e) => {
   e.preventDefault()
@@ -140,7 +147,8 @@ const sendRequestObjavaOdgovori = async () => {
           await axios.post(
           `http://localhost:5000/api/odgovor-brisanje/${e}`,
           { withCredentials: true }
-        )
+        );
+        setDeletedAnswers((prevDeletedAnswers) => [...prevDeletedAnswers, e]);
       } catch (error) {
         console.error(error);
         alert('Nemate ovlasti za brisanje.');
@@ -337,15 +345,18 @@ const sendRequestObjavaOdgovori = async () => {
                 {ifZadatak && edit ? (
   <div className="objava-polje objava-datoteke odgovori">
     <>
-      {ifAdmin ? (
-        <label className="ob-label">Odgovori</label>
-      ) : null}
-      <div className="objava-polje objava-tekst korisnici">
-        {objavaOdgovori?.length > 0 ? (
-          objavaOdgovori?.map((item) => {
-            if (ifAdmin || item.userId === user._id) {
-              return (
-                <div className="korisnik komentar" key={item._id}>
+    {ifAdmin ? (
+  <label className="ob-label">Odgovori</label>
+) : null}
+<div className="objava-polje objava-tekst korisnici">
+{objavaOdgovori?.length > 0 ? (
+  objavaOdgovori?.map((item) => {
+    const isCurrentUserComment = item.userId === user._id;
+    const isAnswerDeleted = deletedAnswers.includes(item._id);
+
+    if (ifAdmin || isCurrentUserComment) {
+      return (
+        <div className="korisnik komentar" key={item._id}>
                   <div className="kom-info">
                     <i>{item.admin}</i>
                     <p>{new Date(item.createdAt).toLocaleString([], {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'})}</p>
@@ -371,20 +382,35 @@ const sendRequestObjavaOdgovori = async () => {
                       </>
                     ))}
                   </div>
-                  <div className="ob-funkcije objava-gumbi">
-                  <button className="gumb-ob" id="delete" onClick={() => obrisiOdgovor(item._id)}>Obriši</button>
-                  </div>
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })
-        ) : (
-          <div>
-                    <p>Nema odgovora!</p>
-                  </div>
-        )}
+          {isCurrentUserComment && !isAnswerDeleted && (
+            <div className="ob-funkcije objava-gumbi">
+              <button
+                className="gumb-ob"
+                id="delete"
+                onClick={() => obrisiOdgovor(item._id)}
+                disabled={isAnswerDeleted}
+              >
+                {isAnswerDeleted ? (
+                  <>
+                    <span>&#10003;</span> Obrisano
+                  </>
+                ) : (
+                  "Obriši"
+                )}
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  })
+  ) : (
+    <div>
+      <p>Nema odgovora!</p>
+    </div>
+  )}
       </div>
     </>
   </div>

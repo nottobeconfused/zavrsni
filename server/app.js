@@ -18,4 +18,4 @@ mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0.u
     app.listen(5000);
     console.log("database is connected");
     console.log("listening to 5000");
-}).catch((err)=>console.log(err));
+}).catch((err)=>console.log(err)); 

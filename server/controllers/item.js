@@ -13,9 +13,10 @@ const getDatoteka = async (req, res) => {
 
 const dodajDatoteku = asyncWrapper(async (req, res) => {
      const file = req.file.path;
-     const item = await Datoteka.create({file});
-     res.status(201).json({item})
-});
+     const fileName = path.basename(file);
+     const item = await Datoteka.create({ file: fileName });
+     res.status(201).json({ item });
+   });
 
 const downloadDatoteka = asyncWrapper(async (req, res) => {
      const { id } = req.params;
