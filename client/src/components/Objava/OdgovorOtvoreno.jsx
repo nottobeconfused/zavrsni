@@ -14,7 +14,7 @@ const OdgovorOtvoreno = ({ item, user, objavaId }) => {
 
   const getDatoteke = async () => {
    try{
-       const res = await axios.get(`https://propuh.onrender.com/api/odgovor-datoteke/${item.id}`,
+       const res = await axios.get(`http://localhost:5000/api/odgovor-datoteke/${item.id}`,
        {userId: user._id},
             { withCredentials: true })
        return res.data;
@@ -26,7 +26,7 @@ const OdgovorOtvoreno = ({ item, user, objavaId }) => {
     const downloadDatoteka = async (datId) => {
         try{
           const res = await axios.get(
-            `https://propuh.onrender.com/api/objava-datoteke-download/${datId}`,
+            `http://localhost:5000/api/objava-datoteke-download/${datId}`,
             {responseType: 'blob'},
           );
           const blob = new Blob([res.data], { type: res.data.type });
@@ -41,7 +41,7 @@ const OdgovorOtvoreno = ({ item, user, objavaId }) => {
       const obrisi = async (e) => {
         try {
             await axios.post(
-            `https://propuh.onrender.com/api/odgovor-brisanje/${item.id}`,
+            `http://localhost:5000/api/odgovor-brisanje/${item.id}`,
             { withCredentials: true }
           )
         } catch (error) {
@@ -52,7 +52,7 @@ const OdgovorOtvoreno = ({ item, user, objavaId }) => {
     const obrisiDatoteku = async (datId) => {
       try {
           await axios.post(
-          `https://propuh.onrender.com/api/datoteka-brisanje/${datId}`,
+          `http://localhost:5000/api/datoteka-brisanje/${datId}`,
           { withCredentials: true }
         )
       } catch (error) {
@@ -69,7 +69,7 @@ const OdgovorOtvoreno = ({ item, user, objavaId }) => {
           formData.append("file", fileInputRef.current.files[0]);
           formData.append("komentar", odgovorKomentar);
           const res = await axios.post(
-            `https://propuh.onrender.com/api//objava-odgovor/${objavaId}`,
+            `http://localhost:5000/api//objava-odgovor/${objavaId}`,
             formData,
             { withCredentials: true }
           )

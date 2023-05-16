@@ -23,7 +23,7 @@ function Login() {
         seterrorM("");
     };
     const sendRequest = async() => {
-        const res = await axios.post("https://propuh.onrender.com/api/login", {
+        const res = await axios.post("http://localhost:5000/api/login", {
             email: inputs.email,
             password: inputs.password,
         })

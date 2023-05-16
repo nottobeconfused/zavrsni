@@ -22,7 +22,7 @@ const NewOdgovor = ({ objavaId, user, id }) => {
       setIsPredano(false);
       setIsFileUploading(true); // Set isFileUploading to true during file upload
 
-      await axios.post(`https://propuh.onrender.com/api//objava-odgovor/${objavaId}`, formData, {
+      await axios.post(`http://localhost:5000/api//objava-odgovor/${objavaId}`, formData, {
         withCredentials: true,
         onUploadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);

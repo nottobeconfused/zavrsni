@@ -16,14 +16,14 @@ const Naslovna = () => {
   const otvoreno = "naslovna";
 
   const sendRequest = async () => {
-      const res = await axios.get('https://propuh.onrender.com/api/user', {
+      const res = await axios.get('http://localhost:5000/api/user', {
           withCredentials: true
       }).catch((err) => console.log(err));
       const data = await res.data;
       return data;
   }
   const sentRequestGetObjave = async () => {
-    const res = await axios.get('https://propuh.onrender.com/api/objave', {
+    const res = await axios.get('http://localhost:5000/api/objave', {
           withCredentials: true
       }).catch((err) => console.log(err));
       const data = await res.data;
@@ -32,7 +32,7 @@ const Naslovna = () => {
 
   const refreshToken = async () => {
       const res = await axios
-        .get("https://propuh.onrender.com/api/refresh", {
+        .get("http://localhost:5000/api/refresh", {
           withCredentials: true,
         })
         .catch((err) => console.log(err));

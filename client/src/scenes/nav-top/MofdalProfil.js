@@ -8,7 +8,7 @@ function ModalProfil({open, onClose}) {
   const dispatch = useDispatch();
   const sendLogoutRequest = async () => {
     axios.defaults.withCredentials = true
-  const res = await axios.post("https://propuh.onrender.com/api/logout", null, {
+  const res = await axios.post("http://localhost:5000/api/logout", null, {
     withCredentials: true
   })
   if(res.status === 200) {

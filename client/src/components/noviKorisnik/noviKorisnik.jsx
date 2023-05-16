@@ -28,7 +28,7 @@ const NewKorisnik = ({ onClose, id, grupa, user}) => {
     const dodaj = async () => {
         try {
           const res = await axios.post(
-            `https://propuh.onrender.com/api/dodaj-korisnika/${id}`,
+            `http://localhost:5000/api/dodaj-korisnika/${id}`,
             { korisnikIds: odabraniKorisnici.map(korisnik => korisnik._id) },
             { withCredentials: true }
           )
@@ -44,7 +44,7 @@ const NewKorisnik = ({ onClose, id, grupa, user}) => {
     const ukloni = async (korisnik) => {
       try {
         const res = await axios.post(
-          `https://propuh.onrender.com/api/ukloni-korisnika/${grupa._id}`,
+          `http://localhost:5000/api/ukloni-korisnika/${grupa._id}`,
           { korisnikId: korisnik },
           { withCredentials: true }
         );
@@ -61,9 +61,9 @@ const NewKorisnik = ({ onClose, id, grupa, user}) => {
         try {
           let res;
           if (pretraga.length === 0 || pretraga.length > 1) {
-            res = await axios.get(`https://propuh.onrender.com/api/korisnici/${pretraga}`, { withCredentials: true });
+            res = await axios.get(`http://localhost:5000/api/korisnici/${pretraga}`, { withCredentials: true });
           } else {
-            res = await axios.get(`https://propuh.onrender.com/api/korisnici`, { withCredentials: true });
+            res = await axios.get(`http://localhost:5000/api/korisnici`, { withCredentials: true });
           }
           setKorisnici(res.data);
         } catch (err) {

@@ -45,7 +45,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, user, grupa, 
         
   const getDatoteke = async () => {
     try{
-        const res = await axios.get(`https://propuh.onrender.com/api/objava-datoteke/${objavaId}`);
+        const res = await axios.get(`http://localhost:5000/api/objava-datoteke/${objavaId}`);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -54,7 +54,7 @@ const ObjavaOtvoreno = ({ onClose, objavaId, tekst, naziv, OD, DO, user, grupa, 
 const downloadDatoteka = async (datId) => {
   try {
     const res = await axios.get(
-      `https://propuh.onrender.com/api/objava-datoteke-download/${datId}`,
+      `http://localhost:5000/api/objava-datoteke-download/${datId}`,
       { responseType: 'blob' }
     );
 
@@ -89,7 +89,7 @@ const uredi = async (e) => {
     }
 
     const res = await axios.post(
-      `https://propuh.onrender.com/api/objava/${objavaId}`,
+      `http://localhost:5000/api/objava/${objavaId}`,
       formData,
       { withCredentials: true }
     );
@@ -104,7 +104,7 @@ const uredi = async (e) => {
       setIsKom(true);
       try {
         const res = await axios.post(
-          `https://propuh.onrender.com/api/objava-komentar/${objavaId}`,
+          `http://localhost:5000/api/objava-komentar/${objavaId}`,
           { sadrzaj: objavaKomentar },
           { withCredentials: true }
         )
@@ -117,13 +117,13 @@ const uredi = async (e) => {
   };
   
   const sendRequestObjavaKomentari = async () => {
-    const res = await axios.get(`https://propuh.onrender.com/api/objava-komentari/${objavaId}`, {
+    const res = await axios.get(`http://localhost:5000/api/objava-komentari/${objavaId}`, {
         withCredentials: true
     }).catch((err) => console.log(err));
     return res.data;
 }
 const sendRequestObjavaOdgovori = async () => {
-  const res = await axios.get(`https://propuh.onrender.com/api/objava-odgovori/${objavaId}`, {
+  const res = await axios.get(`http://localhost:5000/api/objava-odgovori/${objavaId}`, {
       withCredentials: true
   }).catch((err) => console.log(err));
   return res.data;
@@ -133,7 +133,7 @@ const sendRequestObjavaOdgovori = async () => {
       setIsDeleted(true);
         try {
             await axios.post(
-            `https://propuh.onrender.com/api/objava-brisanje/${objavaId}`,
+            `http://localhost:5000/api/objava-brisanje/${objavaId}`,
             { withCredentials: true }
           )
         } catch (error) {
@@ -145,7 +145,7 @@ const sendRequestObjavaOdgovori = async () => {
     const obrisiOdgovor = async (e) => {
       try {
           await axios.post(
-          `https://propuh.onrender.com/api/odgovor-brisanje/${e}`,
+          `http://localhost:5000/api/odgovor-brisanje/${e}`,
           { withCredentials: true }
         );
         setDeletedAnswers((prevDeletedAnswers) => [...prevDeletedAnswers, e]);
@@ -160,7 +160,7 @@ const sendRequestObjavaOdgovori = async () => {
       setAnimationStatusDatDel("success");
       try {
           await axios.get(
-          `https://propuh.onrender.com/api/datoteka-brisanje/${id}`,
+          `http://localhost:5000/api/datoteka-brisanje/${id}`,
           { withCredentials: true }
         )
       } catch (error) {

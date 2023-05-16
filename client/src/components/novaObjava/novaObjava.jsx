@@ -39,7 +39,7 @@ const NewObjava = ({ onClose, id, grupa, user }) => {
             formData.append("DO", objavaDatumDo);
             formData.append("ifZadatak", zadChecked)
             const res = await axios.post(
-              `https://propuh.onrender.com/api/${id}/nova-objava`,
+              `http://localhost:5000/api/${id}/nova-objava`,
               formData,
               { withCredentials: true }
             )
