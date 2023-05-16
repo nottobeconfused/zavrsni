@@ -7,7 +7,7 @@ export default function Odgovor({id, item}) {
 
      const getDatoteke = async () => {
       try{
-          const res = await axios.get(`http://localhost:5000/api/objava-odgovor-datoteke/${id}`);
+          const res = await axios.get(`https://propuh.onrender.com/api/objava-odgovor-datoteke/${id}`);
           return res.data;
       } catch (error) {
           console.log(error);
@@ -16,7 +16,7 @@ export default function Odgovor({id, item}) {
      const downloadDatoteka = async (datId) => {
           try{
             const res = await axios.get(
-              `http://localhost:5000/api/objava-datoteke-download/${datId}`,
+              `https://propuh.onrender.com/api/objava-datoteke-download/${datId}`,
               {responseType: 'blob'},
             );
             const blob = new Blob([res.data], { type: res.data.type });

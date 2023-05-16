@@ -24,7 +24,7 @@ const Grupa = () => {
 
 
     const sendRequest = async () => {
-      const res = await axios.get('http://localhost:5000/api/user', {
+      const res = await axios.get('https://propuh.onrender.com/api/user', {
           withCredentials: true
       }).catch((err) => console.log(err));
       const data = await res.data;
@@ -32,14 +32,14 @@ const Grupa = () => {
       
   }
     const sendRequestGrupa = async () => {
-        const res = await axios.get(`http://localhost:5000/api/grupe/${id}`, {
+        const res = await axios.get(`https://propuh.onrender.com/api/grupe/${id}`, {
             withCredentials: true
         }).catch((err) => console.log(err));
         const data = await res.data;
         return data;
     }
     const sendRequestGrupaObjave = async () => {
-      const res = await axios.get(`http://localhost:5000/api/grupe-objave/${id}`, {
+      const res = await axios.get(`https://propuh.onrender.com/api/grupe-objave/${id}`, {
           withCredentials: true
       }).catch((err) => console.log(err));
       const data = await res.data;
@@ -48,7 +48,7 @@ const Grupa = () => {
 
     const refreshToken = async () => {
       const res = await axios
-        .get("http://localhost:5000/api/refresh", {
+        .get("https://propuh.onrender.com/api/refresh", {
           withCredentials: true,
         })
         .catch((err) => console.log(err));
