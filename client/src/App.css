@@ -72,6 +72,7 @@ select {
     scroll-behavior: auto !important;
   }
 }
+
 :root{
   --isticanje: var(--zelena);
   --isticanje-svijetlo: rgba(var(--isticanje), 0.425);
@@ -87,7 +88,7 @@ select {
   --tekst: rgb(var(--tamno-tekst));
 
   --tamno-iznad: 66, 68, 66;
-  --svijetlo-iznad: 255, 255, 255;
+  --svijetlo-iznad: 250, 250, 250;
 
   --tamno-tekst: 218, 214, 214;
   --svijetlo-tekst: 15, 15, 15;
@@ -107,6 +108,29 @@ select {
   --narancasta: 251, 133, 0;
   --zelena: 132, 169, 140;
   --radius: 0.5rem;
+}
+
+body.light {
+  background-color: #ffffff;
+  color: #000000;
+  --iznad: rgb(var(--svijetlo-iznad));
+  --boxShadow: var(--sjena-svijetlo);
+  --tekst: rgb(var(--svijetlo-tekst));
+  --isticanje-svijetlo: rgba(var(--isticanje), 0.425);
+  --iznad-objava: rgb(var(--isticanje));
+  --pozadina: rgb(var(--pozadina-svijetlo));
+}
+
+/* Dark Theme */
+body.dark {
+  background-color: rgb(17, 17, 17);
+  color: #ffffff;
+  --iznad: rgb(var(--tamno-iznad));
+  --boxShadow: var(--sjena-tamno);
+  --tekst: rgb(var(--tamno-tekst));
+  --isticanje-svijetlo: rgba(var(--isticanje), 0.425);
+  --iznad-objava: rgb(var(--isticanje));
+  --pozadina: rgb(var(--pozadina-tamno));
 }
 @font-face {
   font-family: 'My font';
@@ -185,6 +209,9 @@ header{
  .uil{
     color: rgb(var(--isticanje));
     font-size: 2.4em;
+  }
+  #tema{
+    font-size: 1.4em;
   }
   .gumb:hover{
     cursor: pointer;
@@ -330,6 +357,7 @@ header{
   position: relative;
   float: right;
   flex-direction: column;
+  background-color: var(--pozadina);
 }
 .pokazatelj{
   width: 90%;
@@ -338,10 +366,10 @@ header{
   top: 0;
   border-radius: 0 0 1em 1em;
   box-shadow: var(--boxShadow);
-  background-color: rgb(var(--tamno-iznad));
+  background-color: var(--iznad);
 }
 .pokazatelj .p{
-  color: rgb(var(--tamno-tekst));
+  color: rgb(var(--tekst));
   font-weight: bold;
 }
 .glavna-forma{
@@ -353,7 +381,7 @@ header{
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(var(--tamno-iznad));
+  background-color: var(--iznad);
   border-radius: 1em 1em 0 0;
   box-shadow: var(--boxShadow);
 }
@@ -665,7 +693,7 @@ textarea{
   transition: background-color 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .radio_input:checked + .radio_label{
-  background-color: var(--tekst);
+  background-color: var(--iznad);
   color: var(--iznad-objava);
 }
 .ob-izlaz{

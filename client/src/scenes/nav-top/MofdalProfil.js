@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -19,9 +19,27 @@ function ModalProfil({open, onClose}) {
  const handleLogout = () => {
   sendLogoutRequest().then(()=>dispatch(authActions.logout()))
  }
+
+ const [theme, setTheme] = useState(
+      localStorage.getItem('theme') || 'light'
+    );
+    const toggleTheme = () => {
+      if (theme === 'light') {
+        setTheme('dark');
+      } else {
+        setTheme('light');
+      }
+    };
+    useEffect(() => {
+      localStorage.setItem('theme', theme);
+      document.body.className = theme;
+    }, [theme]);
     if (!open) return null
     return (
       <div className='modal-profil' onClick={onClose}>
+        <div>
+        <button className="gumb-novo gumb-nav " onClick={toggleTheme}><i id='tema' className="uil uil-swatchbook">{theme === 'dark' ? 'Svijetla tema' : 'Tamna tema'}</i></button>
+        </div>
       <Link className='link' to="/login" onClick={handleLogout}>
       <div className="odjava dropdown-item modal-sredina"><i className="uil uil-sign-out-alt"></i><p>Odjava</p></div>
       </Link>
