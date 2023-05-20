@@ -9,18 +9,6 @@ const userSchema = new Schema({
         min: 2,
         max: 60,
     },
-    ime: {
-        type: String,
-        default: "",
-        min: 2,
-        max: 30,
-    },
-    prezime: {
-        type: String,
-        default: "",
-        min: 2,
-        max: 30,
-    },
     email: {
         type: String,
         required: true,
@@ -32,19 +20,7 @@ const userSchema = new Schema({
         required: true,
         min: 8,
     },
-    putDoSlike: {
-        type: String,
-        default: "",
-    },
-    putDoDatoteka: {
-        type: String,
-        default: "",
-    },
     grupe: {
-        type: Array,
-        default: []
-    },
-    friends: {
         type: Array,
         default: []
     },
