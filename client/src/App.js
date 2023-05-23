@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
@@ -28,15 +29,13 @@ function App() {
   }, [isLoggedIn, location]);
 
   return (
-    <>
-      <Routes>
-        {isLoggedIn && <Route path="/user/*" element={<Naslovna />} />}
-        {isLoggedIn && <Route path="/grupe/:id/*" element={<Grupa />} />}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<Welcome />} />
-      </Routes>
-    </>
+    <Routes>
+      {isLoggedIn && <Route path="/user/*" element={<Naslovna />} />}
+      {isLoggedIn && <Route path="/grupe/:id/*" element={<Grupa />} />}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/" element={<Welcome />} />
+    </Routes>
   );
 }
 
