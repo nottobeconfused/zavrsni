@@ -1,0 +1,6 @@
+Foreach petlja je petlja koju koristimo ukoliko treba iterirati kroz neko polje za koje ne znamo koliko članova posjeduje.
+npr. 
+const polje = ["prvi", "drugi", "treci", "cetvrti"];
+foreach(item in polje){
+     console.log(item); // ispis: prvi drugi treci cetvrti
+}

@@ -1,0 +1,7 @@
+While petlja je petlja koju koristimo ukoliko želimo prvo provjeriti uvjet te ukoliko je uvjet zadovoljen onda iterirati kroz petlju - može se izvršiti barem jednom ili niti jednom.
+npr. 
+uvjet = true;
+while(uvjet == true){
+     console.log(uvjet); // true
+     uvjet = false; // petlja će se izvršiti jednom
+}
